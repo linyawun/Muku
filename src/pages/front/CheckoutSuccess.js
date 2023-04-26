@@ -13,6 +13,8 @@ function CheckoutSuccess() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
       );
       console.log(res);
+      if (res.data.order) {
+      }
       setOrderData(res.data.order);
     } catch (error) {
       console.log(error);
@@ -21,6 +23,7 @@ function CheckoutSuccess() {
   useEffect(() => {
     getOrder(orderId);
   }, [orderId]);
+
   useEffect(() => {
     if (Object.values(orderData?.products || {})[0]?.coupon) {
       setCouponData({
@@ -42,8 +45,11 @@ function CheckoutSuccess() {
   }, [orderData]);
   return (
     <div className='container'>
-      {orderData?.order ? (
-        <div className='mt-5 mb-7'>
+      {orderData ? (
+        <div
+          className='mt-5 mb-7'
+          style={{ minHeight: 'calc((100vh - 70px) - 350px)' }}
+        >
           <CheckoutSteps
             data={[
               { step: 1, content: '購物車', done: true },
@@ -166,8 +172,11 @@ function CheckoutSuccess() {
           </div>
         </div>
       ) : (
-        <div className='mt-5 mb-7'>
-          <div className='row flex-column justify-content-center align-items-center p-5'>
+        <div
+          className='my-7'
+          style={{ minHeight: 'calc((100vh - 70px) - 350px)' }}
+        >
+          <div className='row flex-column justify-content-center align-items-center py-5'>
             <h5 className='col-lg-4 col-10 text-center mb-4'>此訂單不存在</h5>
             <Link
               to='/'

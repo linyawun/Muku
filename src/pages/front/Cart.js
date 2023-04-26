@@ -56,6 +56,9 @@ function Cart() {
     }
   };
   const sendCoupon = async () => {
+    if (!couponCode) {
+      return;
+    }
     const data = {
       data: {
         code: couponCode,
