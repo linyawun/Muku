@@ -35,8 +35,8 @@
 - 後台-編輯商品
 ![image](https://i.imgur.com/GZRePKR.png)
 
-- 後台-編輯訂單
-![image](https://i.imgur.com/tqxgU8Z.png)
+- 後台-建立優惠券
+![image](https://i.imgur.com/A6jOOe8.png)
 
 ## 安裝
 以下將會引導你如何安裝此專案到你的電腦上。
@@ -53,8 +53,6 @@ cd Muku
 ```bash
 npm install
 ```
-### 環境變數設定
-請在終端機輸入 `cp .env.example .env` 來複製 .env.example 檔案，並依據 .env 內容調整相關欄位。
 ### 運行專案
 ```bash
 npm start
@@ -86,7 +84,6 @@ http://localhost:8000/
 - Bootstrap v5.2.3
 - Bootstrap-icons v1.10.3
 - Swiper v9.2.2
-- marked v4.2.12
 
 ## 聯絡作者
 你可以透過以下方式與我聯絡
