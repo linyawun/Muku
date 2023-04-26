@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Muku/static/css/main.cf3cb273.css",
-    "main.js": "/Muku/static/js/main.07a82752.js",
+    "main.js": "/Muku/static/js/main.1b2bc83a.js",
     "static/js/787.6653abfd.chunk.js": "/Muku/static/js/787.6653abfd.chunk.js",
     "static/media/bootstrap-icons.woff?": "/Muku/static/media/bootstrap-icons.6959d0d983ee318f8880.woff",
     "static/media/bootstrap-icons.woff2?": "/Muku/static/media/bootstrap-icons.b2e5aab643c6f0fd2da6.woff2",
@@ -9,11 +9,11 @@
     "index.html": "/Muku/index.html",
     "static/media/rightarrow-01.svg": "/Muku/static/media/rightarrow-01.60225501f90eed5cb972.svg",
     "main.cf3cb273.css.map": "/Muku/static/css/main.cf3cb273.css.map",
-    "main.07a82752.js.map": "/Muku/static/js/main.07a82752.js.map",
+    "main.1b2bc83a.js.map": "/Muku/static/js/main.1b2bc83a.js.map",
     "787.6653abfd.chunk.js.map": "/Muku/static/js/787.6653abfd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cf3cb273.css",
-    "static/js/main.07a82752.js"
+    "static/js/main.1b2bc83a.js"
   ]
 }
