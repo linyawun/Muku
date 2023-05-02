@@ -35,7 +35,7 @@ function Home() {
     <>
       <div className='container'>
         <Loading isLoading={isLoading} />
-        <div className='mb-5'>
+        <div className='mb-3'>
           <Swiper
             spaceBetween={30}
             pagination={pagination}
@@ -57,12 +57,51 @@ function Home() {
             </SwiperSlide>
           </Swiper>
         </div>
-
+        <div className='bg-light text-center p-4 mb-5'>
+          <h5 className='text-primary fw-bold mb-4'>
+            Muku. 純粹美好的穿衣日常
+          </h5>
+          <div className='row justify-content-center mb-4'>
+            <div className='col-md-3 col-8 border-end border-secondary '>
+              <h6>
+                <i className='bi bi-flower2 me-2'></i>簡約日系風格
+              </h6>
+              <p>
+                <small>
+                  適合各種場合穿搭，主打日常舒適感，寬鬆自在的穿著風格
+                </small>
+              </p>
+            </div>
+            <div className='col-md-3 col-8 border-end border-secondary'>
+              <h6>
+                <i className='bi bi-flower2 me-2'></i>純淨自然的品牌理念
+              </h6>
+              <p>
+                <small>
+                  以「Muku」為名，希望透過商品傳達純淨自然的訴求，引領大家過舒適放鬆的生活
+                </small>
+              </p>
+            </div>
+            <div className='col-md-3 col-8'>
+              <h6>
+                <i className='bi bi-flower2 me-2'></i>注重商品品質與環保議題
+              </h6>
+              <p>
+                <small>
+                  選用高品質面料，盡量減少對環境的影響，提倡可持續發展的生活方式
+                </small>
+              </p>
+            </div>
+          </div>
+          <div className='d-flex justify-content-center'>
+            <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
+              關於我們
+            </Link>
+          </div>
+        </div>
         <div className='row mb-3 justify-content-between align-items-center'>
           <div className='col-7'>
-            <h2 className='text-primary'>
-              <i className='bi bi-flower2 me-2'></i>New Collection
-            </h2>
+            <h2 className='text-primary'>New Collection</h2>
           </div>
           <div className='col-5 d-flex justify-content-end'>
             <Link to='/products/all' className='link-primary pe-5 arrowLink'>
@@ -70,7 +109,7 @@ function Home() {
             </Link>
           </div>
         </div>
-        <div className='row'>
+        <div className='row mb-5'>
           {products.map((product) => {
             return (
               <div className='col-lg-3 col-6' key={product.id}>
