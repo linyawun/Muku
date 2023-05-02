@@ -22,7 +22,7 @@ function AboutUs() {
             <p className='mb-0'>Muku 的三大特點：</p>
             <ol className='list-group list-group-numbered'>
               <li class='list-group-item border-0'>
-                簡約日系風格：Muku
+                簡約選物風格：Muku
                 的服飾設計簡單、大方，展現出日系風格的特色，適合穿搭於各種場合。Muku
                 強調日常舒適感，主打寬鬆自在的穿著風格，讓人穿上後能感受到輕鬆舒適的感覺。
               </li>
@@ -32,7 +32,7 @@ function AboutUs() {
                 希望透過商品的設計、選材、製作等方面，傳達出純淨自然的訴求，並引領消費者過一種舒適放鬆的生活方式。
               </li>
               <li class='list-group-item border-0'>
-                注重商品品質與環保議題：Muku
+                注重品質與環保：Muku
                 強調商品品質與環保議題，致力於選用高品質的面料，並且盡量減少對環境的影響，例如使用綠色材料、減少廢棄物產生等。同時，Muku
                 也提倡可持續發展的生活方式，期望透過自身的努力，影響更多人對環境的關注與改變。
               </li>

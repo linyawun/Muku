@@ -61,10 +61,10 @@ function Home() {
           <h5 className='text-primary fw-bold mb-4'>
             Muku. 純粹美好的穿衣日常
           </h5>
-          <div className='row justify-content-center mb-4'>
-            <div className='col-md-3 col-8 border-end border-secondary '>
+          <div className='row justify-content-center home-intro mb-4'>
+            <div className='col-md-3 col-9'>
               <h6>
-                <i className='bi bi-flower2 me-2'></i>簡約日系風格
+                <i className='bi bi-flower2 me-2'></i>簡約選物風格
               </h6>
               <p>
                 <small>
@@ -72,19 +72,19 @@ function Home() {
                 </small>
               </p>
             </div>
-            <div className='col-md-3 col-8 border-end border-secondary'>
+            <div className='col-md-3 col-9'>
               <h6>
                 <i className='bi bi-flower2 me-2'></i>純淨自然的品牌理念
               </h6>
               <p>
                 <small>
-                  以「Muku」為名，希望透過商品傳達純淨自然的訴求，引領大家過舒適放鬆的生活
+                  以「Muku」為名，透過商品傳達純淨自然的訴求，引領大家過放鬆的生活
                 </small>
               </p>
             </div>
-            <div className='col-md-3 col-8'>
+            <div className='col-md-3 col-9'>
               <h6>
-                <i className='bi bi-flower2 me-2'></i>注重商品品質與環保議題
+                <i className='bi bi-flower2 me-2'></i>注重品質與環保
               </h6>
               <p>
                 <small>
