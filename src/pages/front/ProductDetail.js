@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import {
+  useNavigate,
+  useOutletContext,
+  useParams,
+  Link,
+} from 'react-router-dom';
 import { Link as ScrollLink, Element as ScrollElement } from 'react-scroll';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
@@ -105,7 +110,21 @@ function ProductDetail() {
                 : ''}
             </Swiper>
           </div>
-          <div className='col-lg-4 col-12 productInfo p-lg-3 p-4'>
+          <div className='col-lg-4 col-12 productInfo p-lg-2 p-4'>
+            <nav aria-label='breadcrumb'>
+              <ol className='breadcrumb'>
+                <li className='breadcrumb-item'>
+                  <Link to='/products/all' className='link'>
+                    <small>所有商品</small>
+                  </Link>
+                </li>
+                <li className='breadcrumb-item active' aria-current='page'>
+                  <Link to={`/products/${product.category}`} className='link'>
+                    <small>{product.category}</small>
+                  </Link>
+                </li>
+              </ol>
+            </nav>
             <h3 className='mb-1 text-primary'>{product.title}</h3>
             {product.description ? (
               <>
