@@ -9,7 +9,15 @@ function Product({ product }) {
           height={300}
           alt='productImg'
         />
-        <div className='overlay position-absolute top-0 start-0 w-100 h-100 bg-white'></div>
+
+        <div className='overlay position-absolute top-0 start-0 w-100 h-100 bg-white'>
+          <img
+            className='card-img-top rounded-0 object-cover'
+            height={300}
+            src={product.imagesUrl[0]}
+            alt='productImg'
+          />
+        </div>
       </Link>
 
       <div className='card-body p-0'>
