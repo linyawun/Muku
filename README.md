@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# Muku
+![image](https://i.imgur.com/SOVm5TY.jpg)
+> 此專案為日系服飾的電子商務平台，包含前台與後台，顧客可在前台觀看商品，並將商品加入購物車、填寫資料並送出訂單，管理者可在後台新增、編輯和刪除商品，也可新增、編輯、刪除優惠券，並可觀看訂單列表。
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- [線上觀看連結](https://linyawun.github.io/Muku/)
 
-## Available Scripts
+## 功能 
+### 後台(管理者)
+- [x] 登入
+- [x] 登出
+- [x] 顯示商品列表
+- [x] 依類別篩選商品
+- [x] 新增、編輯、刪除商品
+- [x] 顯示優惠券列表
+- [x] 新增、編輯、刪除優惠券
+- [x] 顯示訂單列表
+- [x] 編輯、刪除訂單
+### 前台
+- [x] 顯示商品列表
+- [x] 依類別篩選商品
+- [x] 商品加入購物車
+- [x] 顯示購物車列表
+- [x] 編輯購物車商品數量、刪除購物車
+- [x] 購物車使用優惠券
+- [x] 填寫顧客資訊，表單驗證
+- [x] 送出訂單
 
-In the project directory, you can run:
+## 畫面
+- 前台-商品列表
+![image](https://i.imgur.com/93Cy1dT.png)
 
-### `npm start`
+- 前台-購物車
+![image](https://i.imgur.com/AZaythd.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 後台-編輯商品
+![image](https://i.imgur.com/GZRePKR.png)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 後台-建立優惠券
+![image](https://i.imgur.com/A6jOOe8.png)
 
-### `npm test`
+## 安裝
+以下將會引導你如何安裝此專案到你的電腦上。
+> 請先安裝 [Node.js](https://nodejs.org/zh-tw/download)，Node.js 版本建議為：`18.12.0` 以上
+### 取得專案
+```bash
+git clone https://github.com/linyawun/Muku.git
+```
+### 移動到專案內
+```bash
+cd Muku
+```
+### 安裝套件
+```bash
+npm install
+```
+### 運行專案
+```bash
+npm start
+```
+### 開啟專案
+在瀏覽器網址列輸入以下即可看到畫面
+```
+http://localhost:8000/
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 資料夾說明
+- public - 靜態檔案放置處
+- src
+  - assets - 圖片放置處
+  - components - React 元件放置處
+  - pages - 頁面元件放置處
+  - helpers - 共用函式放置處
+  - store - 共用資料放置處
+  - stylesheets - scss 樣式放置處
+  
+## 專案技術
+- Node.js v18.12.0
+- React v18.2.0
+- React-router-dom v6.9.0
+- React-Hook-Form v7.43.8
+- React-scroll v1.8.9
+- React-widgets v5.8.4
+- Axios v1.3.4
+- Bootstrap v5.2.3
+- Bootstrap-icons v1.10.3
+- Swiper v9.2.2
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 聯絡作者
+你可以透過以下方式與我聯絡
+- email: linyawun031@gmail.com
