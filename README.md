@@ -1,5 +1,5 @@
 # Muku
-![image](https://i.imgur.com/SOVm5TY.jpg)
+![image](https://i.imgur.com/rgVDQHb.jpg)
 > 此專案為日系服飾的電子商務平台，包含前台與後台，顧客可在前台觀看商品，並將商品加入購物車、填寫資料並送出訂單，管理者可在後台新增、編輯和刪除商品，也可新增、編輯、刪除優惠券，並可觀看訂單列表。
 
 - [線上觀看連結](https://linyawun.github.io/Muku/)
