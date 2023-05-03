@@ -14,7 +14,7 @@ function Product({ product }) {
           <img
             className='card-img-top rounded-0 object-cover'
             height={300}
-            src={product.imagesUrl[0]}
+            src={product.imagesUrl?.[0] || product.imageUrl}
             alt='productImg'
           />
         </div>
