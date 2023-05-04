@@ -95,7 +95,7 @@ function Home() {
           </div>
           <div className='d-flex justify-content-center'>
             <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
-              關於我們
+              <small>關於我們</small>
             </Link>
           </div>
         </div>
@@ -105,7 +105,7 @@ function Home() {
           </div>
           <div className='col-5 d-flex justify-content-end'>
             <Link to='/products/all' className='link-primary pe-5 arrowLink'>
-              更多商品
+              <small>更多商品</small>
             </Link>
           </div>
         </div>
