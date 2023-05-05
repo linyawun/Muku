@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import MessageToast from '../../components/MessageToast';
 function FrontLayout() {
   const [cartData, setCartData] = useState({});
   const getCart = async () => {
@@ -21,6 +22,7 @@ function FrontLayout() {
   return (
     <>
       <Navbar cartData={cartData} />
+      <MessageToast />
       <Outlet context={{ getCart, cartData }}></Outlet>
       <Footer />
     </>
