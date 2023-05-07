@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 function Message() {
   const messages = useSelector((state) => state.message);
-  console.log(messages);
   return (
     <>
       <div

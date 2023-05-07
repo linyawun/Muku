@@ -7,7 +7,7 @@ import {
   Link,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createMessage } from '../../slice/messageSlice';
+import { createAsyncMessage } from '../../slice/messageSlice';
 import { Link as ScrollLink, Element as ScrollElement } from 'react-scroll';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
@@ -61,13 +61,13 @@ function ProductDetail() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart`,
         data
       );
-      console.log(res);
-      dispatch(createMessage(res.data));
+      dispatch(createAsyncMessage(res.data));
       getCart();
       setIsLoading(false);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   const getProducts = async (page = 1, category) => {

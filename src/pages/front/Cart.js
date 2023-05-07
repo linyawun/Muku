@@ -47,10 +47,9 @@ function Cart() {
   const deleteAllCart = async () => {
     try {
       const res = await axios.delete(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/carts`
+        `/v2/api/${process.env.REACT_APP_API_PATH}/cart`
       );
       getCart();
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
