@@ -66,7 +66,7 @@ function Products() {
       <div className='container mt-md-5 mt-3 mb-7'>
         <Loading isLoading={isLoading} />
         <div className='row'>
-          <div className='col-lg-2 col-md-3 mb-md-0 mb-4'>
+          <div className='col-lg-2 col-md-3 mb-md-0 mb-4 d-md-block d-none'>
             <div className='d-flex justify-content-between align-items-center'>
               <Link to='/products/all' className='link'>
                 所有商品

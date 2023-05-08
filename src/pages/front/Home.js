@@ -112,29 +112,13 @@ function Home() {
         <div className='row mb-5'>
           {products.map((product) => {
             return (
-              <div className='col-lg-3 col-6' key={product.id}>
+              <div className='col-lg-3 col-6 mb-4' key={product.id}>
                 <Product product={product} />
               </div>
             );
           })}
         </div>
       </div>
-      {/* <div className='bg-primary py-5 text-white'>
-        <div className='container'>
-          <div className='row justify-content-center'>
-            <div className='col-md-4 text-center'>
-              <h4>Muku. 純粹美好的穿衣日常</h4>
-              <p className='text-light'>
-                歡迎來到 Muku，Muku 成立於 2023
-                年，是一間日系服飾選物店，主要販售日常、簡約、寬鬆自在的服飾，讓穿衣成為簡單、純粹的日常。
-              </p>
-              <Link to='aboutUs' className='btn btn-secondary mt-4 rounded-0'>
-                關於我們
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }
