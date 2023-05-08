@@ -70,6 +70,7 @@ http://localhost:8000/
   - components - React 元件放置處
   - pages - 頁面元件放置處
   - helpers - 共用函式放置處
+  - slice - redux slice 放置處
   - store - 共用資料放置處
   - stylesheets - scss 樣式放置處
   
@@ -77,6 +78,7 @@ http://localhost:8000/
 - Node.js v18.12.0
 - React v18.2.0
 - React-router-dom v6.9.0
+- React-Redux v8.0.5
 - React-Hook-Form v7.43.8
 - React-scroll v1.8.9
 - React-widgets v5.8.4
