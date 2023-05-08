@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 function Product({ product }) {
   return (
-    <div className='card border-0 mb-4 position-relative'>
+    <div className='card border-0 mb-4 position-relative h-100'>
       <Link className='position-relative' to={`/product/${product.id}`}>
         <img
           src={product.imageUrl}
@@ -17,23 +17,33 @@ function Product({ product }) {
             src={product.imagesUrl?.[0] || product.imageUrl}
             alt='productImg'
           />
+          <button
+            type='button'
+            className='btn btn-primary position-absolute py-2 start-50 translate-middle-x add-to-cart d-md-block d-none'
+          >
+            加入購物車
+          </button>
         </div>
       </Link>
-
       <div className='card-body p-0'>
         <h6 className='mb-0 mt-2'>
           <Link to={`/product/${product.id}`} className='link'>
             {product.title}
           </Link>
         </h6>
-
         <p className='text-primary mt-1 mb-0'>
           NT$ {product.price?.toLocaleString()}
         </p>
-        <p className='text-decoration-line-through text-muted'>
+        <p className='text-decoration-line-through text-muted mb-0'>
           <small>NT$ {product.origin_price?.toLocaleString()}</small>
         </p>
       </div>
+      <button
+        type='button'
+        className='btn btn-primary add-to-cart w-100 d-md-none d-block'
+      >
+        <i className='bi bi-cart-fill'></i>
+      </button>
     </div>
   );
 }

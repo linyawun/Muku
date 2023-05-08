@@ -111,7 +111,7 @@ function Products() {
             <div className='row'>
               {products.map((product) => {
                 return (
-                  <div className='col-lg-3 col-6' key={product.id}>
+                  <div className='col-lg-3 col-6 mb-4' key={product.id}>
                     <Product product={product} />
                   </div>
                 );

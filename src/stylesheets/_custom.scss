@@ -161,10 +161,18 @@ li{
 }
 .overlay{
   opacity: 0;
-  transition: opacity .5s;
+  transition: all .5s;
   &:hover{
     opacity: 1;
     z-index: 20;
+  }
+  .add-to-cart{
+    bottom: 15px;
+    width: calc(100% - 30px);
+    margin: auto;
+    box-shadow: 6px 6px 50px 3px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 6px 6px 50px 3px rgba(0,0,0,0.3);
+    -moz-box-shadow: 6px 6px 50px 3px rgba(0,0,0,0.3);
   }
 }
 .login{
