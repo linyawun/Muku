@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
 
@@ -10,6 +12,7 @@ function Cart() {
   const [couponMsg, setCouponMsg] = useState('');
   const [loadingItems, setLoadingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
 
   const removeCartItem = async (id) => {
@@ -38,20 +41,26 @@ function Cart() {
       setLoadingItems(
         loadingItems.filter((loadingObj) => loadingObj !== item.id)
       );
-      console.log(res);
+      dispatch(createAsyncMessage(res.data));
       getCart();
     } catch (error) {
       console.log(error);
+      dispatch(createAsyncMessage(error.response.data));
+      setLoadingItems(
+        loadingItems.filter((loadingObj) => loadingObj !== item.id)
+      );
     }
   };
   const deleteAllCart = async () => {
     try {
       const res = await axios.delete(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/cart`
+        `/v2/api/${process.env.REACT_APP_API_PATH}/carts`
       );
       getCart();
+      dispatch(createAsyncMessage(res.data));
     } catch (error) {
       console.log(error);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   const sendCoupon = async () => {
