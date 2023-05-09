@@ -4,8 +4,12 @@ import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import MessageToast from '../../components/MessageToast';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAsyncCart } from '../../slice/cartSlice';
 function FrontLayout() {
   const [cartData, setCartData] = useState({});
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.cart);
   const getCart = async () => {
     try {
       const res = await axios.get(
@@ -16,9 +20,13 @@ function FrontLayout() {
       console.log(error);
     }
   };
+  // useEffect(() => {
+  //   dispatch(getAsyncCart());
+  // }, [dispatch]);
   useEffect(() => {
     getCart();
   }, []);
+
   return (
     <>
       <Navbar cartData={cartData} />
