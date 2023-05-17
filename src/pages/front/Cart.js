@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { Modal } from 'bootstrap';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import DeleteModal from '../../components/DeleteModal';
 import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
@@ -12,17 +14,20 @@ function Cart() {
   const [couponMsg, setCouponMsg] = useState('');
   const [loadingItems, setLoadingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const deleteModal = useRef(null);
   const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
 
   const removeCartItem = async (id) => {
     try {
-      await axios.delete(
+      const res = await axios.delete(
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
       );
       getCart();
+      dispatch(createAsyncMessage(res.data));
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   const updateCartItem = async (item, quantity) => {
@@ -44,7 +49,7 @@ function Cart() {
       dispatch(createAsyncMessage(res.data));
       getCart();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
       setLoadingItems(
         loadingItems.filter((loadingObj) => loadingObj !== item.id)
@@ -57,9 +62,10 @@ function Cart() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/carts`
       );
       getCart();
+      closeDeleteModal();
       dispatch(createAsyncMessage(res.data));
     } catch (error) {
-      console.log(error);
+      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };
@@ -89,9 +95,25 @@ function Cart() {
       setIsLoading(false);
     }
   };
+  const openDeleteModal = () => {
+    deleteModal.current.show();
+  };
+  const closeDeleteModal = () => {
+    deleteModal.current.hide();
+  };
+  useEffect(() => {
+    deleteModal.current = new Modal('#deleteModal', {
+      backdrop: 'static',
+    });
+  }, []);
 
   return (
     <div className='container'>
+      <DeleteModal
+        close={closeDeleteModal}
+        text='全部商品'
+        handleDelete={deleteAllCart}
+      />
       <Loading isLoading={isLoading} />
       <div className='row justify-content-center'>
         <div
@@ -113,7 +135,7 @@ function Cart() {
                 cartData?.carts?.length === 0 ? 'd-none' : 'd-block'
               }`}
               onClick={() => {
-                deleteAllCart();
+                openDeleteModal();
               }}
             >
               刪除全部

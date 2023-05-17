@@ -46,13 +46,20 @@ function Home() {
             className='mySwiper'
           >
             <SwiperSlide>
-              <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
+              <Link to='/products/all'>
+                <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
+              </Link>
+            </SwiperSlide>
+
+            <SwiperSlide>
+              <Link to='/products/all'>
+                <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
+              </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
-            </SwiperSlide>
-            <SwiperSlide>
-              <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
+              <Link to='/products/all'>
+                <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
+              </Link>
             </SwiperSlide>
           </Swiper>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import {
   useNavigate,
@@ -34,20 +34,23 @@ function ProductDetail() {
       `;
     },
   };
-  const getProduct = async (id) => {
-    setIsLoading(true);
-    try {
-      const productRes = await axios.get(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/product/${id}`
-      );
-      setProduct(productRes.data.product);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      navigate('/products/all');
-      setIsLoading(false);
-    }
-  };
+  const getProduct = useCallback(
+    async (id) => {
+      setIsLoading(true);
+      try {
+        const productRes = await axios.get(
+          `/v2/api/${process.env.REACT_APP_API_PATH}/product/${id}`
+        );
+        setProduct(productRes.data.product);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        navigate('/products/all');
+        setIsLoading(false);
+      }
+    },
+    [navigate]
+  );
   const addToCart = async () => {
     const data = {
       data: {
@@ -80,7 +83,7 @@ function ProductDetail() {
   };
   useEffect(() => {
     getProduct(id);
-  }, [id]);
+  }, [id, getProduct]);
   useEffect(() => {
     getProducts(1, product.category);
   }, [product]);
@@ -90,7 +93,7 @@ function ProductDetail() {
       <div className='container-lg mb-5'>
         <Loading isLoading={isLoading} />
         <div className='row'>
-          <div className='col-lg-8 col-12 mb-lg-0 mb-3'>
+          <div className='col-lg-8 mb-lg-0 mb-3'>
             <Swiper
               spaceBetween={30}
               pagination={pagination}
@@ -115,7 +118,7 @@ function ProductDetail() {
                 : ''}
             </Swiper>
           </div>
-          <div className='col-lg-4 col-12 productInfo p-lg-2 p-4'>
+          <div className='col-lg-4 productInfo p-lg-2 p-4'>
             <nav aria-label='breadcrumb'>
               <ol className='breadcrumb'>
                 <li className='breadcrumb-item'>
@@ -280,7 +283,7 @@ function ProductDetail() {
             <div className='mb-4'>
               <h4 className='text-primary'>送貨及付款方式</h4>
               <div className='row justify-content-between'>
-                <div className='col-lg-6 col-12'>
+                <div className='col-lg-6'>
                   <p className='mb-0 fw-bold'>送貨方式</p>
                   <ul className='ps-0'>
                     <li>7-11 取貨不付款 (C2C)</li>
@@ -288,7 +291,7 @@ function ProductDetail() {
                     <li>黑貓-常溫</li>
                   </ul>
                 </div>
-                <div className='col-lg-6 col-12'>
+                <div className='col-lg-6'>
                   <p className='mb-0 fw-bold'>付款方式</p>
                   <ul className='ps-0'>
                     <li>信用卡 (支援VISA, MasterCard, JCB)</li>

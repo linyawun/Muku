@@ -2,7 +2,7 @@ function AboutUs() {
   return (
     <div className='container'>
       <div className='row justify-content-center mb-6'>
-        <div className='col-lg-7 col-12'>
+        <div className='col-lg-7'>
           <h2 className='text-primary text-center mt-4 mb-4'>關於我們</h2>
           <img
             src='https://i.imgur.com/xJWaghG.jpg'

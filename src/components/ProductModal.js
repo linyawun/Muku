@@ -106,7 +106,7 @@ function ProductModal({
         setUploadImgMsg('上傳成功');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setUploadImgMsg('上傳失敗，請檢查檔案是否過大');
     }
   };
@@ -154,7 +154,10 @@ function ProductModal({
             />
           </div>
           <div className='modal-body'>
-            <form onSubmit={handleSubmit(submit)} className='row'>
+            <form
+              onSubmit={handleSubmit(submit)}
+              className='row flex-sm-row flex-column-reverse'
+            >
               <div className='col-sm-4'>
                 <div className='form-group mb-3'>
                   <Input
@@ -162,7 +165,7 @@ function ProductModal({
                     errors={errors}
                     id='imageUrl'
                     type='text'
-                    labelText='輸入圖片網址*'
+                    labelText='輸入主圖網址*'
                     placeholder='請輸入圖片連結'
                     rules={{
                       required: {
@@ -191,13 +194,12 @@ function ProductModal({
                     />
                   </label>
                   <p className='text-muted'>{uploadImgMsg}</p>
+                  <img
+                    className={imageUrl ? 'img-fluid' : 'd-none'}
+                    src={imageUrl}
+                    alt='product_mainImg'
+                  />
                 </div>
-                <img
-                  className={imageUrl ? 'img-fluid' : 'd-none'}
-                  src={imageUrl}
-                  alt='product_mainImg'
-                />
-                <img src='' alt='' className='img-fluid' />
               </div>
               <div className='col-sm-8'>
                 <div className='form-group mb-3'>
@@ -326,19 +328,19 @@ function ProductModal({
                   />
                 </div>
               </div>
-              <div className='modal-footer'>
-                <button
-                  type='button'
-                  className='btn btn-secondary'
-                  onClick={closeProductModal}
-                >
-                  關閉
-                </button>
-                <button type='submit' className='btn btn-primary'>
-                  儲存
-                </button>
-              </div>
             </form>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-secondary'
+                onClick={closeProductModal}
+              >
+                關閉
+              </button>
+              <button type='submit' className='btn btn-primary'>
+                儲存
+              </button>
+            </div>
           </div>
         </div>
       </div>

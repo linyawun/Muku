@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { useForm, useWatch } from 'react-hook-form';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import { Input, Select, CheckboxRadio } from '../../components/FormElement';
 import Loading from '../../components/Loading';
@@ -11,7 +13,9 @@ function Checkout() {
   const [cityList, setCityList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const { cartData, getCart } = useOutletContext();
+  const [disableSubmit, serDisableSubmit] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
   const defaultVal = useRef({
     name: '',
@@ -27,7 +31,7 @@ function Checkout() {
     handleSubmit,
     getValues,
     control,
-    formState: { errors },
+    formState: { isDirty, errors },
   } = useForm({
     defaultValues: defaultVal.current,
     mode: 'onTouched',
@@ -55,16 +59,18 @@ function Checkout() {
       if (res.data.success) {
         getCart();
         navigate(`/checkoutSuccess/${res.data.orderId}`);
+        dispatch(createAsyncMessage(res.data));
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   useEffect(() => {
     if (cartData?.carts?.length === 0) {
       navigate('/');
     }
-  }, []);
+  }, [cartData, navigate]);
   useEffect(() => {
     const getCity = async () => {
       setIsLoading(true);
@@ -105,6 +111,10 @@ function Checkout() {
     control,
     name: 'city',
   });
+
+  useEffect(() => {
+    serDisableSubmit(!isDirty || Object.keys(errors).length !== 0);
+  }, [errors, isDirty]);
 
   return (
     <div className='pt-5 pb-7'>
@@ -310,6 +320,7 @@ function Checkout() {
                   <button
                     type='submit'
                     className='btn btn-primary py-3 px-7 rounded-0'
+                    disabled={disableSubmit}
                   >
                     確認送出
                   </button>
@@ -339,7 +350,6 @@ function Checkout() {
                           <small>{item.product.title}</small>
                         </p>
                         <p className='mb-0'>
-                          {' '}
                           <small>x{item.qty}</small>
                         </p>
                       </div>

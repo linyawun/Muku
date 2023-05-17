@@ -53,7 +53,6 @@ function AdminCoupons() {
       const res = await axios.delete(
         `/v2/api/${process.env.REACT_APP_API_PATH}/admin/coupon/${id}`
       );
-      console.log(res);
       if (res.data.success) {
         handleSuccessMessage(dispatch, res);
         getCoupons();

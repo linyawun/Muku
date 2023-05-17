@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 function CheckoutSuccess() {
+  const dispatch = useDispatch();
   const { orderId } = useParams();
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState({});
@@ -14,12 +17,29 @@ function CheckoutSuccess() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
       );
       if (res.data.order) {
+        console.log(res.data.order);
         setOrderData(res.data.order);
       } else {
         navigate('/');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    }
+  };
+
+  const payOrder = async (orderId) => {
+    try {
+      const res = await axios.post(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/pay/${orderId}`
+      );
+      if (res.data.success) {
+        console.log(res);
+        dispatch(createAsyncMessage(res.data));
+        getOrder(orderId);
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   useEffect(() => {
@@ -70,7 +90,8 @@ function CheckoutSuccess() {
                 購物，謝謝您對我們的信任和支持，讓我們有機會為您提供優質的服務。
               </p>
               <p>
-                我們會盡快準備商品，期待能將商品寄送給您，祝您有個美好的一天！
+                <strong>請您於 3 日內付款</strong>
+                ，我們會盡快準備商品，期待能將商品寄送給您，祝您有個美好的一天！
               </p>
               <Link
                 to='/'
@@ -124,7 +145,6 @@ function CheckoutSuccess() {
                         </li>
                       );
                     })}
-
                     <li className='list-group-item px-0 pb-0'>
                       {couponData?.hasCoupon ? (
                         <table className='table text-muted'>
@@ -159,7 +179,24 @@ function CheckoutSuccess() {
                       ) : (
                         ''
                       )}
-
+                      <div className='d-flex justify-content-between align-items-center mt-2'>
+                        <p className='mb-0 h5'>付款狀態</p>
+                        <p className='mb-0'>
+                          {orderData?.is_paid === false ? (
+                            <button
+                              type='button'
+                              className='btn btn-primary'
+                              onClick={() => {
+                                payOrder();
+                              }}
+                            >
+                              確認付款
+                            </button>
+                          ) : (
+                            '已付款'
+                          )}
+                        </p>
+                      </div>
                       <div className='d-flex justify-content-between mt-2'>
                         <p className='mb-0 h4 fw-bold'>訂單總金額</p>
                         <p className='mb-0 h4 fw-bold'>
