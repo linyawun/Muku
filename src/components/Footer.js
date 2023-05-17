@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import mukuLogo from '../assets/mukuLogo-03.svg';
 function Footer() {
   return (
-    <div className='bg-light'>
+    <footer className='bg-light'>
       <div className='container'>
         <div className='row py-5 justify-content-lg-between justify-content-start align-items-center'>
           <div className='col-md-5 col-12'>
@@ -74,7 +74,7 @@ function Footer() {
           </p>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 export default Footer;

@@ -22,7 +22,7 @@ function Navbar({ cartData }) {
     getCategory();
   }, []);
   return (
-    <div className='bg-white sticky-top'>
+    <header className='bg-white sticky-top'>
       <nav className='navbar navbar-expand-lg navbar-light bg-white'>
         <div className='container-fluid position-relative'>
           <button
@@ -102,7 +102,7 @@ function Navbar({ cartData }) {
           </div>
         </div>
       </nav>
-    </div>
+    </header>
   );
 }
 
