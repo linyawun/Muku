@@ -17,7 +17,7 @@ function Cart() {
 
   const removeCartItem = async (id) => {
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
       );
       getCart();
@@ -145,7 +145,7 @@ function Cart() {
 
                       <p className='mb-0'>{item.product.title}</p>
 
-                      <div className='d-flex justify-content-between align-items-center w-100 row'>
+                      <div className='row justify-content-between align-items-center w-100'>
                         <div className='col-lg-4 col-5 ps-3'>
                           <select
                             name=''

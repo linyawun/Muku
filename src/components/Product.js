@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createAsyncMessage } from '../slice/messageSlice';
 import axios from 'axios';
 function Product({ product }) {
   const { getCart } = useOutletContext();
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const addToCart = async () => {
     const data = {

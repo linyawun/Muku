@@ -4,6 +4,7 @@ import axios from 'axios';
 import CheckoutSteps from '../../components/CheckoutSteps';
 function CheckoutSuccess() {
   const { orderId } = useParams();
+  const navigate = useNavigate();
   const [orderData, setOrderData] = useState({});
   const [couponData, setCouponData] = useState({});
 
@@ -12,10 +13,11 @@ function CheckoutSuccess() {
       const res = await axios.get(
         `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
       );
-      console.log(res);
       if (res.data.order) {
+        setOrderData(res.data.order);
+      } else {
+        navigate('/');
       }
-      setOrderData(res.data.order);
     } catch (error) {
       console.log(error);
     }

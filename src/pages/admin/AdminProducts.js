@@ -50,6 +50,7 @@ function AdminProducts() {
   };
   const closeProductModal = () => {
     productModal.current.hide();
+    setTempProduct({});
   };
 
   const openDeleteModal = (product) => {

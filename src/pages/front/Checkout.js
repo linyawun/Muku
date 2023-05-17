@@ -158,15 +158,6 @@ function Checkout() {
                   />
                 </div>
                 <div className='mb-5'>
-                  {/* <label htmlFor='ContactPhone' className=' mb-0 form-label'>
-                    手機
-                  </label>
-                  <input
-                    type='text'
-                    className='form-control rounded-0'
-                    id='ContactPhone'
-                    placeholder='0933-123-123'
-                  /> */}
                   <Input
                     register={register}
                     errors={errors}
@@ -193,28 +184,6 @@ function Checkout() {
                     }}
                   />
                 </div>
-
-                {/* <p className='mb-2'>地址</p>
-                <div className='form-row'>
-                  <div className='col mb-2'>
-                    <select id='inputState' className='form-select rounded-0'>
-                      <option selected>Country/Region</option>
-                      <option>...</option>
-                    </select>
-                  </div>
-                  <div className='col mb-2'>
-                    <select id='inputState' className='form-select rounded-0'>
-                      <option selected>City</option>
-                      <option>...</option>
-                    </select>
-                  </div>
-                </div>
-                <input
-                  type='text'
-                  className='form-control rounded-0 mt-1 mb-2'
-                  id='inputCity'
-                  placeholder='Address'
-                /> */}
                 <h5>送貨與付款資料</h5>
                 <div className='row mb-3 g-3'>
                   <div className='col-6'>
@@ -229,8 +198,7 @@ function Checkout() {
                       disabled={false}
                     >
                       <option value='' disabled>
-                        {' '}
-                        請選擇縣市{' '}
+                        請選擇縣市
                       </option>
                       {cityList?.map((city) => (
                         <option value={city.countyName} key={city.countyCode}>
@@ -251,8 +219,7 @@ function Checkout() {
                       disabled={!getValues().city}
                     >
                       <option value='' disabled>
-                        {' '}
-                        請選擇鄉鎮市區{' '}
+                        請選擇鄉鎮市區
                       </option>
                       {getValues().city
                         ? districtList.map((area) => (
@@ -315,53 +282,6 @@ function Checkout() {
                     hasErrorMsg={true}
                   />
                 </div>
-                {/* <p className='mb-3'>付款方式</p>
-                <div className='form-check mb-2'>
-                  <input
-                    className='form-check-input'
-                    type='radio'
-                    name='gridRadios'
-                    id='gridRadios1'
-                    value='option1'
-                    checked
-                  />
-                  <label
-                    className='form-check-label text-muted'
-                    htmlFor='gridRadios1'
-                  >
-                    WebATM
-                  </label>
-                </div>
-                <div className='form-check mb-2'>
-                  <input
-                    className='form-check-input'
-                    type='radio'
-                    name='gridRadios'
-                    id='gridRadios2'
-                    value='option2'
-                  />
-                  <label
-                    className='form-check-label text-muted'
-                    htmlFor='gridRadios2'
-                  >
-                    ATM
-                  </label>
-                </div>
-                <div className='form-check mb-5'>
-                  <input
-                    className='form-check-input'
-                    type='radio'
-                    name='gridRadios'
-                    id='gridRadios3'
-                    value='option3'
-                  />
-                  <label
-                    className='form-check-label text-muted'
-                    htmlFor='gridRadios3'
-                  >
-                    ApplePay
-                  </label>
-                </div> */}
                 <div className='mb-3'>
                   <h5>訂單備註</h5>
                   <textarea
@@ -440,26 +360,6 @@ function Checkout() {
                   </div>
                 );
               })}
-              {/* <div className='d-flex mt-2'>
-                <img
-                  src='https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80'
-                  alt=''
-                  className='me-2'
-                  style={{ width: '48px', height: '48px', objectFit: 'cover' }}
-                />
-                <div className='w-100'>
-                  <div className='d-flex justify-content-between fw-bold'>
-                    <p className='mb-0'>Lorem ipsum</p>
-                    <p className='mb-0'>x10</p>
-                  </div>
-                  <div className='d-flex justify-content-between'>
-                    <p className='text-muted mb-0'>
-                      <small>NT$12,000</small>
-                    </p>
-                    <p className='mb-0'>NT$12,000</p>
-                  </div>
-                </div>
-              </div> */}
               {hascoupon ? (
                 <table className='table mt-4 border-top border-bottom text-muted'>
                   <tbody>

@@ -24,7 +24,6 @@ function Home() {
       `/v2/api/${process.env.REACT_APP_API_PATH}/products?page=${page}`
     );
     setProducts(productRes.data.products);
-    //setPagination(productRes.data.pagination);
     setIsLoading(false);
   };
   useEffect(() => {
@@ -94,7 +93,7 @@ function Home() {
             </div>
           </div>
           <div className='d-flex justify-content-center'>
-            <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
+            <Link to='/products/all' className='link-primary pe-5 arrowLink'>
               <small>關於我們</small>
             </Link>
           </div>

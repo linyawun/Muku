@@ -15,7 +15,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
       status: 0,
       ...tempOrder,
     }),
-    []
+    [tempOrder]
   );
   const [tempData, setTempData] = useState(initData);
   const [, dispatch] = useContext(MessageContext);

@@ -55,16 +55,19 @@ function ProductModal({
   };
   const [, dispatch] = useContext(MessageContext);
 
-  useEffect(() => {
-    if (type === 'create') {
-      setTempData(initData);
-      console.log('create', tempData);
-    } else if (type === 'edit') {
-      setTempData((pre) => ({ ...pre, ...tempProduct }));
-    }
-    setUploadImgMsg('');
-    setUploadImgVal('');
-  }, [type, tempProduct, initData]);
+  useEffect(
+    (tempData) => {
+      if (type === 'create') {
+        setTempData(initData);
+        console.log('create', tempData);
+      } else if (type === 'edit') {
+        setTempData((pre) => ({ ...pre, ...tempProduct }));
+      }
+      setUploadImgMsg('');
+      setUploadImgVal('');
+    },
+    [type, tempProduct, initData]
+  );
 
   useEffect(() => {
     const resetForm = () => {

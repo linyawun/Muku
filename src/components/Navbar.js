@@ -96,7 +96,7 @@ function Navbar({ cartData }) {
               <i className='bi bi-cart-fill'></i>
 
               <span className='position-absolute start-100 translate-middle badge rounded-pill bg-danger cart-msg'>
-                {cartData?.carts?.length}
+                {cartData?.carts?.length === 0 ? '' : cartData?.carts?.length}
               </span>
             </NavLink>
           </div>
