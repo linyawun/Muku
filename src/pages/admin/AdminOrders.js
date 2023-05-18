@@ -25,6 +25,7 @@ function AdminOrders() {
     const res = await axios.get(
       `/v2/api/${process.env.REACT_APP_API_PATH}/admin/orders?page=${page}`
     );
+    console.log(res.data);
     setOrders(res.data.orders);
     setPagination(res.data.pagination);
     setIsLoading(false);
@@ -106,10 +107,7 @@ function AdminOrders() {
                   <td>
                     <small>{order.id}</small>
                   </td>
-                  <td>
-                    {order.user?.name}
-                    {/* {order.user?.email} */}
-                  </td>
+                  <td>{order.user?.name}</td>
                   <td>${Math.round(order.total)?.toLocaleString()}</td>
                   <td>
                     {order.is_paid ? (

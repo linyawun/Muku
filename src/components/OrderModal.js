@@ -181,7 +181,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
             )}
 
             <div>
-              <h5 className='mt-4'>修改訂單狀態</h5>
+              <h5 className='mt-4'>訂單狀態</h5>
               <div className='form-check mb-4'>
                 <label className='form-check-label' htmlFor='is_paid'>
                   <input
@@ -191,9 +191,15 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                     id='is_paid'
                     checked={!!tempData.is_paid}
                     onChange={handleChange}
-                    disabled={isLoading}
+                    disabled
                   />
-                  付款狀態 ({tempData.is_paid ? '已付款' : '未付款'})
+                  付款狀態 (
+                  {tempData.is_paid
+                    ? `已付款，付款時間為 ${timeStampToTime(
+                        tempData.paid_date
+                      )}`
+                    : '未付款'}
+                  )
                 </label>
               </div>
               <div className='mb-4'>

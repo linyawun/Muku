@@ -4,14 +4,17 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
+import Loading from '../../components/Loading';
 function CheckoutSuccess() {
   const dispatch = useDispatch();
   const { orderId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [orderData, setOrderData] = useState({});
   const [couponData, setCouponData] = useState({});
 
   const getOrder = async (orderId) => {
+    setIsLoading(true);
     try {
       const res = await axios.get(
         `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
@@ -22,12 +25,15 @@ function CheckoutSuccess() {
       } else {
         navigate('/');
       }
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
 
   const payOrder = async (orderId) => {
+    console.log('orderId', orderId);
     try {
       const res = await axios.post(
         `/v2/api/${process.env.REACT_APP_API_PATH}/pay/${orderId}`
@@ -67,6 +73,7 @@ function CheckoutSuccess() {
   }, [orderData]);
   return (
     <div className='container'>
+      <Loading isLoading={isLoading} />
       {orderData ? (
         <div
           className='mt-5 mb-7'
@@ -187,7 +194,7 @@ function CheckoutSuccess() {
                               type='button'
                               className='btn btn-primary'
                               onClick={() => {
-                                payOrder();
+                                payOrder(orderId);
                               }}
                             >
                               確認付款
@@ -200,7 +207,10 @@ function CheckoutSuccess() {
                       <div className='d-flex justify-content-between mt-2'>
                         <p className='mb-0 h4 fw-bold'>訂單總金額</p>
                         <p className='mb-0 h4 fw-bold'>
-                          NT$ {Math.round(orderData?.total)?.toLocaleString()}
+                          NT${' '}
+                          {orderData?.total
+                            ? Math.round(orderData?.total)?.toLocaleString()
+                            : ''}
                         </p>
                       </div>
                     </li>
