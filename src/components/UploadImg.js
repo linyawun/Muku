@@ -1,45 +1,64 @@
-import { Input } from './FormElement';
-function UploadImg() {
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setUploadVal, setUploadMsg } from '../slice/uploadImgSlice';
+function UploadImg({ id, property, setValue, imgUrl }) {
+  const uploadImages = useSelector((state) => state.uploadImg);
+  const dispatchRedux = useDispatch();
+  const uploadImg = async (e, property, name) => {
+    dispatchRedux(
+      setUploadVal({
+        [property]: e.target.value,
+      })
+    );
+    const file = e.target.files[0]; // 取得選定的檔案資訊
+    const formData = new FormData(); // 建立FormData
+    formData.append('file', file); // 將選定的檔案加入到FormData中
+    if (file.type.split('/')[0] !== 'image') {
+      dispatchRedux(
+        setUploadMsg({ [property]: '格式錯誤，請選擇 jpg 或 png 檔' })
+      );
+      return;
+    }
+    try {
+      dispatchRedux(setUploadMsg({ [property]: '上傳中...' }));
+      const res = await axios.post(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/admin/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      if (res.data.success) {
+        setValue(name, res.data.imageUrl);
+        dispatchRedux(setUploadMsg({ [property]: '' }));
+      }
+    } catch (error) {
+      dispatchRedux(
+        setUploadMsg({ [property]: '上傳失敗，請檢查檔案是否過大' })
+      );
+    }
+  };
   return (
     <>
       <div className='form-group mb-2'>
-        <Input
-          register={register}
-          errors={errors}
-          id='imageUrl'
-          type='text'
-          labelText='主圖網址*'
-          placeholder='請輸入圖片連結'
-          rules={{
-            required: {
-              value: true,
-              message: '圖片網址為必填',
-            },
-          }}
-          onChange={(e) =>
-            setTempData((pre) => ({
-              ...pre,
-              imageUrl: e.target.value,
-            }))
-          }
-        />
-      </div>
-      <div className='form-group mb-2'>
-        <label className='w-100' htmlFor='customFile'>
+        <label className='w-100' htmlFor={`${property}_file`}>
           或 上傳圖片
           <input
             type='file'
-            id='customFile'
-            className='form-control mb-2'
-            value={uploadImgVal}
-            onChange={uploadImg}
+            id={`${property}_file`}
+            className='form-control mb-1'
+            value={uploadImages[property].uploadVal}
+            onChange={(e) => uploadImg(e, property, id)}
           />
         </label>
-        <p className='text-muted'>{uploadImgMsg}</p>
+        <p className='text-muted mb-1'>{uploadImages[property].uploadMsg}</p>
         <img
-          className={imageUrl ? 'img-fluid' : 'd-none'}
-          src={imageUrl}
-          alt='product_mainImg'
+          className={imgUrl ? 'img-fluid' : 'd-none'}
+          src={imgUrl}
+          alt='productImg_preview'
         />
       </div>
     </>

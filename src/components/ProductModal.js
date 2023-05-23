@@ -2,11 +2,19 @@ import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Input, Textarea, CheckboxRadio, Selectbox } from './FormElement';
+import UploadImg from './UploadImg';
 import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
 } from '../store/messageStore';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {
+  setUploadVal,
+  setUploadMsg,
+  resetUploadImg,
+} from '../slice/uploadImgSlice';
 
 function ProductModal({
   closeProductModal,
@@ -27,25 +35,14 @@ function ProductModal({
       is_enabled: 1,
       imageUrl: '',
       ...Object.fromEntries(
-        Array.from({ length: 5 }, (_, i) => [`imageUrl_${i + 1}`, ''])
+        Array.from({ length: 5 }, (_, i) => [`detailImg${i + 1}`, ''])
       ),
     }),
     []
   );
   const [tempData, setTempData] = useState(initData);
-  const [uploadImgMsg, setUploadImgMsg] = useState({
-    imageUrl: '',
-    ...Object.fromEntries(
-      Array.from({ length: 5 }, (_, i) => [`imageUrl_${i + 1}`, ''])
-    ),
-  });
-  const [uploadImgVal, setUploadImgVal] = useState({
-    imageUrl: '',
-    ...Object.fromEntries(
-      Array.from({ length: 5 }, (_, i) => [`imageUrl_${i + 1}`, ''])
-    ),
-  });
-
+  const dispatchRedux = useDispatch();
+  const uploadImages = useSelector((state) => state.uploadImg);
   const {
     register,
     handleSubmit,
@@ -58,9 +55,13 @@ function ProductModal({
     defaultValues: tempData,
     mode: 'onTouched',
   });
-  const imageUrl = watch('imageUrl');
-  const imageUrl_1 = watch('imageUrl_1');
-  const originPrice = watch('origin_price');
+  let imageUrl = watch('imageUrl');
+  let detailImg1 = watch('detailImg1');
+  let detailImg2 = watch('detailImg2');
+  let detailImg3 = watch('detailImg3');
+  let detailImg4 = watch('detailImg4');
+  let detailImg5 = watch('detailImg5');
+  let originPrice = watch('origin_price');
   const validatePrice = (value) => {
     if (value && originPrice && Number(value) >= Number(originPrice)) {
       return '售價必須低於原價';
@@ -72,35 +73,22 @@ function ProductModal({
   useEffect(() => {
     if (type === 'create') {
       setTempData(initData);
+      dispatchRedux(resetUploadImg());
     } else if (type === 'edit') {
-      const { imagesUrl, ...rest } = tempProduct;
+      dispatchRedux(resetUploadImg());
+      let { imagesUrl, ...rest } = tempProduct;
+      if (!imagesUrl) {
+        imagesUrl = Array.from({ length: 5 }, (v, i) => '');
+      }
       const imageData = imagesUrl?.reduce((result, url, index) => {
-        result[`imageUrl_${index + 1}`] = url;
+        result[`detailImg${index + 1}`] = url;
         return result;
       }, {});
-
-      // const uploadImgMsg = {
-      //   imageUrl: '',
-      //   imageUrl_1: '',
-      //   imageUrl_2: '',
-      //   imageUrl_3: '',
-      //   imageUrl_4: '',
-      //   imageUrl_5: '',
-      // };
-
-      const uploadImgVal = {
-        imageUrl: tempProduct.imageUrl,
-        ...imageData,
-      };
-
       setTempData((pre) => ({
         ...pre,
         ...rest,
         ...imageData,
       }));
-
-      setUploadImgMsg(uploadImgMsg);
-      setUploadImgVal(uploadImgVal);
     }
   }, [type, tempProduct, initData]);
 
@@ -111,34 +99,6 @@ function ProductModal({
     resetForm();
   }, [tempData, reset]);
 
-  const uploadImg = async (e) => {
-    setUploadImgVal(e.target.value);
-    const file = e.target.files[0]; // 取得選定的檔案資訊
-    const formData = new FormData(); // 建立FormData
-    formData.append('file', file); // 將選定的檔案加入到FormData中
-    if (file.type.split('/')[0] !== 'image') {
-      setUploadImgMsg('格式錯誤，請選擇 jpg 或 png 檔');
-      return;
-    }
-    try {
-      setUploadImgMsg('上傳中...');
-      const res = await axios.post(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/admin/upload`,
-        formData, // 傳送FormData
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data', // 設定Content-Type
-          },
-        }
-      );
-      if (res.data.success) {
-        setValue('imageUrl', res.data.imageUrl);
-        setUploadImgMsg('上傳成功');
-      }
-    } catch (error) {
-      setUploadImgMsg('上傳失敗，請檢查檔案是否過大');
-    }
-  };
   const submit = async (data) => {
     try {
       let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product`;
@@ -149,7 +109,16 @@ function ProductModal({
         method = 'put';
       }
       const res = await axios[method](api, {
-        data: data,
+        data: {
+          ...data,
+          imagesUrl: [
+            detailImg1,
+            detailImg2,
+            detailImg3,
+            detailImg4,
+            detailImg5,
+          ],
+        },
       });
       if (res.data.success) {
         handleSuccessMessage(dispatch, res);
@@ -313,7 +282,7 @@ function ProductModal({
               </div>
               <div className='col-12'>
                 <div className='row'>
-                  <div className='col-sm-6'>
+                  <div className='col-md-4 col-sm-6 mb-3'>
                     <div className='form-group mb-2'>
                       <Input
                         register={register}
@@ -325,7 +294,7 @@ function ProductModal({
                         rules={{
                           required: {
                             value: true,
-                            message: '圖片網址為必填',
+                            message: '主圖網址為必填',
                           },
                         }}
                         onChange={(e) =>
@@ -336,76 +305,148 @@ function ProductModal({
                         }
                       />
                     </div>
-                    <div className='form-group mb-2'>
-                      <label className='w-100' htmlFor='customFile'>
-                        或 上傳圖片
-                        <input
-                          type='file'
-                          id='customFile'
-                          className='form-control mb-2'
-                          value={uploadImgVal[imageUrl]}
-                          onChange={uploadImg}
-                        />
-                      </label>
-                      <p className='text-muted'>{uploadImgMsg[imageUrl]}</p>
-                      <img
-                        className={imageUrl ? 'img-fluid' : 'd-none'}
-                        src={imageUrl}
-                        alt='product_mainImg'
-                      />
-                    </div>
+                    <UploadImg
+                      id='imageUrl'
+                      property='mainImg'
+                      setValue={setValue}
+                      imgUrl={imageUrl}
+                    />
                   </div>
-                  <div className='col-sm-6'>
+                  <div className='col-md-4 col-sm-6 mb-3'>
                     <div className='form-group mb-2'>
                       <Input
                         register={register}
                         errors={errors}
-                        id='imageUrl_1'
+                        id='detailImg1'
                         type='text'
-                        labelText='細圖 1 網址*'
+                        labelText='細圖 1 網址'
                         placeholder='請輸入圖片連結'
                         onChange={(e) =>
                           setTempData((pre) => ({
                             ...pre,
-                            imageUrl_1: e.target.value,
+                            detailImg1: e.target.value,
                           }))
                         }
                       />
                     </div>
+                    <UploadImg
+                      id='detailImg1'
+                      property='detailImg1'
+                      setValue={setValue}
+                      imgUrl={detailImg1}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
                     <div className='form-group mb-2'>
-                      <label className='w-100' htmlFor='customFile'>
-                        或 上傳圖片
-                        <input
-                          type='file'
-                          id='customFile'
-                          className='form-control mb-2'
-                          value={uploadImgVal[imageUrl_1]}
-                          onChange={uploadImg}
-                        />
-                      </label>
-                      <p className='text-muted'>{uploadImgMsg[imageUrl_1]}</p>
-                      <img
-                        className={imageUrl_1 ? 'img-fluid' : 'd-none'}
-                        src={imageUrl_1}
-                        alt='product_mainImg'
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg2'
+                        type='text'
+                        labelText='細圖 2 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg2: e.target.value,
+                          }))
+                        }
                       />
                     </div>
+                    <UploadImg
+                      id='detailImg2'
+                      property='detailImg2'
+                      setValue={setValue}
+                      imgUrl={detailImg2}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg3'
+                        type='text'
+                        labelText='細圖 3 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg3: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg3'
+                      property='detailImg3'
+                      setValue={setValue}
+                      imgUrl={detailImg3}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg4'
+                        type='text'
+                        labelText='細圖 4 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg4: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg4'
+                      property='detailImg4'
+                      setValue={setValue}
+                      imgUrl={detailImg4}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg5'
+                        type='text'
+                        labelText='細圖 5 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg5: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg5'
+                      property='detailImg5'
+                      setValue={setValue}
+                      imgUrl={detailImg5}
+                    />
                   </div>
                 </div>
               </div>
+              <div className='modal-footer'>
+                <button
+                  type='button'
+                  className='btn btn-secondary'
+                  onClick={closeProductModal}
+                >
+                  關閉
+                </button>
+                <button type='submit' className='btn btn-primary'>
+                  儲存
+                </button>
+              </div>
             </form>
-            <div className='modal-footer'>
-              <button
-                type='button'
-                className='btn btn-secondary'
-                onClick={closeProductModal}
-              >
-                關閉
-              </button>
-              <button type='submit' className='btn btn-primary'>
-                儲存
-              </button>
-            </div>
           </div>
         </div>
       </div>
