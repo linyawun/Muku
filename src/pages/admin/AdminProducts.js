@@ -72,7 +72,6 @@ function AdminProducts() {
         closeDeleteModal();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };

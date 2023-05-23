@@ -26,12 +26,25 @@ function ProductModal({
       content: '',
       is_enabled: 1,
       imageUrl: '',
+      ...Object.fromEntries(
+        Array.from({ length: 5 }, (_, i) => [`imageUrl_${i + 1}`, ''])
+      ),
     }),
     []
   );
   const [tempData, setTempData] = useState(initData);
-  const [uploadImgMsg, setUploadImgMsg] = useState('');
-  const [uploadImgVal, setUploadImgVal] = useState('');
+  const [uploadImgMsg, setUploadImgMsg] = useState({
+    imageUrl: '',
+    ...Object.fromEntries(
+      Array.from({ length: 5 }, (_, i) => [`imageUrl_${i + 1}`, ''])
+    ),
+  });
+  const [uploadImgVal, setUploadImgVal] = useState({
+    imageUrl: '',
+    ...Object.fromEntries(
+      Array.from({ length: 5 }, (_, i) => [`imageUrl_${i + 1}`, ''])
+    ),
+  });
 
   const {
     register,
@@ -46,6 +59,7 @@ function ProductModal({
     mode: 'onTouched',
   });
   const imageUrl = watch('imageUrl');
+  const imageUrl_1 = watch('imageUrl_1');
   const originPrice = watch('origin_price');
   const validatePrice = (value) => {
     if (value && originPrice && Number(value) >= Number(originPrice)) {
@@ -55,18 +69,40 @@ function ProductModal({
   };
   const [, dispatch] = useContext(MessageContext);
 
-  useEffect(
-    (tempData) => {
-      if (type === 'create') {
-        setTempData(initData);
-      } else if (type === 'edit') {
-        setTempData((pre) => ({ ...pre, ...tempProduct }));
-      }
-      setUploadImgMsg('');
-      setUploadImgVal('');
-    },
-    [type, tempProduct, initData]
-  );
+  useEffect(() => {
+    if (type === 'create') {
+      setTempData(initData);
+    } else if (type === 'edit') {
+      const { imagesUrl, ...rest } = tempProduct;
+      const imageData = imagesUrl?.reduce((result, url, index) => {
+        result[`imageUrl_${index + 1}`] = url;
+        return result;
+      }, {});
+
+      // const uploadImgMsg = {
+      //   imageUrl: '',
+      //   imageUrl_1: '',
+      //   imageUrl_2: '',
+      //   imageUrl_3: '',
+      //   imageUrl_4: '',
+      //   imageUrl_5: '',
+      // };
+
+      const uploadImgVal = {
+        imageUrl: tempProduct.imageUrl,
+        ...imageData,
+      };
+
+      setTempData((pre) => ({
+        ...pre,
+        ...rest,
+        ...imageData,
+      }));
+
+      setUploadImgMsg(uploadImgMsg);
+      setUploadImgVal(uploadImgVal);
+    }
+  }, [type, tempProduct, initData]);
 
   useEffect(() => {
     const resetForm = () => {
@@ -146,54 +182,8 @@ function ProductModal({
             />
           </div>
           <div className='modal-body'>
-            <form
-              onSubmit={handleSubmit(submit)}
-              className='row flex-sm-row flex-column-reverse'
-            >
-              <div className='col-sm-4'>
-                <div className='form-group mb-3'>
-                  <Input
-                    register={register}
-                    errors={errors}
-                    id='imageUrl'
-                    type='text'
-                    labelText='輸入主圖網址*'
-                    placeholder='請輸入圖片連結'
-                    rules={{
-                      required: {
-                        value: true,
-                        message: '圖片網址為必填',
-                      },
-                    }}
-                    onChange={(e) =>
-                      setTempData((pre) => ({
-                        ...pre,
-                        imageUrl: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-
-                <div className='form-group mb-3'>
-                  <label className='w-100' htmlFor='customFile'>
-                    或 上傳圖片
-                    <input
-                      type='file'
-                      id='customFile'
-                      className='form-control mb-2'
-                      value={uploadImgVal}
-                      onChange={uploadImg}
-                    />
-                  </label>
-                  <p className='text-muted'>{uploadImgMsg}</p>
-                  <img
-                    className={imageUrl ? 'img-fluid' : 'd-none'}
-                    src={imageUrl}
-                    alt='product_mainImg'
-                  />
-                </div>
-              </div>
-              <div className='col-sm-8'>
+            <form onSubmit={handleSubmit(submit)} className='row'>
+              <div className='col-12'>
                 <div className='form-group mb-3'>
                   <Input
                     register={register}
@@ -287,7 +277,7 @@ function ProductModal({
                     />
                   </div>
                 </div>
-                <hr />
+
                 <div className='form-group mb-3'>
                   <Textarea
                     register={register}
@@ -318,6 +308,89 @@ function ProductModal({
                     labelText='是否啟用'
                     hasErrorMsg={false}
                   />
+                  <hr />
+                </div>
+              </div>
+              <div className='col-12'>
+                <div className='row'>
+                  <div className='col-sm-6'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='imageUrl'
+                        type='text'
+                        labelText='主圖網址*'
+                        placeholder='請輸入圖片連結'
+                        rules={{
+                          required: {
+                            value: true,
+                            message: '圖片網址為必填',
+                          },
+                        }}
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            imageUrl: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className='form-group mb-2'>
+                      <label className='w-100' htmlFor='customFile'>
+                        或 上傳圖片
+                        <input
+                          type='file'
+                          id='customFile'
+                          className='form-control mb-2'
+                          value={uploadImgVal[imageUrl]}
+                          onChange={uploadImg}
+                        />
+                      </label>
+                      <p className='text-muted'>{uploadImgMsg[imageUrl]}</p>
+                      <img
+                        className={imageUrl ? 'img-fluid' : 'd-none'}
+                        src={imageUrl}
+                        alt='product_mainImg'
+                      />
+                    </div>
+                  </div>
+                  <div className='col-sm-6'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='imageUrl_1'
+                        type='text'
+                        labelText='細圖 1 網址*'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            imageUrl_1: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className='form-group mb-2'>
+                      <label className='w-100' htmlFor='customFile'>
+                        或 上傳圖片
+                        <input
+                          type='file'
+                          id='customFile'
+                          className='form-control mb-2'
+                          value={uploadImgVal[imageUrl_1]}
+                          onChange={uploadImg}
+                        />
+                      </label>
+                      <p className='text-muted'>{uploadImgMsg[imageUrl_1]}</p>
+                      <img
+                        className={imageUrl_1 ? 'img-fluid' : 'd-none'}
+                        src={imageUrl_1}
+                        alt='product_mainImg'
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </form>
