@@ -48,14 +48,12 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
         },
       });
       if (res.data.success) {
-        console.log(res);
         handleSuccessMessage(dispatch, res);
         setIsLoading(false);
         getOrders();
         closeModal();
       }
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       handleErrorMessage(dispatch, error);
     }

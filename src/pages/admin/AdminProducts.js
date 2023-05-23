@@ -83,7 +83,6 @@ function AdminProducts() {
     deleteModal.current = new Modal('#deleteModal', {
       backdrop: 'static',
     });
-    getProducts();
     getCategory();
   }, []);
   useEffect(() => {

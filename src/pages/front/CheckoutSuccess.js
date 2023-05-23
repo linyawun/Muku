@@ -20,31 +20,27 @@ function CheckoutSuccess() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
       );
       if (res.data.order) {
-        console.log(res.data.order);
         setOrderData(res.data.order);
       } else {
         navigate('/');
       }
       setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      dispatch(createAsyncMessage(error.response.data));
       setIsLoading(false);
     }
   };
 
   const payOrder = async (orderId) => {
-    console.log('orderId', orderId);
     try {
       const res = await axios.post(
         `/v2/api/${process.env.REACT_APP_API_PATH}/pay/${orderId}`
       );
       if (res.data.success) {
-        console.log(res);
         dispatch(createAsyncMessage(res.data));
         getOrder(orderId);
       }
     } catch (error) {
-      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };

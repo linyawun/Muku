@@ -59,7 +59,6 @@ function AdminCoupons() {
         closeDeleteModal();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };

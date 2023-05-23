@@ -62,7 +62,6 @@ function Checkout() {
         dispatch(createAsyncMessage(res.data));
       }
     } catch (error) {
-      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };

@@ -44,7 +44,7 @@ function ProductDetail() {
         setProduct(productRes.data.product);
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        dispatch(createAsyncMessage(error.response.data));
         navigate('/products/all');
         setIsLoading(false);
       }
@@ -68,7 +68,6 @@ function ProductDetail() {
       getCart();
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       dispatch(createAsyncMessage(error.response.data));
     }

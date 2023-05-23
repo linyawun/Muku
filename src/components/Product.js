@@ -17,11 +17,9 @@ function Product({ product }) {
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart`,
         data
       );
-      console.log(res);
       dispatch(createAsyncMessage(res.data));
       getCart();
     } catch (error) {
-      console.log(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };

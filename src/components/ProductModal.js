@@ -59,7 +59,6 @@ function ProductModal({
     (tempData) => {
       if (type === 'create') {
         setTempData(initData);
-        console.log('create', tempData);
       } else if (type === 'edit') {
         setTempData((pre) => ({ ...pre, ...tempProduct }));
       }
@@ -98,15 +97,9 @@ function ProductModal({
       );
       if (res.data.success) {
         setValue('imageUrl', res.data.imageUrl);
-        // setTempData((pre) => ({
-        //   ...pre,
-        //   uploadImg: e.target.value,
-        //   imageUrl: res.data.imageUrl,
-        // }));
         setUploadImgMsg('上傳成功');
       }
     } catch (error) {
-      console.error(error);
       setUploadImgMsg('上傳失敗，請檢查檔案是否過大');
     }
   };
@@ -128,7 +121,6 @@ function ProductModal({
         getProducts();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };

@@ -26,7 +26,6 @@ function Cart() {
       getCart();
       dispatch(createAsyncMessage(res.data));
     } catch (error) {
-      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };
@@ -49,7 +48,6 @@ function Cart() {
       dispatch(createAsyncMessage(res.data));
       getCart();
     } catch (error) {
-      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
       setLoadingItems(
         loadingItems.filter((loadingObj) => loadingObj !== item.id)
@@ -65,7 +63,6 @@ function Cart() {
       closeDeleteModal();
       dispatch(createAsyncMessage(res.data));
     } catch (error) {
-      console.error(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };
@@ -90,7 +87,6 @@ function Cart() {
       }
       setIsLoading(false);
     } catch (error) {
-      console.log(error?.response?.data?.message);
       setCouponMsg(error?.response?.data?.message);
       setIsLoading(false);
     }
