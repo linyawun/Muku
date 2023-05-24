@@ -10,11 +10,7 @@ import {
 } from '../store/messageStore';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import {
-  setUploadVal,
-  setUploadMsg,
-  resetUploadImg,
-} from '../slice/uploadImgSlice';
+import { resetUploadImg } from '../slice/uploadImgSlice';
 
 function ProductModal({
   closeProductModal,
@@ -42,7 +38,6 @@ function ProductModal({
   );
   const [tempData, setTempData] = useState(initData);
   const dispatchRedux = useDispatch();
-  const uploadImages = useSelector((state) => state.uploadImg);
   const {
     register,
     handleSubmit,

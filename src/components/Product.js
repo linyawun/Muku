@@ -1,10 +1,12 @@
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import Image from 'react-graceful-image';
 import { createAsyncMessage } from '../slice/messageSlice';
 import axios from 'axios';
 function Product({ product }) {
   const { getCart } = useOutletContext();
   const dispatch = useDispatch();
+
   const addToCart = async () => {
     const data = {
       data: {
@@ -26,19 +28,23 @@ function Product({ product }) {
   return (
     <div className='card border-0 mb-4 position-relative h-100'>
       <Link className='position-relative' to={`/product/${product.id}`}>
-        <img
+        <Image
           src={product.imageUrl}
           className='card-img-top rounded-0 object-cover'
           height={300}
           alt='productImg'
+          retry={{ count: 10, delay: 2 }}
+          loading='lazy'
         />
 
         <div className='overlay position-absolute top-0 start-0 w-100 h-100 bg-white'>
-          <img
+          <Image
             className='card-img-top rounded-0 object-cover'
             height={300}
             src={product.imagesUrl?.[0] || product.imageUrl}
             alt='productImg'
+            retry={{ count: 10, delay: 2 }}
+            loading='lazy'
           />
           <button
             type='button'

@@ -11,6 +11,7 @@ import { createAsyncMessage } from '../../slice/messageSlice';
 import { Link as ScrollLink, Element as ScrollElement } from 'react-scroll';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
+import Image from 'react-graceful-image';
 import Loading from '../../components/Loading';
 import Product from '../../components/Product';
 
@@ -110,7 +111,7 @@ function ProductDetail() {
                 ? product.imagesUrl.map((imageUrl) => {
                     return (
                       <SwiperSlide key={imageUrl}>
-                        <img src={imageUrl} alt='productImg' />
+                        <Image src={imageUrl} alt='productImg' />
                       </SwiperSlide>
                     );
                   })
@@ -303,7 +304,7 @@ function ProductDetail() {
           <ScrollElement name='productMore'>
             <div className=''>
               <h4 className='text-primary'>了解更多</h4>
-              <img
+              <Image
                 src={product.imageUrl}
                 alt='productImg'
                 className='img-fluid mb-4'
@@ -311,7 +312,7 @@ function ProductDetail() {
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
                     return (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt='productImg'
                         className='img-fluid d-block mb-4'
