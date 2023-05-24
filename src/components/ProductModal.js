@@ -8,7 +8,6 @@ import {
   handleSuccessMessage,
   handleErrorMessage,
 } from '../store/messageStore';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { resetUploadImg } from '../slice/uploadImgSlice';
 
