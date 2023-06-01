@@ -144,7 +144,7 @@ function Cart() {
                   <div className='d-flex mt-4 mb-4 bg-light' key={item.id}>
                     <img
                       src={item.product.imageUrl}
-                      alt=''
+                      alt='productImg'
                       className='object-cover'
                       style={{
                         width: '120px',
@@ -161,7 +161,9 @@ function Cart() {
                         <i className='bi bi-x-lg'></i>
                       </button>
 
-                      <p className='mb-0'>{item.product.title}</p>
+                      <p className='mb-0' style={{ width: '90%' }}>
+                        {item.product.title}
+                      </p>
 
                       <div className='row justify-content-between align-items-center w-100'>
                         <div className='col-lg-4 col-5 ps-3'>
