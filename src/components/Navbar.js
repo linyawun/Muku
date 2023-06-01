@@ -29,18 +29,24 @@ function Navbar({ cartData }) {
     dataToggle.current = document.querySelectorAll('[data-toggle]');
   }, [categoryList]);
   useEffect(() => {
+    function handleCollapse() {
+      bsCollapse.current.hide();
+      setIsCollapsed((pre) => !pre);
+    }
     if (menuToggle.current && categoryList) {
       bsCollapse.current = new Collapse(menuToggle.current, {
         toggle: false,
       });
 
       dataToggle.current.forEach((item) => {
-        item.addEventListener('click', () => {
-          bsCollapse.current.hide();
-          setIsCollapsed((pre) => !pre);
-        });
+        item.addEventListener('click', handleCollapse);
       });
     }
+    return () => {
+      dataToggle.current.forEach((item) => {
+        item.removeEventListener('click', handleCollapse);
+      });
+    };
   }, [menuToggle, isCollapsed, categoryList]);
 
   return (
