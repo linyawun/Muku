@@ -75,7 +75,7 @@ function AdminOrders() {
       <OrderModal
         closeModal={closeModal}
         getOrders={getOrders}
-        tempOrder={tempOrder}
+        tempOrder={{ ...tempOrder, status: 0 }}
       />
       <DeleteModal
         close={closeDeleteModal}
