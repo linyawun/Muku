@@ -12,7 +12,6 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
   const initData = useMemo(
     () => ({
       is_paid: '',
-      status: 0,
       ...tempOrder,
     }),
     [tempOrder]
@@ -32,7 +31,11 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
     const { name, value, checked } = e.target;
     if (['is_paid'].includes(name)) {
       //如果是is_paid的欄位
-      setTempData((preState) => ({ ...preState, [name]: checked }));
+      setTempData((preState) => ({
+        ...preState,
+        [name]: checked,
+        paid_date: new Date(),
+      }));
     } else {
       setTempData((preState) => ({ ...preState, [name]: value }));
     }
@@ -189,12 +192,11 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                     id='is_paid'
                     checked={!!tempData.is_paid}
                     onChange={handleChange}
-                    disabled
                   />
                   付款狀態 (
                   {tempData.is_paid
                     ? `已付款，付款時間為 ${timeStampToTime(
-                        tempData.paid_date
+                        tempData.paid_date ? tempData.paid_date : new Date()
                       )}`
                     : '未付款'}
                   )
