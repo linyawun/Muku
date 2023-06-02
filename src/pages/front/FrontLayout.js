@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
@@ -9,7 +9,7 @@ import { createAsyncMessage } from '../../slice/messageSlice';
 function FrontLayout() {
   const [cartData, setCartData] = useState({});
   const dispatch = useDispatch();
-  const getCart = async () => {
+  const getCart = useCallback(async () => {
     try {
       const res = await axios.get(
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart`
@@ -18,10 +18,10 @@ function FrontLayout() {
     } catch (error) {
       dispatch(createAsyncMessage(error.response.data));
     }
-  };
+  }, [dispatch]);
   useEffect(() => {
     getCart();
-  }, []);
+  }, [getCart]);
   return (
     <>
       <Navbar cartData={cartData} />

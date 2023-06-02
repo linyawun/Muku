@@ -12,6 +12,9 @@
 li{
   list-style: none;
 }
+.btn:disabled{
+  cursor: not-allowed;
+}
 .link{
   text-decoration: none;
 }
@@ -43,9 +46,13 @@ li{
   }
 }
 .cart-msg{
-  font-size: 0.4rem;
+  font-size: 0.9rem;
   font-weight: lighter;
+  padding: 0.25em 0.55em;
   top: 10%;
+}
+.cart-icon{
+  font-size: 1.4rem;
 }
 .navbar-toggler{
   border: none;
@@ -189,6 +196,7 @@ li{
   }
 }
 .add-to-cart-icon{
+  font-size: 1.2rem;
   z-index: 20;
 }
 @keyframes jump {

@@ -50,7 +50,7 @@ function ProductDetail() {
         setIsLoading(false);
       }
     },
-    [navigate]
+    [navigate, dispatch]
   );
   const addToCart = async () => {
     const data = {
@@ -109,11 +109,15 @@ function ProductDetail() {
               </SwiperSlide>
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
-                    return (
-                      <SwiperSlide key={imageUrl}>
-                        <Image src={imageUrl} alt='productImg' />
-                      </SwiperSlide>
-                    );
+                    if (imageUrl) {
+                      return (
+                        <SwiperSlide key={`${imageUrl}_swiper`}>
+                          <Image src={imageUrl} alt='productImg' />
+                        </SwiperSlide>
+                      );
+                    } else {
+                      return '';
+                    }
                   })
                 : ''}
             </Swiper>
@@ -311,14 +315,18 @@ function ProductDetail() {
               />
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
-                    return (
-                      <Image
-                        src={imageUrl}
-                        alt='productImg'
-                        className='img-fluid d-block mb-4'
-                        key={imageUrl}
-                      />
-                    );
+                    if (imageUrl) {
+                      return (
+                        <Image
+                          src={imageUrl}
+                          alt='productImg'
+                          className='img-fluid d-block mb-4'
+                          key={`${imageUrl}_info`}
+                        />
+                      );
+                    } else {
+                      return '';
+                    }
                   })
                 : ''}
             </div>

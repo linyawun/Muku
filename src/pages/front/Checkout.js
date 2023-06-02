@@ -13,7 +13,7 @@ function Checkout() {
   const [cityList, setCityList] = useState([]);
   const [districtList, setDistrictList] = useState([]);
   const { cartData, getCart } = useOutletContext();
-  const [disableSubmit, serDisableSubmit] = useState(true);
+  const [disableSubmit, setDisableSubmit] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
@@ -112,7 +112,7 @@ function Checkout() {
   });
 
   useEffect(() => {
-    serDisableSubmit(!isDirty || Object.keys(errors).length !== 0);
+    setDisableSubmit(!isDirty || Object.keys(errors).length !== 0);
   }, [errors, isDirty]);
 
   return (
@@ -320,6 +320,13 @@ function Checkout() {
                     type='submit'
                     className='btn btn-primary py-3 px-7 rounded-0'
                     disabled={disableSubmit}
+                    // style={{
+                    //   cursor: 'not-allowed',
+                    // }}
+
+                    style={{
+                      pointerEvents: 'auto',
+                    }}
                   >
                     確認送出
                   </button>

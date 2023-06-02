@@ -123,7 +123,7 @@ function Cart() {
               { step: 3, content: '完成訂購', done: false },
             ]}
           />
-          <div className='d-flex justify-content-between align-items-end'>
+          <div className='d-flex justify-content-between align-items-center'>
             <h2 className='mt-2 text-primary'>購物車</h2>
             <button
               type='button'

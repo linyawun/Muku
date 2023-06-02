@@ -132,8 +132,7 @@ function Navbar({ cartData }) {
           </div>
           <div className='d-flex'>
             <NavLink to='/cart' className='nav-link position-relative'>
-              <i className='bi bi-cart-fill'></i>
-
+              <i className='bi bi-cart-fill cart-icon'></i>
               <span className='position-absolute start-100 translate-middle badge rounded-pill bg-danger cart-msg'>
                 {cartData?.carts?.length === 0 ? '' : cartData?.carts?.length}
               </span>
