@@ -46,11 +46,10 @@ function Home() {
             className='mySwiper'
           >
             <SwiperSlide>
-              <Link to='/products/all'>
+              <Link to='/products/all' className='position-relative'>
                 <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
               </Link>
             </SwiperSlide>
-
             <SwiperSlide>
               <Link to='/products/all'>
                 <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
@@ -107,7 +106,7 @@ function Home() {
         </div>
         <div className='row mb-3 justify-content-between align-items-center'>
           <div className='col-7'>
-            <h2 className='text-primary'>New Collection</h2>
+            <h2 className='text-primary'>最新商品</h2>
           </div>
           <div className='col-5 d-flex justify-content-end'>
             <Link to='/products/all' className='link-primary pe-5 arrowLink'>

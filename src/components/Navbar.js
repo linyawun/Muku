@@ -100,7 +100,7 @@ function Navbar({ cartData }) {
                       data-toggle
                     >
                       <i className='bi bi-flower2 me-1'></i>
-                      All
+                      所有商品
                     </NavLink>
                   </li>
                   {categoryList.map((category) => {

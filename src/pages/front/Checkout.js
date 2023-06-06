@@ -318,12 +318,8 @@ function Checkout() {
                   </Link>
                   <button
                     type='submit'
-                    className='btn btn-primary py-3 px-7 rounded-0'
+                    className='btn btn-primary py-3 px-7'
                     disabled={disableSubmit}
-                    // style={{
-                    //   cursor: 'not-allowed',
-                    // }}
-
                     style={{
                       pointerEvents: 'auto',
                     }}

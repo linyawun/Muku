@@ -32,7 +32,6 @@ li{
     transition: all .3s;
   }
   &:hover{
-      //color: $secondary;
       &::before{
           right: -10px;
         }
