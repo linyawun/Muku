@@ -5,7 +5,7 @@ function Footer() {
     <footer className='bg-light'>
       <div className='container'>
         <div className='row py-5 justify-content-lg-between justify-content-start align-items-center'>
-          <div className='col-md-5 col-12'>
+          <div className='col-md-5'>
             <div className='d-flex flex-md-row flex-column align-items-center mb-lg-0 mb-md-6 mb-4'>
               <img src={mukuLogo} alt='muku logo' style={{ height: '80px' }} />
               <div>
@@ -13,7 +13,7 @@ function Footer() {
               </div>
             </div>
           </div>
-          <div className='col-md-7 col-12'>
+          <div className='col-md-7'>
             <div className='row justify-content-center'>
               <div className='col-md-4'>
                 <p className='mb-1'>商店資訊</p>

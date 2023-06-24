@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { Modal } from 'bootstrap';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import DeleteModal from '../../components/DeleteModal';
 import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
@@ -12,6 +14,7 @@ function Cart() {
   const [couponMsg, setCouponMsg] = useState('');
   const [loadingItems, setLoadingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const deleteModal = useRef(null);
   const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
 
@@ -21,8 +24,9 @@ function Cart() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
       );
       getCart();
+      dispatch(createAsyncMessage(res.data));
     } catch (error) {
-      console.log(error);
+      dispatch(createAsyncMessage(error.response.data));
     }
   };
   const updateCartItem = async (item, quantity) => {
@@ -44,7 +48,6 @@ function Cart() {
       dispatch(createAsyncMessage(res.data));
       getCart();
     } catch (error) {
-      console.log(error);
       dispatch(createAsyncMessage(error.response.data));
       setLoadingItems(
         loadingItems.filter((loadingObj) => loadingObj !== item.id)
@@ -57,9 +60,9 @@ function Cart() {
         `/v2/api/${process.env.REACT_APP_API_PATH}/carts`
       );
       getCart();
+      closeDeleteModal();
       dispatch(createAsyncMessage(res.data));
     } catch (error) {
-      console.log(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };
@@ -84,14 +87,29 @@ function Cart() {
       }
       setIsLoading(false);
     } catch (error) {
-      console.log(error?.response?.data?.message);
       setCouponMsg(error?.response?.data?.message);
       setIsLoading(false);
     }
   };
+  const openDeleteModal = () => {
+    deleteModal.current.show();
+  };
+  const closeDeleteModal = () => {
+    deleteModal.current.hide();
+  };
+  useEffect(() => {
+    deleteModal.current = new Modal('#deleteModal', {
+      backdrop: 'static',
+    });
+  }, []);
 
   return (
     <div className='container'>
+      <DeleteModal
+        close={closeDeleteModal}
+        text='全部商品'
+        handleDelete={deleteAllCart}
+      />
       <Loading isLoading={isLoading} />
       <div className='row justify-content-center'>
         <div
@@ -105,7 +123,7 @@ function Cart() {
               { step: 3, content: '完成訂購', done: false },
             ]}
           />
-          <div className='d-flex justify-content-between align-items-end'>
+          <div className='d-flex justify-content-between align-items-center'>
             <h2 className='mt-2 text-primary'>購物車</h2>
             <button
               type='button'
@@ -113,7 +131,7 @@ function Cart() {
                 cartData?.carts?.length === 0 ? 'd-none' : 'd-block'
               }`}
               onClick={() => {
-                deleteAllCart();
+                openDeleteModal();
               }}
             >
               刪除全部
@@ -126,7 +144,7 @@ function Cart() {
                   <div className='d-flex mt-4 mb-4 bg-light' key={item.id}>
                     <img
                       src={item.product.imageUrl}
-                      alt=''
+                      alt='productImg'
                       className='object-cover'
                       style={{
                         width: '120px',
@@ -143,9 +161,11 @@ function Cart() {
                         <i className='bi bi-x-lg'></i>
                       </button>
 
-                      <p className='mb-0'>{item.product.title}</p>
+                      <p className='mb-0' style={{ width: '90%' }}>
+                        {item.product.title}
+                      </p>
 
-                      <div className='d-flex justify-content-between align-items-center w-100 row'>
+                      <div className='row justify-content-between align-items-center w-100'>
                         <div className='col-lg-4 col-5 ps-3'>
                           <select
                             name=''

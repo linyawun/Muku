@@ -50,6 +50,7 @@ function AdminProducts() {
   };
   const closeProductModal = () => {
     productModal.current.hide();
+    setTempProduct({});
   };
 
   const openDeleteModal = (product) => {
@@ -64,7 +65,6 @@ function AdminProducts() {
       const res = await axios.delete(
         `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product/${id}`
       );
-      console.log(res);
       if (res.data.success) {
         handleSuccessMessage(dispatch, res);
         getProducts();
@@ -72,7 +72,6 @@ function AdminProducts() {
         closeDeleteModal();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };
@@ -83,7 +82,6 @@ function AdminProducts() {
     deleteModal.current = new Modal('#deleteModal', {
       backdrop: 'static',
     });
-    getProducts();
     getCategory();
   }, []);
   useEffect(() => {

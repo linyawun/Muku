@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import Image from 'react-graceful-image';
 import { createAsyncMessage } from '../slice/messageSlice';
 import axios from 'axios';
 function Product({ product }) {
   const { getCart } = useOutletContext();
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
   const addToCart = async () => {
     const data = {
       data: {
@@ -19,46 +19,50 @@ function Product({ product }) {
         `/v2/api/${process.env.REACT_APP_API_PATH}/cart`,
         data
       );
-      console.log(res);
       dispatch(createAsyncMessage(res.data));
       getCart();
     } catch (error) {
-      console.log(error);
       dispatch(createAsyncMessage(error.response.data));
     }
   };
   return (
     <div className='card border-0 mb-4 position-relative h-100'>
       <Link className='position-relative' to={`/product/${product.id}`}>
-        <img
+        <Image
           src={product.imageUrl}
           className='card-img-top rounded-0 object-cover'
           height={300}
           alt='productImg'
+          retry={{ count: 10, delay: 2 }}
+          loading='lazy'
         />
 
         <div className='overlay position-absolute top-0 start-0 w-100 h-100 bg-white'>
-          <img
+          <Image
             className='card-img-top rounded-0 object-cover'
             height={300}
             src={product.imagesUrl?.[0] || product.imageUrl}
             alt='productImg'
+            retry={{ count: 10, delay: 2 }}
+            loading='lazy'
           />
-          <button
-            type='button'
-            className='btn btn-primary position-absolute py-2 start-50 translate-middle-x add-to-cart d-md-block d-none'
-            onClick={(e) => {
-              e.preventDefault();
-              addToCart();
-            }}
-          >
-            加入購物車
-          </button>
+          <div className='cart-block'>
+            <button
+              type='button'
+              className='btn btn-primary py-2 add-to-cart d-md-block d-none'
+              onClick={(e) => {
+                e.preventDefault();
+                addToCart();
+              }}
+            >
+              加入購物車
+            </button>
+          </div>
         </div>
       </Link>
       <div className='card-body p-0'>
         <h6 className='mb-0 mt-2'>
-          <Link to={`/product/${product.id}`} className='link'>
+          <Link to={`/product/${product.id}`} className='link stretched-link'>
             {product.title}
           </Link>
         </h6>
@@ -71,7 +75,7 @@ function Product({ product }) {
       </div>
       <button
         type='button'
-        className='btn btn-primary add-to-cart w-100 d-md-none d-block'
+        className='btn btn-primary add-to-cart-icon w-100 d-md-none d-block'
         onClick={() => addToCart()}
       >
         <i className='bi bi-cart-fill'></i>

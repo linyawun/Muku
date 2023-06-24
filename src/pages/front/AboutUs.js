@@ -2,7 +2,7 @@ function AboutUs() {
   return (
     <div className='container'>
       <div className='row justify-content-center mb-6'>
-        <div className='col-lg-7 col-12'>
+        <div className='col-lg-7'>
           <h2 className='text-primary text-center mt-4 mb-4'>關於我們</h2>
           <img
             src='https://i.imgur.com/xJWaghG.jpg'
@@ -21,17 +21,17 @@ function AboutUs() {
             </p>
             <p className='mb-0'>Muku 的三大特點：</p>
             <ol className='list-group list-group-numbered'>
-              <li class='list-group-item border-0'>
+              <li className='list-group-item border-0'>
                 簡約選物風格：Muku
                 的服飾設計簡單、大方，展現出日系風格的特色，適合穿搭於各種場合。Muku
                 強調日常舒適感，主打寬鬆自在的穿著風格，讓人穿上後能感受到輕鬆舒適的感覺。
               </li>
-              <li class='list-group-item border-0'>
+              <li className='list-group-item border-0'>
                 純淨自然的品牌理念：Muku
                 的品牌理念為「純淨」、「樸素」、「自然」，這也是品牌名稱的意義所在。Muku
                 希望透過商品的設計、選材、製作等方面，傳達出純淨自然的訴求，並引領消費者過一種舒適放鬆的生活方式。
               </li>
-              <li class='list-group-item border-0'>
+              <li className='list-group-item border-0'>
                 注重品質與環保：Muku
                 強調商品品質與環保議題，致力於選用高品質的面料，並且盡量減少對環境的影響，例如使用綠色材料、減少廢棄物產生等。同時，Muku
                 也提倡可持續發展的生活方式，期望透過自身的努力，影響更多人對環境的關注與改變。

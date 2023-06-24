@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import messageReducer from './slice/messageSlice';
-import cartReducer from './slice/cartSlice';
+import uploadImgReducer from './slice/uploadImgSlice';
 
 export const store = configureStore({
   reducer: {
     message: messageReducer,
-    cart: cartReducer,
+    uploadImg: uploadImgReducer,
   },
 });

@@ -2,9 +2,8 @@ function ShoppingNotice() {
   return (
     <div className='container'>
       <div className='row justify-content-center mb-6'>
-        <div className='col-lg-7 col-12'>
+        <div className='col-lg-7'>
           <h2 className='text-primary text-center mt-4 mb-4'>購物須知</h2>
-
           <div className='mb-5'>
             <h4>購物指南</h4>
             <p className='text-muted mb-3'>－お買い物ガイド－</p>

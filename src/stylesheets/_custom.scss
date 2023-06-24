@@ -12,10 +12,12 @@
 li{
   list-style: none;
 }
+.btn:disabled{
+  cursor: not-allowed;
+}
 .link{
   text-decoration: none;
 }
-
 .arrowLink{
   text-decoration: none;
   position: relative;
@@ -30,7 +32,6 @@ li{
     transition: all .3s;
   }
   &:hover{
-      //color: $secondary;
       &::before{
           right: -10px;
         }
@@ -44,9 +45,13 @@ li{
   }
 }
 .cart-msg{
-  font-size: 0.4rem;
+  font-size: 0.9rem;
   font-weight: lighter;
+  padding: 0.25em 0.55em;
   top: 10%;
+}
+.cart-icon{
+  font-size: 1.4rem;
 }
 .navbar-toggler{
   border: none;
@@ -61,7 +66,7 @@ li{
   }
 }
 .navbar-collapse{
-  @media (max-width: 992px) {
+  @include media-breakpoint-down(lg) {
     position: absolute;
     width: 100%;
     top: 100%;
@@ -70,19 +75,19 @@ li{
   }
 }
 .nav-item.dropdown{
-  @media (min-width: 991px) {
+  @include media-breakpoint-down(lg) {
     & > .dropdown-toggle:active + .dropdown-menu {
     display: block;
     }
     }
     
-    @media (min-width: 992px) {
+    @include media-breakpoint-up(lg) {
     &:hover > .dropdown-menu {
     display: block;
     }
     & > .dropdown-toggle:active {
       pointer-events: none;
-      @media (max-width: 992px) {
+      @include media-breakpoint-down(lg) {
         pointer-events: all;
       }
     }
@@ -135,7 +140,6 @@ li{
     }
   }
   &:hover{
-
     background-color: #fff;
     border-bottom: 1px solid $primary;
   }
@@ -147,58 +151,90 @@ li{
 .home-intro{
   div:first-child{
     border-right: 1px solid $secondary;
-    @media(max-width: 768px){
+    @include media-breakpoint-down(md){
       border-right: none;
     }
   }
   div:last-child{
     border-left: 1px solid $secondary;
-    @media(max-width: 768px){
+    @include media-breakpoint-down(md){
       border-left: none;
     }
   }
   
 }
-.overlay{
-  opacity: 0;
-  transition: all .5s;
-  &:hover{
+.card{
+  .overlay{
+    opacity: 0;
+    transition: all .5s;
+    
+  }
+  &:hover .overlay{
     opacity: 1;
     z-index: 20;
   }
-  .add-to-cart{
-    bottom: 15px;
-    width: calc(100% - 30px);
-    margin: auto;
-    box-shadow: 6px 6px 50px 3px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 6px 6px 50px 3px rgba(0,0,0,0.3);
-    -moz-box-shadow: 6px 6px 50px 3px rgba(0,0,0,0.3);
-    &:hover{
-      z-index: 20;
-    }
+  &:hover .cart-block{
+    animation: showUp 0.4s forwards;
   }
 }
+.cart-block {
+  position: absolute;
+  transform: translateX(-50%) translateY(0);
+  width: calc(100% - 30px);
+  left: 50%;
+  bottom: 15px;
+}
+.add-to-cart{
+  width: 100%;
+  margin: auto;
+  box-shadow: 6px 6px 50px 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 6px 6px 50px 3px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 6px 6px 50px 3px rgba(0, 0, 0, 0.3);
+  &:hover{
+    animation: jump 1s infinite;
+  }
+}
+.add-to-cart-icon{
+  font-size: 1.2rem;
+  z-index: 20;
+}
+@keyframes jump {
+  0% {
+    transform: translateY(0) ;
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes showUp {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(80%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 .login{
   padding: 20vh 15px;
 }
 .productInfo{
   position: relative;
-  @media(min-width: 991px){
+  @include media-breakpoint-down(lg){
     position: relative;
   }
-  @media(min-width: 992px){
+  @include media-breakpoint-up(lg){
     height: 100%;
     position: sticky;
     position: -webkit-sticky;
     top: 80px;
     z-index: 100;
   }
-  // @media(min-width: 960px){
-  //   max-height: calc(100vh - 200px);
-  //   position: sticky;
-  //   position: -webkit-sticky;
-  //   top: 100px;
-  // }
 }
 .back-to-top-button {
   position: fixed;
@@ -357,14 +393,6 @@ li{
     box-shadow: 0 0 4px 0 rgba(0,0,0,0.3);
     margin: 0;
   }
-  // width: 20px;
-  // height: 20px;
-  // text-align: center;
-  // line-height: 20px;
-  // font-size: 12px;
-  // color: #000;
-  // opacity: 1;
-  // background: rgba(0, 0, 0, 0.2);
 }
 
 .swiper-pagination-bullet-active {
@@ -448,17 +476,3 @@ li{
     }
   }
 }
-
-
-
-// .checkout-undone > div:first-child {
-//   color: rgba(50, 50, 50, 0.3);
-//   border-color: rgba(50, 50, 50, 0.2);
-//   background-color: #FFFFFF;
-// }
-// .checkout-steps>div.checkout-undone>div:last-child {
-//   opacity: .3;
-// }
-// .checkout-steps>div.checkout-undone>div:first-child:before {
-//   opacity: .2;
-// }

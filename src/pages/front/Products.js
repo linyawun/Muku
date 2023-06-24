@@ -87,9 +87,9 @@ function Products() {
               <ul className='collapseList'>
                 {categoryList.map((category) => {
                   return (
-                    <li key={category}>
+                    <li key={category} className='mt-1'>
                       <Link to={`/products/${category}`} className='link'>
-                        <small>{category}</small>
+                        {category}
                       </Link>
                     </li>
                   );

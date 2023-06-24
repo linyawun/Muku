@@ -80,7 +80,6 @@ function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
         getCoupons();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };

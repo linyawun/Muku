@@ -34,14 +34,12 @@ function AdminOrders() {
       const res = await axios.delete(
         `/v2/api/${process.env.REACT_APP_API_PATH}/admin/order/${id}`
       );
-      console.log(res);
       if (res.data.success) {
         handleSuccessMessage(dispatch, res);
         getOrders();
         closeDeleteModal();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };
@@ -77,7 +75,7 @@ function AdminOrders() {
       <OrderModal
         closeModal={closeModal}
         getOrders={getOrders}
-        tempOrder={tempOrder}
+        tempOrder={{ ...tempOrder, status: 0 }}
       />
       <DeleteModal
         close={closeDeleteModal}
@@ -107,10 +105,7 @@ function AdminOrders() {
                   <td>
                     <small>{order.id}</small>
                   </td>
-                  <td>
-                    {order.user?.name}
-                    {/* {order.user?.email} */}
-                  </td>
+                  <td>{order.user?.name}</td>
                   <td>${Math.round(order.total)?.toLocaleString()}</td>
                   <td>
                     {order.is_paid ? (

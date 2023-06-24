@@ -49,7 +49,7 @@ function Login() {
   return (
     <div className='container login'>
       <div className='row justify-content-center align-items-center flex-md-row flex-column-reverse'>
-        <div className='col-md-5 col-12 d-flex'>
+        <div className='col-md-5 d-flex'>
           <form onSubmit={handleSubmit(submit)} className='col'>
             <small className='text-muted mb-2'>Muku. 純粹美好的穿衣日常</small>
             <h2 className='mb-3'>登入帳號</h2>
@@ -104,7 +104,7 @@ function Login() {
             </button>
           </form>
         </div>
-        <div className='col-md-6 col-12'>
+        <div className='col-md-6'>
           <img
             src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
             alt=''

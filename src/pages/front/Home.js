@@ -24,7 +24,6 @@ function Home() {
       `/v2/api/${process.env.REACT_APP_API_PATH}/products?page=${page}`
     );
     setProducts(productRes.data.products);
-    //setPagination(productRes.data.pagination);
     setIsLoading(false);
   };
   useEffect(() => {
@@ -47,13 +46,19 @@ function Home() {
             className='mySwiper'
           >
             <SwiperSlide>
-              <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
+              <Link to='/products/all' className='position-relative'>
+                <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
+              </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
+              <Link to='/products/all'>
+                <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
+              </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
+              <Link to='/products/all'>
+                <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
+              </Link>
             </SwiperSlide>
           </Swiper>
         </div>
@@ -94,14 +99,14 @@ function Home() {
             </div>
           </div>
           <div className='d-flex justify-content-center'>
-            <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
+            <Link to='/products/all' className='link-primary pe-5 arrowLink'>
               <small>關於我們</small>
             </Link>
           </div>
         </div>
         <div className='row mb-3 justify-content-between align-items-center'>
           <div className='col-7'>
-            <h2 className='text-primary'>New Collection</h2>
+            <h2 className='text-primary'>最新商品</h2>
           </div>
           <div className='col-5 d-flex justify-content-end'>
             <Link to='/products/all' className='link-primary pe-5 arrowLink'>

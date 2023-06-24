@@ -2,11 +2,14 @@ import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Input, Textarea, CheckboxRadio, Selectbox } from './FormElement';
+import UploadImg from './UploadImg';
 import {
   MessageContext,
   handleSuccessMessage,
   handleErrorMessage,
 } from '../store/messageStore';
+import { useDispatch } from 'react-redux';
+import { resetUploadImg } from '../slice/uploadImgSlice';
 
 function ProductModal({
   closeProductModal,
@@ -26,13 +29,14 @@ function ProductModal({
       content: '',
       is_enabled: 1,
       imageUrl: '',
+      ...Object.fromEntries(
+        Array.from({ length: 5 }, (_, i) => [`detailImg${i + 1}`, ''])
+      ),
     }),
     []
   );
   const [tempData, setTempData] = useState(initData);
-  const [uploadImgMsg, setUploadImgMsg] = useState('');
-  const [uploadImgVal, setUploadImgVal] = useState('');
-
+  const dispatchRedux = useDispatch();
   const {
     register,
     handleSubmit,
@@ -45,8 +49,13 @@ function ProductModal({
     defaultValues: tempData,
     mode: 'onTouched',
   });
-  const imageUrl = watch('imageUrl');
-  const originPrice = watch('origin_price');
+  let imageUrl = watch('imageUrl');
+  let detailImg1 = watch('detailImg1');
+  let detailImg2 = watch('detailImg2');
+  let detailImg3 = watch('detailImg3');
+  let detailImg4 = watch('detailImg4');
+  let detailImg5 = watch('detailImg5');
+  let originPrice = watch('origin_price');
   const validatePrice = (value) => {
     if (value && originPrice && Number(value) >= Number(originPrice)) {
       return '售價必須低於原價';
@@ -58,12 +67,23 @@ function ProductModal({
   useEffect(() => {
     if (type === 'create') {
       setTempData(initData);
-      console.log('create', tempData);
+      dispatchRedux(resetUploadImg());
     } else if (type === 'edit') {
-      setTempData((pre) => ({ ...pre, ...tempProduct }));
+      dispatchRedux(resetUploadImg());
+      let { imagesUrl, ...rest } = tempProduct;
+      if (!imagesUrl) {
+        imagesUrl = Array.from({ length: 5 }, (v, i) => '');
+      }
+      const imageData = imagesUrl?.reduce((result, url, index) => {
+        result[`detailImg${index + 1}`] = url;
+        return result;
+      }, {});
+      setTempData((pre) => ({
+        ...pre,
+        ...rest,
+        ...imageData,
+      }));
     }
-    setUploadImgMsg('');
-    setUploadImgVal('');
   }, [type, tempProduct, initData]);
 
   useEffect(() => {
@@ -73,40 +93,6 @@ function ProductModal({
     resetForm();
   }, [tempData, reset]);
 
-  const uploadImg = async (e) => {
-    setUploadImgVal(e.target.value);
-    const file = e.target.files[0]; // 取得選定的檔案資訊
-    const formData = new FormData(); // 建立FormData
-    formData.append('file', file); // 將選定的檔案加入到FormData中
-    if (file.type.split('/')[0] !== 'image') {
-      setUploadImgMsg('格式錯誤，請選擇 jpg 或 png 檔');
-      return;
-    }
-    try {
-      setUploadImgMsg('上傳中...');
-      const res = await axios.post(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/admin/upload`,
-        formData, // 傳送FormData
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data', // 設定Content-Type
-          },
-        }
-      );
-      if (res.data.success) {
-        setValue('imageUrl', res.data.imageUrl);
-        // setTempData((pre) => ({
-        //   ...pre,
-        //   uploadImg: e.target.value,
-        //   imageUrl: res.data.imageUrl,
-        // }));
-        setUploadImgMsg('上傳成功');
-      }
-    } catch (error) {
-      console.log(error);
-      setUploadImgMsg('上傳失敗，請檢查檔案是否過大');
-    }
-  };
   const submit = async (data) => {
     try {
       let api = `/v2/api/${process.env.REACT_APP_API_PATH}/admin/product`;
@@ -117,7 +103,16 @@ function ProductModal({
         method = 'put';
       }
       const res = await axios[method](api, {
-        data: data,
+        data: {
+          ...data,
+          imagesUrl: [
+            detailImg1,
+            detailImg2,
+            detailImg3,
+            detailImg4,
+            detailImg5,
+          ],
+        },
       });
       if (res.data.success) {
         handleSuccessMessage(dispatch, res);
@@ -125,7 +120,6 @@ function ProductModal({
         getProducts();
       }
     } catch (error) {
-      console.log(error);
       handleErrorMessage(dispatch, error);
     }
   };
@@ -152,51 +146,7 @@ function ProductModal({
           </div>
           <div className='modal-body'>
             <form onSubmit={handleSubmit(submit)} className='row'>
-              <div className='col-sm-4'>
-                <div className='form-group mb-3'>
-                  <Input
-                    register={register}
-                    errors={errors}
-                    id='imageUrl'
-                    type='text'
-                    labelText='輸入圖片網址*'
-                    placeholder='請輸入圖片連結'
-                    rules={{
-                      required: {
-                        value: true,
-                        message: '圖片網址為必填',
-                      },
-                    }}
-                    onChange={(e) =>
-                      setTempData((pre) => ({
-                        ...pre,
-                        imageUrl: e.target.value,
-                      }))
-                    }
-                  />
-                </div>
-
-                <div className='form-group mb-3'>
-                  <label className='w-100' htmlFor='customFile'>
-                    或 上傳圖片
-                    <input
-                      type='file'
-                      id='customFile'
-                      className='form-control mb-2'
-                      value={uploadImgVal}
-                      onChange={uploadImg}
-                    />
-                  </label>
-                  <p className='text-muted'>{uploadImgMsg}</p>
-                </div>
-                <img
-                  className={imageUrl ? 'img-fluid' : 'd-none'}
-                  src={imageUrl}
-                  alt='product_mainImg'
-                />
-                <img src='' alt='' className='img-fluid' />
-              </div>
-              <div className='col-sm-8'>
+              <div className='col-12'>
                 <div className='form-group mb-3'>
                   <Input
                     register={register}
@@ -290,7 +240,7 @@ function ProductModal({
                     />
                   </div>
                 </div>
-                <hr />
+
                 <div className='form-group mb-3'>
                   <Textarea
                     register={register}
@@ -321,6 +271,161 @@ function ProductModal({
                     labelText='是否啟用'
                     hasErrorMsg={false}
                   />
+                  <hr />
+                </div>
+              </div>
+              <div className='col-12'>
+                <div className='row'>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='imageUrl'
+                        type='text'
+                        labelText='主圖網址*'
+                        placeholder='請輸入圖片連結'
+                        rules={{
+                          required: {
+                            value: true,
+                            message: '主圖網址為必填',
+                          },
+                        }}
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            imageUrl: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='imageUrl'
+                      property='mainImg'
+                      setValue={setValue}
+                      imgUrl={imageUrl}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg1'
+                        type='text'
+                        labelText='細圖 1 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg1: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg1'
+                      property='detailImg1'
+                      setValue={setValue}
+                      imgUrl={detailImg1}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg2'
+                        type='text'
+                        labelText='細圖 2 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg2: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg2'
+                      property='detailImg2'
+                      setValue={setValue}
+                      imgUrl={detailImg2}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg3'
+                        type='text'
+                        labelText='細圖 3 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg3: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg3'
+                      property='detailImg3'
+                      setValue={setValue}
+                      imgUrl={detailImg3}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg4'
+                        type='text'
+                        labelText='細圖 4 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg4: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg4'
+                      property='detailImg4'
+                      setValue={setValue}
+                      imgUrl={detailImg4}
+                    />
+                  </div>
+                  <div className='col-md-4 col-sm-6 mb-3'>
+                    <div className='form-group mb-2'>
+                      <Input
+                        register={register}
+                        errors={errors}
+                        id='detailImg5'
+                        type='text'
+                        labelText='細圖 5 網址'
+                        placeholder='請輸入圖片連結'
+                        onChange={(e) =>
+                          setTempData((pre) => ({
+                            ...pre,
+                            detailImg5: e.target.value,
+                          }))
+                        }
+                      />
+                    </div>
+                    <UploadImg
+                      id='detailImg5'
+                      property='detailImg5'
+                      setValue={setValue}
+                      imgUrl={detailImg5}
+                    />
+                  </div>
                 </div>
               </div>
               <div className='modal-footer'>
