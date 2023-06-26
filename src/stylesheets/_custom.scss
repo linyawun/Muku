@@ -360,6 +360,11 @@ li{
   background-color: $light;
   border-color: $light;
 }
+.CTA{
+  top: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .swiper {
   width: 100%;
   height: 100%;

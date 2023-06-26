@@ -53,11 +53,25 @@ function Home() {
             <SwiperSlide>
               <Link to='/products/all'>
                 <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
+                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0 w-100 h-100'></div>
+                <button
+                  type='button'
+                  className='btn btn-primary btn-lg p-3 px-4 position-absolute CTA'
+                >
+                  前往購物
+                </button>
               </Link>
             </SwiperSlide>
             <SwiperSlide>
               <Link to='/products/all'>
                 <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
+                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0 w-100 h-100'></div>
+                <button
+                  type='button'
+                  className='btn btn-primary btn-lg p-3 px-4 position-absolute CTA'
+                >
+                  前往購物
+                </button>
               </Link>
             </SwiperSlide>
           </Swiper>
