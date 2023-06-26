@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setUploadVal, setUploadMsg } from '../slice/uploadImgSlice';
-function UploadImg({ id, property, setValue, imgUrl }) {
+function UploadImg({ id, property, setValue, imgUrl, setTempData }) {
   const uploadImages = useSelector((state) => state.uploadImg);
   const dispatchRedux = useDispatch();
   const uploadImg = async (e, property, name) => {
@@ -33,6 +33,10 @@ function UploadImg({ id, property, setValue, imgUrl }) {
       );
       if (res.data.success) {
         setValue(name, res.data.imageUrl);
+        setTempData((pre) => ({
+          ...pre,
+          [name]: res.data.imageUrl,
+        }));
         dispatchRedux(setUploadMsg({ [property]: '' }));
       }
     } catch (error) {

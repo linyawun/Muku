@@ -71,7 +71,7 @@ function ProductModal({
       dispatchRedux(resetUploadImg());
     } else if (type === 'edit') {
       dispatchRedux(resetUploadImg());
-      let { imagesUrl, ...rest } = tempProduct;
+      let { imagesUrl } = tempProduct;
       if (!imagesUrl) {
         imagesUrl = Array.from({ length: 5 }, (v, i) => '');
       }
@@ -85,7 +85,7 @@ function ProductModal({
         ...imageData,
       }));
     }
-  }, [type, tempProduct, initData]);
+  }, [type, tempProduct, initData, dispatchRedux]);
 
   useEffect(() => {
     const resetForm = () => {
@@ -305,12 +305,13 @@ function ProductModal({
                       property='mainImg'
                       setValue={setValue}
                       imgUrl={imageUrl}
+                      setTempData={setTempData}
                     />
                   </div>
                   {tempData.imagesUrl.length > 0 &&
                     tempData.imagesUrl.map((img, i) => {
                       return (
-                        <div className='col-md-4 col-sm-6 mb-3'>
+                        <div className='col-md-4 col-sm-6 mb-3' key={i}>
                           <div className='form-group mb-2'>
                             <Input
                               register={register}
@@ -332,6 +333,7 @@ function ProductModal({
                             property={`detailImg${i + 1}`}
                             setValue={setValue}
                             imgUrl={eval(`detailImg${i + 1}`)}
+                            setTempData={setTempData}
                           />
                         </div>
                       );
@@ -341,12 +343,12 @@ function ProductModal({
                       <button
                         type='button'
                         className='btn btn-primary'
-                        onClick={(e) =>
+                        onClick={(e) => {
                           setTempData((pre) => ({
                             ...pre,
                             imagesUrl: [...pre.imagesUrl, ''],
-                          }))
-                        }
+                          }));
+                        }}
                       >
                         新增圖片
                       </button>
