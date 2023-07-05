@@ -29,6 +29,7 @@ function ProductModal({
       content: '',
       is_enabled: 1,
       imageUrl: '',
+      imagesUrl: [],
       ...Object.fromEntries(
         Array.from({ length: 5 }, (_, i) => [`detailImg${i + 1}`, ''])
       ),
@@ -70,7 +71,7 @@ function ProductModal({
       dispatchRedux(resetUploadImg());
     } else if (type === 'edit') {
       dispatchRedux(resetUploadImg());
-      let { imagesUrl, ...rest } = tempProduct;
+      let { imagesUrl } = tempProduct;
       if (!imagesUrl) {
         imagesUrl = Array.from({ length: 5 }, (v, i) => '');
       }
@@ -80,11 +81,11 @@ function ProductModal({
       }, {});
       setTempData((pre) => ({
         ...pre,
-        ...rest,
+        ...tempProduct,
         ...imageData,
       }));
     }
-  }, [type, tempProduct, initData]);
+  }, [type, tempProduct, initData, dispatchRedux]);
 
   useEffect(() => {
     const resetForm = () => {
@@ -304,9 +305,56 @@ function ProductModal({
                       property='mainImg'
                       setValue={setValue}
                       imgUrl={imageUrl}
+                      setTempData={setTempData}
                     />
                   </div>
-                  <div className='col-md-4 col-sm-6 mb-3'>
+                  {tempData.imagesUrl.length > 0 &&
+                    tempData.imagesUrl.map((img, i) => {
+                      return (
+                        <div className='col-md-4 col-sm-6 mb-3' key={i}>
+                          <div className='form-group mb-2'>
+                            <Input
+                              register={register}
+                              errors={errors}
+                              id={`detailImg${i + 1}`}
+                              type='text'
+                              labelText={`細圖 ${i + 1} 網址`}
+                              placeholder='請輸入圖片連結'
+                              onChange={(e) =>
+                                setTempData((pre) => ({
+                                  ...pre,
+                                  [`detailImg${i + 1}`]: e.target.value,
+                                }))
+                              }
+                            />
+                          </div>
+                          <UploadImg
+                            id={`detailImg${i + 1}`}
+                            property={`detailImg${i + 1}`}
+                            setValue={setValue}
+                            imgUrl={eval(`detailImg${i + 1}`)}
+                            setTempData={setTempData}
+                          />
+                        </div>
+                      );
+                    })}
+                  {tempData.imagesUrl.length < 5 && (
+                    <div className='col-md-4 col-sm-6 mb-3'>
+                      <button
+                        type='button'
+                        className='btn btn-primary'
+                        onClick={(e) => {
+                          setTempData((pre) => ({
+                            ...pre,
+                            imagesUrl: [...pre.imagesUrl, ''],
+                          }));
+                        }}
+                      >
+                        新增圖片
+                      </button>
+                    </div>
+                  )}
+                  {/* <div className='col-md-4 col-sm-6 mb-3'>
                     <div className='form-group mb-2'>
                       <Input
                         register={register}
@@ -425,7 +473,7 @@ function ProductModal({
                       setValue={setValue}
                       imgUrl={detailImg5}
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='modal-footer'>

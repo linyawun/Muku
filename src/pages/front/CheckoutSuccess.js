@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -13,23 +13,26 @@ function CheckoutSuccess() {
   const [orderData, setOrderData] = useState({});
   const [couponData, setCouponData] = useState({});
 
-  const getOrder = async (orderId) => {
-    setIsLoading(true);
-    try {
-      const res = await axios.get(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
-      );
-      if (res.data.order) {
-        setOrderData(res.data.order);
-      } else {
-        navigate('/');
+  const getOrder = useCallback(
+    async (orderId) => {
+      setIsLoading(true);
+      try {
+        const res = await axios.get(
+          `/v2/api/${process.env.REACT_APP_API_PATH}/order/${orderId}`
+        );
+        if (res.data.order) {
+          setOrderData(res.data.order);
+        } else {
+          navigate('/');
+        }
+        setIsLoading(false);
+      } catch (error) {
+        dispatch(createAsyncMessage(error.response.data));
+        setIsLoading(false);
       }
-      setIsLoading(false);
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-      setIsLoading(false);
-    }
-  };
+    },
+    [dispatch, navigate]
+  );
 
   const payOrder = async (orderId) => {
     try {
@@ -46,7 +49,7 @@ function CheckoutSuccess() {
   };
   useEffect(() => {
     getOrder(orderId);
-  }, [orderId]);
+  }, [orderId, getOrder]);
 
   useEffect(() => {
     if (Object.values(orderData?.products || {})[0]?.coupon) {

@@ -51,7 +51,7 @@ function Navbar({ cartData }) {
 
   return (
     <header className='bg-white sticky-top'>
-      <nav className='navbar navbar-expand-lg navbar-light bg-white'>
+      <nav className='navbar navbar-expand-lg navbar-light bg-white px-lg-3 pe-2'>
         <div className='container-fluid position-relative'>
           <button
             className='navbar-toggler'
