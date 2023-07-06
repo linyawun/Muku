@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { Modal } from 'bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { debounce } from 'lodash';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import DeleteModal from '../../components/DeleteModal';
 import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
+import { useMemo } from 'react';
 
 function Cart() {
   const { cartData, getCart } = useOutletContext();
@@ -103,6 +105,11 @@ function Cart() {
     });
   }, []);
 
+  const debouncedClick = useMemo(
+    () => debounce((id) => removeCartItem(id), 200),
+    [removeCartItem]
+  );
+
   return (
     <div className='container'>
       <DeleteModal
@@ -156,7 +163,7 @@ function Cart() {
                         type='button'
                         className='position-absolute btn border-0'
                         style={{ top: '10px', right: '10px' }}
-                        onClick={() => removeCartItem(item.id)}
+                        onClick={() => debouncedClick(item.id)}
                       >
                         <i className='bi bi-x-lg'></i>
                       </button>
