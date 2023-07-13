@@ -113,7 +113,7 @@ function Home() {
             </div>
           </div>
           <div className='d-flex justify-content-center'>
-            <Link to='/products/all' className='link-primary pe-5 arrowLink'>
+            <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
               <small>關於我們</small>
             </Link>
           </div>
