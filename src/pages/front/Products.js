@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Collapse } from 'bootstrap';
@@ -12,24 +12,24 @@ function Products() {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
   const { category } = useParams();
-  const [filterCategory, setFilterCategory] = useState(
-    getCategoryParam(category)
-  );
   const categoryCollapse = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const getProducts = async (page = 1) => {
-    setIsLoading(true);
-    const category = filterCategory === 'All' ? '' : filterCategory;
-    const productRes = await axios.get(
-      `/v2/api/${process.env.REACT_APP_API_PATH}/products?page=${page}&category=${category}`
-    );
-    if (productRes.data.products.length === 0) {
-      navigate('/products/all');
-    }
-    setProducts(productRes.data.products);
-    setPagination(productRes.data.pagination);
-    setIsLoading(false);
-  };
+  const getProducts = useCallback(
+    async (page = 1) => {
+      setIsLoading(true);
+      const filterCategory = category === 'all' ? '' : category;
+      const productRes = await axios.get(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/products?page=${page}&category=${filterCategory}`
+      );
+      if (productRes.data.products.length === 0) {
+        navigate('/products/all');
+      }
+      setProducts(productRes.data.products);
+      setPagination(productRes.data.pagination);
+      setIsLoading(false);
+    },
+    [category, navigate]
+  );
   const getCategory = async () => {
     const res = await axios.get(
       `/v2/api/${process.env.REACT_APP_API_PATH}/products/all`
@@ -39,27 +39,15 @@ function Products() {
     ];
     setCategoryList(categories);
   };
-  function getCategoryParam(category) {
-    let param = category;
-    if (category[0].toUpperCase() !== category[0]) {
-      param =
-        category.slice(0, 1).toUpperCase() + category.slice(1).toLowerCase();
-    }
-    return param;
-  }
 
   useEffect(() => {
     categoryCollapse.current = new Collapse('#categoryCollapse');
-    getCategory(1);
+    getCategory();
   }, []);
 
   useEffect(() => {
-    setFilterCategory(getCategoryParam(category));
-  }, [category]);
-
-  useEffect(() => {
     getProducts(1);
-  }, [filterCategory]);
+  }, [category, getProducts]);
 
   return (
     <>

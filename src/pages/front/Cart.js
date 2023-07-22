@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Modal } from 'bootstrap';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { debounce } from 'lodash';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,6 @@ import DeleteModal from '../../components/DeleteModal';
 import { createAsyncMessage } from '../../slice/messageSlice';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
-import { useMemo } from 'react';
 
 function Cart() {
   const { cartData, getCart } = useOutletContext();
@@ -20,17 +19,20 @@ function Cart() {
   const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
 
-  const removeCartItem = async (id) => {
-    try {
-      const res = await axios.delete(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
-      );
-      getCart();
-      dispatch(createAsyncMessage(res.data));
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-    }
-  };
+  const removeCartItem = useMemo(
+    () => async (id) => {
+      try {
+        const res = await axios.delete(
+          `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
+        );
+        getCart();
+        dispatch(createAsyncMessage(res.data));
+      } catch (error) {
+        dispatch(createAsyncMessage(error.response.data));
+      }
+    },
+    [dispatch, getCart]
+  );
   const updateCartItem = async (item, quantity) => {
     const data = {
       data: {
