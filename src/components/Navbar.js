@@ -9,7 +9,6 @@ function Navbar({ cartData }) {
   const dataToggle = useRef(null);
   const menuToggle = useRef(null);
   const bsCollapse = useRef(null);
-  dataToggle.current = document.querySelectorAll('[data-toggle]');
 
   const handleClick = () => {
     setIsCollapsed((pre) => !pre);
@@ -27,6 +26,7 @@ function Navbar({ cartData }) {
     getCategory();
   }, []);
   useEffect(() => {
+    dataToggle.current = document.querySelectorAll('[data-toggle]');
     function handleCollapse() {
       bsCollapse.current.hide();
       setIsCollapsed(false);
