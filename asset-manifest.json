@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/Muku/static/css/main.439dbcf0.css",
+    "main.css": "/Muku/static/css/main.5a2257bf.css",
     "main.js": "/Muku/static/js/main.2096ac99.js",
     "static/js/787.6653abfd.chunk.js": "/Muku/static/js/787.6653abfd.chunk.js",
     "static/media/bootstrap-icons.woff?": "/Muku/static/media/bootstrap-icons.6959d0d983ee318f8880.woff",
@@ -8,12 +8,12 @@
     "static/media/mukuLogo-03.svg": "/Muku/static/media/mukuLogo-03.f303dfee74f842ec1ec9c0ad182bf525.svg",
     "index.html": "/Muku/index.html",
     "static/media/rightarrow-01.svg": "/Muku/static/media/rightarrow-01.60225501f90eed5cb972.svg",
-    "main.439dbcf0.css.map": "/Muku/static/css/main.439dbcf0.css.map",
+    "main.5a2257bf.css.map": "/Muku/static/css/main.5a2257bf.css.map",
     "main.2096ac99.js.map": "/Muku/static/js/main.2096ac99.js.map",
     "787.6653abfd.chunk.js.map": "/Muku/static/js/787.6653abfd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.439dbcf0.css",
+    "static/css/main.5a2257bf.css",
     "static/js/main.2096ac99.js"
   ]
 }
