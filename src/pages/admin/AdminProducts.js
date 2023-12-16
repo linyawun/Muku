@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useEffect, useState, useRef, useContext, useCallback } from 'react';
 import axios from 'axios';
 import ProductModal from '../../components/ProductModal';
 import DeleteModal from '../../components/DeleteModal';
@@ -32,16 +32,19 @@ function AdminProducts() {
     ];
     setCategoryList(categories);
   };
-  const getProducts = async (page = 1) => {
-    setIsLoading(true);
-    const category = filterCategory === 'All' ? '' : filterCategory;
-    const productRes = await axios.get(
-      `/v2/api/${process.env.REACT_APP_API_PATH}/admin/products?page=${page}&category=${category}`
-    );
-    setProducts(productRes.data.products);
-    setPagination(productRes.data.pagination);
-    setIsLoading(false);
-  };
+  const getProducts = useCallback(
+    async (page = 1) => {
+      setIsLoading(true);
+      const category = filterCategory === 'All' ? '' : filterCategory;
+      const productRes = await axios.get(
+        `/v2/api/${process.env.REACT_APP_API_PATH}/admin/products?page=${page}&category=${category}`
+      );
+      setProducts(productRes.data.products);
+      setPagination(productRes.data.pagination);
+      setIsLoading(false);
+    },
+    [filterCategory]
+  );
   const openProductModal = (type, product) => {
     //展開modal時確認modal用途
     setType(type);
@@ -86,7 +89,7 @@ function AdminProducts() {
   }, []);
   useEffect(() => {
     getProducts();
-  }, [filterCategory]);
+  }, [filterCategory, getProducts]);
   return (
     <div className='p-3'>
       <Loading isLoading={isLoading} />

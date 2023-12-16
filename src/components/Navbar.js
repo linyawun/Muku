@@ -27,11 +27,9 @@ function Navbar({ cartData }) {
   }, []);
   useEffect(() => {
     dataToggle.current = document.querySelectorAll('[data-toggle]');
-  }, [categoryList]);
-  useEffect(() => {
     function handleCollapse() {
       bsCollapse.current.hide();
-      setIsCollapsed((pre) => !pre);
+      setIsCollapsed(false);
     }
     if (menuToggle.current && categoryList) {
       bsCollapse.current = new Collapse(menuToggle.current, {
@@ -47,7 +45,7 @@ function Navbar({ cartData }) {
         item.removeEventListener('click', handleCollapse);
       });
     };
-  }, [menuToggle, isCollapsed, categoryList]);
+  }, [categoryList]);
 
   return (
     <header className='bg-white sticky-top'>
@@ -69,7 +67,7 @@ function Navbar({ cartData }) {
               </div>
             ) : (
               <div style={{ textAlign: 'center' }}>
-                <i className='bi bi-list' style={{ fontSize: '35px' }}></i>{' '}
+                <i className='bi bi-list' style={{ fontSize: '35px' }}></i>
               </div>
             )}
           </button>

@@ -44,6 +44,7 @@ function ProductDetail() {
         );
         setProduct(productRes.data.product);
         setIsLoading(false);
+        getRelatedProducts(1, productRes.data.product.category);
       } catch (error) {
         dispatch(createAsyncMessage(error.response.data));
         navigate('/products/all');
@@ -73,7 +74,7 @@ function ProductDetail() {
       dispatch(createAsyncMessage(error.response.data));
     }
   };
-  const getProducts = async (page = 1, category) => {
+  const getRelatedProducts = async (page = 1, category) => {
     setIsLoading(true);
     const productRes = await axios.get(
       `/v2/api/${process.env.REACT_APP_API_PATH}/products?page=${page}&category=${category}`
@@ -84,9 +85,6 @@ function ProductDetail() {
   useEffect(() => {
     getProduct(id);
   }, [id, getProduct]);
-  useEffect(() => {
-    getProducts(1, product.category);
-  }, [product]);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Modal } from 'bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { debounce } from 'lodash';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import DeleteModal from '../../components/DeleteModal';
@@ -18,17 +19,20 @@ function Cart() {
   const dispatch = useDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
 
-  const removeCartItem = async (id) => {
-    try {
-      const res = await axios.delete(
-        `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
-      );
-      getCart();
-      dispatch(createAsyncMessage(res.data));
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-    }
-  };
+  const removeCartItem = useMemo(
+    () => async (id) => {
+      try {
+        const res = await axios.delete(
+          `/v2/api/${process.env.REACT_APP_API_PATH}/cart/${id}`
+        );
+        getCart();
+        dispatch(createAsyncMessage(res.data));
+      } catch (error) {
+        dispatch(createAsyncMessage(error.response.data));
+      }
+    },
+    [dispatch, getCart]
+  );
   const updateCartItem = async (item, quantity) => {
     const data = {
       data: {
@@ -103,6 +107,11 @@ function Cart() {
     });
   }, []);
 
+  const debouncedClick = useMemo(
+    () => debounce((id) => removeCartItem(id), 200),
+    [removeCartItem]
+  );
+
   return (
     <div className='container'>
       <DeleteModal
@@ -156,7 +165,7 @@ function Cart() {
                         type='button'
                         className='position-absolute btn border-0'
                         style={{ top: '10px', right: '10px' }}
-                        onClick={() => removeCartItem(item.id)}
+                        onClick={() => debouncedClick(item.id)}
                       >
                         <i className='bi bi-x-lg'></i>
                       </button>
