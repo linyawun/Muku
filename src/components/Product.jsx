@@ -49,6 +49,7 @@ function Product({ product }) {
           <div className='cart-block'>
             <button
               type='button'
+              aria-label='Add to cart'
               className='btn btn-primary py-2 add-to-cart d-md-block d-none'
               onClick={(e) => {
                 e.preventDefault();
@@ -77,6 +78,7 @@ function Product({ product }) {
         type='button'
         className='btn btn-primary add-to-cart-icon w-100 d-md-none d-block'
         onClick={() => addToCart()}
+        aria-label='Add to cart'
       >
         <i className='bi bi-cart-fill'></i>
       </button>

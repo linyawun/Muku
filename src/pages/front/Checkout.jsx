@@ -323,6 +323,7 @@ function Checkout() {
                     style={{
                       pointerEvents: 'auto',
                     }}
+                    aria-label='Submit'
                   >
                     確認送出
                   </button>

@@ -70,6 +70,7 @@ function Home() {
                 <button
                   type='button'
                   className='btn btn-primary btn-lg position-absolute CTA'
+                  aria-label='Go shopping'
                 >
                   前往購物
                 </button>
@@ -87,6 +88,7 @@ function Home() {
                 <button
                   type='button'
                   className='btn btn-primary btn-lg position-absolute CTA'
+                  aria-label='Go shopping'
                 >
                   前往購物
                 </button>

@@ -232,6 +232,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
               type='button'
               className='btn btn-secondary'
               onClick={closeModal}
+              aria-label='Close'
             >
               關閉
             </button>

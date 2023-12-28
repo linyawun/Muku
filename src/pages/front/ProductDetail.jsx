@@ -183,6 +183,7 @@ function ProductDetail() {
                       onClick={() =>
                         setCartQuantity((pre) => (pre === 1 ? pre : pre - 1))
                       }
+                      aria-label='Minus'
                     >
                       <i className='bi bi-dash'></i>
                     </button>
@@ -202,6 +203,7 @@ function ProductDetail() {
                       type='button'
                       id='button-addon2'
                       onClick={() => setCartQuantity((pre) => pre + 1)}
+                      aria-label='Plus'
                     >
                       <i className='bi bi-plus'></i>
                     </button>
@@ -215,6 +217,7 @@ function ProductDetail() {
               className='btn btn-primary w-100 py-2 mb-4'
               onClick={() => addToCart()}
               disabled={isLoading}
+              aria-label='Add to cart'
             >
               加入購物車
             </button>

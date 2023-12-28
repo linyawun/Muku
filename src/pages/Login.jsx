@@ -99,7 +99,11 @@ function Login() {
                 }}
               />
             </div>
-            <button type='submit' className='btn btn-primary'>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              aria-label='Login'
+            >
               登入
             </button>
           </form>

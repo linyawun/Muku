@@ -66,6 +66,7 @@ function Products() {
                 id='collapseBtn'
                 type='button'
                 aria-expanded='false'
+                aria-label='Toggle'
                 onClick={() => {
                   categoryCollapse.current.toggle();
                 }}

@@ -209,13 +209,18 @@ function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
               </div>
               <div className='modal-footer'>
                 <button
+                  aria-label='Close'
                   type='button'
                   className='btn btn-secondary'
                   onClick={closeModal}
                 >
                   關閉
                 </button>
-                <button type='submit' className='btn btn-primary'>
+                <button
+                  type='submit'
+                  className='btn btn-primary'
+                  aria-label='Save'
+                >
                   儲存
                 </button>
               </div>

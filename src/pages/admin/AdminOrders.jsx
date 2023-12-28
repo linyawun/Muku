@@ -128,6 +128,7 @@ function AdminOrders() {
                         onClick={() => {
                           openOrderModal(order);
                         }}
+                        aria-label='View'
                       >
                         查看
                       </button>
@@ -135,6 +136,7 @@ function AdminOrders() {
                         type='button'
                         className='btn btn-outline-danger btn-sm'
                         onClick={() => openDeleteModal(order)}
+                        aria-label='Delete'
                       >
                         刪除
                       </button>

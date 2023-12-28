@@ -195,6 +195,7 @@ function CheckoutSuccess() {
                               onClick={() => {
                                 payOrder(orderId);
                               }}
+                              aria-label='Pay'
                             >
                               確認付款
                             </button>
