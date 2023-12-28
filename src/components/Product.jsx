@@ -62,11 +62,11 @@ function Product({ product }) {
         </div>
       </Link>
       <div className='card-body p-0'>
-        <h6 className='mb-0 mt-2'>
+        <h3 className='h6 mb-0 mt-2'>
           <Link to={`/product/${product.id}`} className='link stretched-link'>
             {product.title}
           </Link>
-        </h6>
+        </h3>
         <p className='text-primary mt-1 mb-0'>
           NT$ {product.price?.toLocaleString()}
         </p>
