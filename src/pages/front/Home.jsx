@@ -5,6 +5,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
 import Product from '../../components/Product';
 import Loading from '../../components/Loading';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +37,7 @@ function Home() {
     <>
       <div className='container'>
         <Loading isLoading={isLoading} />
-        <div className='mb-3'>
+        <div className='mb-3 banner-swiper-wrapper'>
           <Swiper
             spaceBetween={30}
             pagination={pagination}
@@ -43,17 +46,27 @@ function Home() {
               delay: 6000,
               disableOnInteraction: false,
             }}
-            className='mySwiper'
+            className='banner-swiper'
           >
             <SwiperSlide>
               <Link to='/products/all' className='position-relative'>
-                <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
+                <LazyLoadImage
+                  alt='mukuBanner'
+                  effect='blur'
+                  src='https://i.ibb.co/JxN9B0m/a8z3v-7rgo8.webp'
+                  fetchpriority='high'
+                />
               </Link>
             </SwiperSlide>
             <SwiperSlide>
               <Link to='/products/all'>
-                <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
-                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0 w-100 h-100'></div>
+                <LazyLoadImage
+                  alt='mukuBanner'
+                  effect='blur'
+                  src='https://i.ibb.co/KrwHnPX/aailg-q2cz8.webp'
+                  fetchpriority='high'
+                />
+                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0'></div>
                 <button
                   type='button'
                   className='btn btn-primary btn-lg position-absolute CTA'
@@ -64,8 +77,13 @@ function Home() {
             </SwiperSlide>
             <SwiperSlide>
               <Link to='/products/all'>
-                <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
-                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0 w-100 h-100'></div>
+                <LazyLoadImage
+                  alt='mukuBanner'
+                  effect='blur'
+                  src='https://i.ibb.co/n0RhThJ/ahv96-47phg.webp'
+                  fetchpriority='high'
+                />
+                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0'></div>
                 <button
                   type='button'
                   className='btn btn-primary btn-lg position-absolute CTA'

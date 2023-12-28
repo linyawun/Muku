@@ -1,14 +1,20 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 function AboutUs() {
   return (
     <div className='container'>
       <div className='row justify-content-center mb-6'>
         <div className='col-lg-7'>
           <h2 className='text-primary text-center mt-4 mb-4'>關於我們</h2>
-          <img
-            src='https://i.imgur.com/xJWaghG.jpg'
-            alt=''
-            className='img-fluid mb-3'
-          />
+          <div className='mb-3'>
+            <LazyLoadImage
+              alt='about Muku'
+              effect='blur'
+              src='https://i.ibb.co/HqQxs0Q/ayh1x-zzh7p.webp'
+              className='w-100'
+            />
+          </div>
           <div className='mb-3'>
             <p>
               歡迎來到 Muku，Muku 成立於 2023

@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression({
-      algorithm: 'gzip', // 或者使用 'brotliCompress' 用於Brotli壓縮
+      algorithm: 'gzip',
     }),
   ],
   resolve: {
