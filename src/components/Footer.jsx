@@ -9,7 +9,7 @@ function Footer() {
             <div className='d-flex flex-md-row flex-column align-items-center mb-lg-0 mb-md-6 mb-4'>
               <img src={mukuLogo} alt='muku logo' style={{ height: '80px' }} />
               <div>
-                <h5 className='text-primary mb-0'>Muku</h5>
+                <p className='h5 text-primary mb-0'>Muku</p>
               </div>
             </div>
           </div>
