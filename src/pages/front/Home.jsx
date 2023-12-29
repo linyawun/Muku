@@ -53,7 +53,7 @@ function Home() {
                 <LazyLoadImage
                   alt='mukuBanner'
                   effect='blur'
-                  src='https://i.ibb.co/JxN9B0m/a8z3v-7rgo8.webp'
+                  src='https://i.ibb.co/g6Zgz4n/a8z3v-7rgo8.webp'
                   fetchpriority='high'
                 />
               </Link>
@@ -63,7 +63,7 @@ function Home() {
                 <LazyLoadImage
                   alt='mukuBanner'
                   effect='blur'
-                  src='https://i.ibb.co/KrwHnPX/aailg-q2cz8.webp'
+                  src='https://i.ibb.co/rxMhsxN/aailg-q2cz8.webp'
                   fetchpriority='high'
                 />
                 <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0'></div>
@@ -81,7 +81,7 @@ function Home() {
                 <LazyLoadImage
                   alt='mukuBanner'
                   effect='blur'
-                  src='https://i.ibb.co/n0RhThJ/ahv96-47phg.webp'
+                  src='https://i.ibb.co/pn2nvKj/ahv96-47phg.webp'
                   fetchpriority='high'
                 />
                 <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0'></div>

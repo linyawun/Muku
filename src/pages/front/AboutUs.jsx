@@ -11,7 +11,7 @@ function AboutUs() {
             <LazyLoadImage
               alt='about Muku'
               effect='blur'
-              src='https://i.ibb.co/HqQxs0Q/ayh1x-zzh7p.webp'
+              src='https://i.ibb.co/SQ55PmB/ayh1x-zzh7p.webp'
               className='w-100'
             />
           </div>
