@@ -29,7 +29,11 @@ function Product({ product }) {
   };
   return (
     <div className='card border-0 mb-4 position-relative h-100'>
-      <Link className='position-relative' to={`/product/${product.id}`}>
+      <Link
+        className='position-relative'
+        to={`/product/${product.id}`}
+        aria-label='Go to Product'
+      >
         <LazyLoadImage
           className='card-img-top rounded-0 object-cover'
           alt='productImg'
@@ -65,7 +69,11 @@ function Product({ product }) {
       </Link>
       <div className='card-body p-0'>
         <h3 className='h6 mb-0 mt-2'>
-          <Link to={`/product/${product.id}`} className='link stretched-link'>
+          <Link
+            to={`/product/${product.id}`}
+            className='link stretched-link'
+            aria-label='Go to Product'
+          >
             {product.title}
           </Link>
         </h3>

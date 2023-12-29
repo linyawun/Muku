@@ -39,6 +39,7 @@ function Footer() {
                       href='https://www.facebook.com/'
                       target='_blank'
                       rel='noreferrer'
+                      aria-label='Go to Facebook'
                     >
                       Facebook
                     </a>
@@ -49,6 +50,7 @@ function Footer() {
                       href='https://www.instagram.com/'
                       target='_blank'
                       rel='noreferrer'
+                      aria-label='Go to Instagram'
                     >
                       Instgram
                     </a>

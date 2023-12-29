@@ -137,12 +137,20 @@ function ProductDetail() {
             <nav aria-label='breadcrumb'>
               <ol className='breadcrumb'>
                 <li className='breadcrumb-item'>
-                  <Link to='/products/all' className='link'>
+                  <Link
+                    to='/products/all'
+                    className='link'
+                    aria-label='All Products'
+                  >
                     <small>所有商品</small>
                   </Link>
                 </li>
                 <li className='breadcrumb-item active' aria-current='page'>
-                  <Link to={`/products/${product.category}`} className='link'>
+                  <Link
+                    to={`/products/${product.category}`}
+                    className='link'
+                    aria-label={product.category}
+                  >
                     <small>{product.category}</small>
                   </Link>
                 </li>

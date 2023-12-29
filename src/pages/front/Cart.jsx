@@ -294,6 +294,7 @@ function Cart() {
               <Link
                 to='/checkout'
                 className='btn btn-primary w-100 mt-4 rounded-0 py-3'
+                aria-label='Go to Checkout'
               >
                 前往結帳
               </Link>{' '}
@@ -320,6 +321,7 @@ function Cart() {
                 to='/'
                 type='button'
                 className='col-lg-6 col-10 btn btn-primary py-2'
+                aria-label='Go to Shopping'
               >
                 繼續購物
               </Link>

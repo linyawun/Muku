@@ -58,7 +58,11 @@ function Products() {
         <div className='row'>
           <div className='col-lg-2 col-md-3 mb-md-0 mb-4 d-md-block d-none'>
             <div className='d-flex justify-content-between align-items-center'>
-              <Link to='/products/all' className='link'>
+              <Link
+                to='/products/all'
+                className='link'
+                aria-label='All Products'
+              >
                 所有商品
               </Link>
               <button
@@ -79,7 +83,11 @@ function Products() {
                 {categoryList.map((category) => {
                   return (
                     <li key={category} className='mt-1'>
-                      <Link to={`/products/${category}`} className='link'>
+                      <Link
+                        to={`/products/${category}`}
+                        className='link'
+                        aria-label={category}
+                      >
                         {category}
                       </Link>
                     </li>

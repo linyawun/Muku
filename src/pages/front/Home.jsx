@@ -49,17 +49,27 @@ function Home() {
             className='banner-swiper'
           >
             <SwiperSlide>
-              <Link to='/products/all' className='position-relative'>
+              <Link
+                to='/products/all'
+                className='position-relative'
+                aria-label='Go Shopping'
+              >
                 <LazyLoadImage
                   alt='mukuBanner'
                   effect='blur'
+                  srcSet={`
+                      https://i.ibb.co/nMqvvgW/Muku-banner-1-mob.webp 480w,
+                      https://i.ibb.co/d2jHv5c/Muku-banner-1-tablet.webp 1024w,
+                      https://i.ibb.co/k6nXnkN/Muku-banner-01.webp 1280w
+                  `}
                   src='https://i.ibb.co/k6nXnkN/Muku-banner-01.webp'
                   fetchpriority='high'
+                  sizes='(max-width: 480px) 480px, (max-width: 1024px) 1024px, 100vw'
                 />
               </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <Link to='/products/all'>
+              <Link to='/products/all' aria-label='Go Shopping'>
                 <LazyLoadImage
                   alt='mukuBanner'
                   effect='blur'
@@ -77,7 +87,7 @@ function Home() {
               </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <Link to='/products/all'>
+              <Link to='/products/all' aria-label='Go Shopping'>
                 <LazyLoadImage
                   alt='mukuBanner'
                   effect='blur'
@@ -133,7 +143,11 @@ function Home() {
             </div>
           </div>
           <div className='d-flex justify-content-center'>
-            <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
+            <Link
+              to='/aboutUs'
+              className='link-primary pe-5 arrowLink'
+              aria-label='About us'
+            >
               <small>關於我們</small>
             </Link>
           </div>
@@ -143,7 +157,11 @@ function Home() {
             <h2 className='text-primary'>最新商品</h2>
           </div>
           <div className='col-5 d-flex justify-content-end'>
-            <Link to='/products/all' className='link-primary pe-5 arrowLink'>
+            <Link
+              to='/products/all'
+              className='link-primary pe-5 arrowLink'
+              aria-label='More Products'
+            >
               <small>更多商品</small>
             </Link>
           </div>
