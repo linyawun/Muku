@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -19,12 +20,9 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.2",
     "browserslist-to-esbuild": "^1.2.0",
-    "gh-pages": "^5.0.0",
     "lightningcss": "^1.22.1",
     "lodash": "^4.17.21",
-    "query-string": "^8.1.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.8",
     "react-lazy-load-image-component": "^1.6.0",
