@@ -5,7 +5,6 @@ import browserslistToEsbuild from 'browserslist-to-esbuild';
 import viteCompression from 'vite-plugin-compression';
 import pluginPurgeCss from '@mojojoejo/vite-plugin-purgecss';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),

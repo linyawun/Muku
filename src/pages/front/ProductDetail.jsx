@@ -11,9 +11,10 @@ import { createAsyncMessage } from '../../slice/messageSlice';
 import { Link as ScrollLink, Element as ScrollElement } from 'react-scroll';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
-import Image from 'react-graceful-image';
 import Loading from '../../components/Loading';
 import Product from '../../components/Product';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function ProductDetail() {
   const navigate = useNavigate();
@@ -105,14 +106,24 @@ function ProductDetail() {
               className='mySwiper'
             >
               <SwiperSlide>
-                <img src={product.imageUrl} alt='productImg' />
+                <LazyLoadImage
+                  alt='productImg'
+                  effect='blur'
+                  src={product.imageUrl}
+                  fetchpriority='high'
+                />
               </SwiperSlide>
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
                     if (imageUrl) {
                       return (
                         <SwiperSlide key={`${imageUrl}_swiper`}>
-                          <Image src={imageUrl} alt='productImg' />
+                          <LazyLoadImage
+                            alt='productImg'
+                            effect='blur'
+                            src={imageUrl}
+                            fetchpriority='high'
+                          />
                         </SwiperSlide>
                       );
                     } else {
@@ -311,20 +322,25 @@ function ProductDetail() {
           <ScrollElement name='productMore'>
             <div className=''>
               <h4 className='text-primary'>了解更多</h4>
-              <Image
-                src={product.imageUrl}
+
+              <LazyLoadImage
                 alt='productImg'
+                effect='blur'
+                src={product.imageUrl}
                 className='img-fluid mb-4'
+                loading='lazy'
               />
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
                     if (imageUrl) {
                       return (
-                        <Image
-                          src={imageUrl}
+                        <LazyLoadImage
                           alt='productImg'
+                          effect='blur'
+                          src={imageUrl}
                           className='img-fluid d-block mb-4'
                           key={`${imageUrl}_info`}
+                          loading='lazy'
                         />
                       );
                     } else {

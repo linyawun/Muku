@@ -1,8 +1,10 @@
 import { Link, useOutletContext } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import Image from 'react-graceful-image';
-import { createAsyncMessage } from '../slice/messageSlice';
 import axios from 'axios';
+import { createAsyncMessage } from '../slice/messageSlice';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 function Product({ product }) {
   const { getCart } = useOutletContext();
   const dispatch = useDispatch();
@@ -28,22 +30,22 @@ function Product({ product }) {
   return (
     <div className='card border-0 mb-4 position-relative h-100'>
       <Link className='position-relative' to={`/product/${product.id}`}>
-        <Image
-          src={product.imageUrl}
+        <LazyLoadImage
           className='card-img-top rounded-0 object-cover'
-          height={300}
           alt='productImg'
-          retry={{ count: 10, delay: 2 }}
+          effect='blur'
+          height={300}
+          src={product.imageUrl}
           loading='lazy'
         />
 
         <div className='overlay position-absolute top-0 start-0 w-100 h-100 bg-white'>
-          <Image
+          <LazyLoadImage
             className='card-img-top rounded-0 object-cover'
+            alt='productImg'
+            effect='blur'
             height={300}
             src={product.imagesUrl?.[0] || product.imageUrl}
-            alt='productImg'
-            retry={{ count: 10, delay: 2 }}
             loading='lazy'
           />
           <div className='cart-block'>
