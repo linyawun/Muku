@@ -58,8 +58,8 @@ function Home() {
                   alt='mukuBanner'
                   effect='blur'
                   srcSet={`
-                      https://i.ibb.co/nMqvvgW/Muku-banner-1-mob.webp 480w,
-                      https://i.ibb.co/d2jHv5c/Muku-banner-1-tablet.webp 1024w,
+                      https://i.ibb.co/6ssW0X8/a8z3v-7rgo8.webp 480w,
+                      https://i.ibb.co/N7rqvQh/Muku-banner-1-tablet.webp 1024w,
                       https://i.ibb.co/k6nXnkN/Muku-banner-01.webp 1280w
                   `}
                   src='https://i.ibb.co/k6nXnkN/Muku-banner-01.webp'

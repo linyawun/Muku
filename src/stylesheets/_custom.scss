@@ -30,7 +30,7 @@ li {
     width: 120px;
     right: 0px;
     top: 18px;
-    transition: all 0.3s;
+    transition: right 0.3s;
   }
   &:hover {
     &::before {
@@ -167,7 +167,7 @@ li {
 .card {
   .overlay {
     opacity: 0;
-    transition: all 0.5s;
+    transition: opacity 0.5s;
   }
   &:hover .overlay {
     opacity: 1;
