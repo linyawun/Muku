@@ -312,7 +312,11 @@ function Checkout() {
                   />
                 </div>
                 <div className='d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end w-100'>
-                  <Link to='/cart' className='text-dark mt-md-0 mt-3'>
+                  <Link
+                    to='/cart'
+                    className='text-dark mt-md-0 mt-3'
+                    aria-label='Back to Cart'
+                  >
                     <i className='bi bi-chevron-left me-2'></i>
                     返回購物車
                   </Link>
@@ -323,6 +327,7 @@ function Checkout() {
                     style={{
                       pointerEvents: 'auto',
                     }}
+                    aria-label='Submit'
                   >
                     確認送出
                   </button>

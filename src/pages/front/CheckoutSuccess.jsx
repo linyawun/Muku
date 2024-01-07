@@ -102,6 +102,7 @@ function CheckoutSuccess() {
               <Link
                 to='/'
                 className='btn btn-outline-primary me-2 rounded-0 mb-4'
+                aria-label='Go to Home'
               >
                 回到首頁
               </Link>
@@ -195,6 +196,7 @@ function CheckoutSuccess() {
                               onClick={() => {
                                 payOrder(orderId);
                               }}
+                              aria-label='Pay'
                             >
                               確認付款
                             </button>
@@ -230,6 +232,7 @@ function CheckoutSuccess() {
               to='/'
               type='button'
               className='col-lg-4 col-10 btn btn-primary py-2'
+              aria-label='Go to Home'
             >
               回到首頁
             </Link>

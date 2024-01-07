@@ -43,38 +43,12 @@ function Dashboard() {
                 type='button'
                 className='btn btn-sm btn-outline-light'
                 onClick={logout}
+                aria-label='Logout'
               >
                 登出
               </button>
             </li>
           </ul>
-          {/* <button
-            className='navbar-toggler'
-            type='button'
-            data-bs-toggle='collapse'
-            data-bs-target='#navbarNav'
-            aria-controls='navbarNav'
-            aria-expanded='false'
-            aria-label='Toggle navigation'
-          >
-            <span className='navbar-toggler-icon' />
-          </button>
-          <div
-            className='collapse navbar-collapse justify-content-end'
-            id='navbarNav'
-          >
-            <ul className='navbar-nav'>
-              <li className='nav-item'>
-                <button
-                  type='button'
-                  className='btn btn-sm btn-outline-light'
-                  onClick={logout}
-                >
-                  登出
-                </button>
-              </li>
-            </ul>
-          </div> */}
         </div>
       </nav>
       <div className='container-fluid'>

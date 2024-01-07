@@ -116,6 +116,7 @@ function AdminProducts() {
           type='button'
           className='btn btn-primary btn-sm'
           onClick={() => openProductModal('create', {})}
+          aria-label='Create Product'
         >
           建立新商品
         </button>
@@ -170,6 +171,7 @@ function AdminProducts() {
                         type='button'
                         className='btn btn-primary btn-sm'
                         onClick={() => openProductModal('edit', product)}
+                        aria-label='Edit'
                       >
                         編輯
                       </button>
@@ -177,6 +179,7 @@ function AdminProducts() {
                         type='button'
                         className='btn btn-outline-danger btn-sm'
                         onClick={() => openDeleteModal(product)}
+                        aria-label='Delete'
                       >
                         刪除
                       </button>

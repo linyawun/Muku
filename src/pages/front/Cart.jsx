@@ -142,6 +142,7 @@ function Cart() {
               onClick={() => {
                 openDeleteModal();
               }}
+              aria-label='Delete All'
             >
               刪除全部
             </button>
@@ -166,6 +167,7 @@ function Cart() {
                         className='position-absolute btn border-0'
                         style={{ top: '10px', right: '10px' }}
                         onClick={() => debouncedClick(item.id)}
+                        aria-label='Delete'
                       >
                         <i className='bi bi-x-lg'></i>
                       </button>
@@ -242,6 +244,7 @@ function Cart() {
                         onClick={() => {
                           sendCoupon();
                         }}
+                        aria-label='Send Coupon'
                       >
                         <i className='bi bi-send-fill'></i>
                       </button>
@@ -291,6 +294,7 @@ function Cart() {
               <Link
                 to='/checkout'
                 className='btn btn-primary w-100 mt-4 rounded-0 py-3'
+                aria-label='Go to Checkout'
               >
                 前往結帳
               </Link>{' '}
@@ -317,6 +321,7 @@ function Cart() {
                 to='/'
                 type='button'
                 className='col-lg-6 col-10 btn btn-primary py-2'
+                aria-label='Go to Shopping'
               >
                 繼續購物
               </Link>

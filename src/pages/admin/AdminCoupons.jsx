@@ -94,6 +94,7 @@ function AdminCoupons() {
         <button
           type='button'
           className='btn btn-primary btn-sm'
+          aria-label='Create Coupon'
           onClick={() => openCouponModal('create', {})}
         >
           建立新優惠券
@@ -126,6 +127,7 @@ function AdminCoupons() {
                         type='button'
                         className='btn btn-primary btn-sm'
                         onClick={() => openCouponModal('edit', coupon)}
+                        aria-label='Edit'
                       >
                         編輯
                       </button>
@@ -133,6 +135,7 @@ function AdminCoupons() {
                         type='button'
                         className='btn btn-outline-danger btn-sm'
                         onClick={() => openDeleteModal(coupon)}
+                        aria-label='Delete'
                       >
                         刪除
                       </button>

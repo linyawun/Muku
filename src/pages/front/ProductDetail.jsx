@@ -11,9 +11,10 @@ import { createAsyncMessage } from '../../slice/messageSlice';
 import { Link as ScrollLink, Element as ScrollElement } from 'react-scroll';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
-import Image from 'react-graceful-image';
 import Loading from '../../components/Loading';
 import Product from '../../components/Product';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function ProductDetail() {
   const navigate = useNavigate();
@@ -105,14 +106,24 @@ function ProductDetail() {
               className='mySwiper'
             >
               <SwiperSlide>
-                <img src={product.imageUrl} alt='productImg' />
+                <LazyLoadImage
+                  alt='productImg'
+                  effect='blur'
+                  src={product.imageUrl}
+                  fetchpriority='high'
+                />
               </SwiperSlide>
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
                     if (imageUrl) {
                       return (
                         <SwiperSlide key={`${imageUrl}_swiper`}>
-                          <Image src={imageUrl} alt='productImg' />
+                          <LazyLoadImage
+                            alt='productImg'
+                            effect='blur'
+                            src={imageUrl}
+                            fetchpriority='high'
+                          />
                         </SwiperSlide>
                       );
                     } else {
@@ -126,12 +137,20 @@ function ProductDetail() {
             <nav aria-label='breadcrumb'>
               <ol className='breadcrumb'>
                 <li className='breadcrumb-item'>
-                  <Link to='/products/all' className='link'>
+                  <Link
+                    to='/products/all'
+                    className='link'
+                    aria-label='All Products'
+                  >
                     <small>所有商品</small>
                   </Link>
                 </li>
                 <li className='breadcrumb-item active' aria-current='page'>
-                  <Link to={`/products/${product.category}`} className='link'>
+                  <Link
+                    to={`/products/${product.category}`}
+                    className='link'
+                    aria-label={product.category}
+                  >
                     <small>{product.category}</small>
                   </Link>
                 </li>
@@ -183,6 +202,7 @@ function ProductDetail() {
                       onClick={() =>
                         setCartQuantity((pre) => (pre === 1 ? pre : pre - 1))
                       }
+                      aria-label='Minus'
                     >
                       <i className='bi bi-dash'></i>
                     </button>
@@ -202,6 +222,7 @@ function ProductDetail() {
                       type='button'
                       id='button-addon2'
                       onClick={() => setCartQuantity((pre) => pre + 1)}
+                      aria-label='Plus'
                     >
                       <i className='bi bi-plus'></i>
                     </button>
@@ -215,6 +236,7 @@ function ProductDetail() {
               className='btn btn-primary w-100 py-2 mb-4'
               onClick={() => addToCart()}
               disabled={isLoading}
+              aria-label='Add to cart'
             >
               加入購物車
             </button>
@@ -308,20 +330,25 @@ function ProductDetail() {
           <ScrollElement name='productMore'>
             <div className=''>
               <h4 className='text-primary'>了解更多</h4>
-              <Image
-                src={product.imageUrl}
+
+              <LazyLoadImage
                 alt='productImg'
+                effect='blur'
+                src={product.imageUrl}
                 className='img-fluid mb-4'
+                loading='lazy'
               />
               {product.imagesUrl
                 ? product.imagesUrl.map((imageUrl) => {
                     if (imageUrl) {
                       return (
-                        <Image
-                          src={imageUrl}
+                        <LazyLoadImage
                           alt='productImg'
+                          effect='blur'
+                          src={imageUrl}
                           className='img-fluid d-block mb-4'
                           key={`${imageUrl}_info`}
+                          loading='lazy'
                         />
                       );
                     } else {

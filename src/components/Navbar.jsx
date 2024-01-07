@@ -131,6 +131,7 @@ function Navbar({ cartData }) {
           <div className='d-flex'>
             <NavLink to='/cart' className='nav-link position-relative'>
               <i className='bi bi-cart-fill cart-icon'></i>
+              <span className='visually-hidden'>購物車</span>
               <span className='position-absolute start-100 translate-middle badge rounded-pill bg-danger cart-msg'>
                 {cartData?.carts?.length === 0 ? '' : cartData?.carts?.length}
               </span>

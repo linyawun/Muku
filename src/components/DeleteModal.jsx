@@ -22,12 +22,18 @@ function DeleteModal({ close, text, handleDelete, id }) {
           </div>
           <div className='modal-body'>確定刪除 {text} 嗎?</div>
           <div className='modal-footer'>
-            <button type='button' className='btn btn-secondary' onClick={close}>
+            <button
+              type='button'
+              className='btn btn-secondary'
+              onClick={close}
+              aria-label='Cancel'
+            >
               取消
             </button>
             <button
               type='button'
               className='btn btn-danger'
+              aria-label='Confirm delete'
               onClick={() => handleDelete(id)}
             >
               確認刪除

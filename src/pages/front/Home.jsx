@@ -5,6 +5,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
 import Product from '../../components/Product';
 import Loading from '../../components/Loading';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +37,7 @@ function Home() {
     <>
       <div className='container'>
         <Loading isLoading={isLoading} />
-        <div className='mb-3'>
+        <div className='mb-3 banner-swiper-wrapper'>
           <Swiper
             spaceBetween={30}
             pagination={pagination}
@@ -43,32 +46,59 @@ function Home() {
               delay: 6000,
               disableOnInteraction: false,
             }}
-            className='mySwiper'
+            className='banner-swiper'
           >
             <SwiperSlide>
-              <Link to='/products/all' className='position-relative'>
-                <img src='https://i.imgur.com/7TVC1s0.png' alt='mukuBanner' />
+              <Link
+                to='/products/all'
+                className='position-relative'
+                aria-label='Go Shopping'
+              >
+                <LazyLoadImage
+                  alt='mukuBanner'
+                  effect='blur'
+                  srcSet={`
+                      https://i.ibb.co/6ssW0X8/a8z3v-7rgo8.webp 480w,
+                      https://i.ibb.co/N7rqvQh/Muku-banner-1-tablet.webp 1024w,
+                      https://i.ibb.co/k6nXnkN/Muku-banner-01.webp 1280w
+                  `}
+                  src='https://i.ibb.co/k6nXnkN/Muku-banner-01.webp'
+                  fetchpriority='high'
+                  sizes='(max-width: 480px) 480px, (max-width: 1024px) 1024px, 100vw'
+                />
               </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <Link to='/products/all'>
-                <img src='https://i.imgur.com/w97DZVQ.png' alt='mukuBanner' />
-                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0 w-100 h-100'></div>
+              <Link to='/products/all' aria-label='Go Shopping'>
+                <LazyLoadImage
+                  alt='mukuBanner'
+                  effect='blur'
+                  src='https://i.ibb.co/rxMhsxN/aailg-q2cz8.webp'
+                  loading='lazy'
+                />
+                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0'></div>
                 <button
                   type='button'
                   className='btn btn-primary btn-lg position-absolute CTA'
+                  aria-label='Go shopping'
                 >
                   前往購物
                 </button>
               </Link>
             </SwiperSlide>
             <SwiperSlide>
-              <Link to='/products/all'>
-                <img src='https://i.imgur.com/q1uNiZL.jpg' alt='mukuBanner' />
-                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0 w-100 h-100'></div>
+              <Link to='/products/all' aria-label='Go Shopping'>
+                <LazyLoadImage
+                  alt='mukuBanner'
+                  effect='blur'
+                  src='https://i.ibb.co/pn2nvKj/ahv96-47phg.webp'
+                  loading='lazy'
+                />
+                <div className='bg-white opacity-50 w-100 h-100 position-absolute top-0 start-0'></div>
                 <button
                   type='button'
                   className='btn btn-primary btn-lg position-absolute CTA'
+                  aria-label='Go shopping'
                 >
                   前往購物
                 </button>
@@ -113,7 +143,11 @@ function Home() {
             </div>
           </div>
           <div className='d-flex justify-content-center'>
-            <Link to='/aboutUs' className='link-primary pe-5 arrowLink'>
+            <Link
+              to='/aboutUs'
+              className='link-primary pe-5 arrowLink'
+              aria-label='About us'
+            >
               <small>關於我們</small>
             </Link>
           </div>
@@ -123,7 +157,11 @@ function Home() {
             <h2 className='text-primary'>最新商品</h2>
           </div>
           <div className='col-5 d-flex justify-content-end'>
-            <Link to='/products/all' className='link-primary pe-5 arrowLink'>
+            <Link
+              to='/products/all'
+              className='link-primary pe-5 arrowLink'
+              aria-label='More Products'
+            >
               <small>更多商品</small>
             </Link>
           </div>

@@ -73,7 +73,7 @@ function ProductModal({
       dispatchRedux(resetUploadImg());
       let { imagesUrl } = tempProduct;
       if (!imagesUrl) {
-        imagesUrl = Array.from({ length: 5 }, (v, i) => '');
+        imagesUrl = Array.from({ length: 5 }, (_, __) => '');
       }
       const imageData = imagesUrl?.reduce((result, url, index) => {
         result[`detailImg${index + 1}`] = url;
@@ -345,7 +345,8 @@ function ProductModal({
                       <button
                         type='button'
                         className='btn btn-primary'
-                        onClick={(e) => {
+                        aria-label='Add image'
+                        onClick={() => {
                           setTempData((pre) => ({
                             ...pre,
                             imagesUrl: [...pre.imagesUrl, ''],
@@ -483,10 +484,15 @@ function ProductModal({
                   type='button'
                   className='btn btn-secondary'
                   onClick={closeProductModal}
+                  aria-label='Close'
                 >
                   關閉
                 </button>
-                <button type='submit' className='btn btn-primary'>
+                <button
+                  type='submit'
+                  className='btn btn-primary'
+                  aria-label='Save'
+                >
                   儲存
                 </button>
               </div>

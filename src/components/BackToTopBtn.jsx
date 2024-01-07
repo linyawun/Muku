@@ -28,6 +28,7 @@ function BackToTopBtn() {
     <>
       {isVisible && (
         <button
+          aria-label='Back to top'
           className='btn btn-primary btn-lg back-to-top-button d-flex justify-content-center'
           onClick={scrollToTop}
         >

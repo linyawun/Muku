@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -19,14 +20,12 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.2",
     "browserslist-to-esbuild": "^1.2.0",
-    "gh-pages": "^5.0.0",
+    "lightningcss": "^1.22.1",
     "lodash": "^4.17.21",
-    "query-string": "^8.1.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
-    "react-graceful-image": "^1.5.0",
     "react-hook-form": "^7.43.8",
+    "react-lazy-load-image-component": "^1.6.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.9.0",
     "react-scroll": "^1.8.9",
@@ -36,6 +35,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@mojojoejo/vite-plugin-purgecss": "^1.1.0",
     "@types/babel__core": "^7.20.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
@@ -45,8 +45,10 @@
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "terser": "^5.26.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vite-plugin-compression": "^0.5.1"
   },
   "browserslist": {
     "production": [

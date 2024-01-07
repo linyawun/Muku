@@ -15,11 +15,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <StrictMode>
     <HashRouter>
-      {/* <Suspense fallback={<Loading isLoading={true} />}> */}
-      <Provider store={store}>
-        <App />
-      </Provider>
-      {/* </Suspense> */}
+      <Suspense fallback={<Loading isLoading={true} />}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </Suspense>
     </HashRouter>
   </StrictMode>
 );
