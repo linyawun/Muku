@@ -35,10 +35,11 @@ function Product({ product }) {
         aria-label='Go to Product'
       >
         <LazyLoadImage
-          className='card-img-top rounded-0 object-cover'
+          className='card-img-top rounded-0 object-cover w-100'
           alt='productImg'
           effect='blur'
           height={300}
+          width='100%'
           src={product.imageUrl}
           loading='lazy'
         />
@@ -49,6 +50,7 @@ function Product({ product }) {
             alt='productImg'
             effect='blur'
             height={300}
+            width='100%'
             src={product.imagesUrl?.[0] || product.imageUrl}
             loading='lazy'
           />
