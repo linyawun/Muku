@@ -8,6 +8,9 @@ function Message() {
         style={{ top: '64px', right: '15px' }}
       >
         {messages?.map((msg) => {
+          const toastClass =
+            msg.type === 'success' ? 'bg-success' : 'bg-danger';
+
           return (
             <div
               key={msg.id}
@@ -17,7 +20,7 @@ function Message() {
               aria-atomic='true'
               data-delay='3000'
             >
-              <div className={`toast-header text-white bg-${msg.type}`}>
+              <div className={`toast-header text-white ${toastClass}`}>
                 <strong className='me-auto'>{msg.title}</strong>
                 <button
                   type='button'
