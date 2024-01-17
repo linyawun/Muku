@@ -200,7 +200,7 @@ function Cart() {
                             })}
                           </select>
                         </div>
-                        <div className='col-lg-8 col-sm-7 col-12 d-flex'>
+                        <div className='col-lg-8 col-sm-7 col-12 d-flex justify-content-sm-end justify-content-start'>
                           {hascoupon && (
                             <p className='mb-0 text-decoration-line-through text-muted text-end me-1'>
                               <small>NT$ {item.total.toLocaleString()}</small>
@@ -259,7 +259,7 @@ function Cart() {
                   </div>
                 )}
               </div>
-              {hascoupon ? (
+              {hascoupon && (
                 <table className='table text-muted'>
                   <tbody>
                     <tr>
@@ -283,8 +283,6 @@ function Cart() {
                     </tr>
                   </tbody>
                 </table>
-              ) : (
-                ''
               )}
               <div className='d-flex justify-content-between mt-4'>
                 <p className='mb-0 h4 fw-bold'>總付款金額</p>
