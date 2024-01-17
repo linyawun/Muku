@@ -113,24 +113,20 @@ function ProductDetail() {
                   fetchpriority='high'
                 />
               </SwiperSlide>
-              {product.imagesUrl
-                ? product.imagesUrl.map((imageUrl) => {
-                    if (imageUrl) {
-                      return (
-                        <SwiperSlide key={`${imageUrl}_swiper`}>
-                          <LazyLoadImage
-                            alt='productImg'
-                            effect='blur'
-                            src={imageUrl}
-                            fetchpriority='high'
-                          />
-                        </SwiperSlide>
-                      );
-                    } else {
-                      return '';
-                    }
-                  })
-                : ''}
+              {product.imagesUrl &&
+                product.imagesUrl.map(
+                  (imageUrl, index) =>
+                    imageUrl && (
+                      <SwiperSlide key={`${imageUrl}_swiper_${index}`}>
+                        <LazyLoadImage
+                          alt='productImg'
+                          effect='blur'
+                          src={imageUrl}
+                          fetchpriority='high'
+                        />
+                      </SwiperSlide>
+                    )
+                )}
             </Swiper>
           </div>
           <div className='col-lg-4 productInfo p-lg-2 p-4'>
@@ -157,15 +153,13 @@ function ProductDetail() {
               </ol>
             </nav>
             <h3 className='mb-1 text-primary'>{product.title}</h3>
-            {product.description ? (
+            {product.description && (
               <>
                 <p className='text-muted'>
                   <small>{product.description}</small>
                 </p>
                 <hr className='text-secondary' />
               </>
-            ) : (
-              ''
             )}
             <h5 className='fw-bold text-primary mb-0'>
               NT$ {product.price?.toLocaleString()}
@@ -328,7 +322,7 @@ function ProductDetail() {
             </div>
           </ScrollElement>
           <ScrollElement name='productMore'>
-            <div className=''>
+            <div>
               <h4 className='text-primary'>了解更多</h4>
 
               <LazyLoadImage
@@ -338,24 +332,19 @@ function ProductDetail() {
                 className='img-fluid mb-4'
                 loading='lazy'
               />
-              {product.imagesUrl
-                ? product.imagesUrl.map((imageUrl) => {
-                    if (imageUrl) {
-                      return (
-                        <LazyLoadImage
-                          alt='productImg'
-                          effect='blur'
-                          src={imageUrl}
-                          className='img-fluid d-block mb-4'
-                          key={`${imageUrl}_info`}
-                          loading='lazy'
-                        />
-                      );
-                    } else {
-                      return '';
-                    }
-                  })
-                : ''}
+              {product.imagesUrl &&
+                product.imagesUrl.map((imageUrl, index) =>
+                  imageUrl ? (
+                    <LazyLoadImage
+                      alt='productImg'
+                      effect='blur'
+                      src={imageUrl}
+                      className='img-fluid d-block mb-4'
+                      key={`${imageUrl}_${index}`}
+                      loading='lazy'
+                    />
+                  ) : null
+                )}
             </div>
           </ScrollElement>
           <ScrollElement name='productRelated'>

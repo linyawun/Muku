@@ -153,7 +153,7 @@ function CheckoutSuccess() {
                       );
                     })}
                     <li className='list-group-item px-0 pb-0'>
-                      {couponData?.hasCoupon ? (
+                      {couponData?.hasCoupon && (
                         <table className='table text-muted'>
                           <tbody>
                             <tr>
@@ -183,8 +183,6 @@ function CheckoutSuccess() {
                             </tr>
                           </tbody>
                         </table>
-                      ) : (
-                        ''
                       )}
                       <div className='d-flex justify-content-between align-items-center mt-2'>
                         <p className='mb-0 h5'>付款狀態</p>
@@ -209,9 +207,8 @@ function CheckoutSuccess() {
                         <p className='mb-0 h4 fw-bold'>訂單總金額</p>
                         <p className='mb-0 h4 fw-bold'>
                           NT${' '}
-                          {orderData?.total
-                            ? Math.round(orderData?.total)?.toLocaleString()
-                            : ''}
+                          {orderData?.total &&
+                            Math.round(orderData.total).toLocaleString()}
                         </p>
                       </div>
                     </li>

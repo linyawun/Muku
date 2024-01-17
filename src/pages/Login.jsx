@@ -33,7 +33,7 @@ function Login() {
         }, 500);
       }
     } catch (error) {
-      let { code } = error?.response?.data?.error;
+      let { code } = error?.response?.data?.error ?? {};
       if (code === 'auth/user-not-found') {
         setLoginMsg('此帳號不存在');
       } else if (code === 'auth/wrong-password') {

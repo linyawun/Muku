@@ -343,7 +343,7 @@ function Checkout() {
                   <div className='d-flex mb-3' key={item.id}>
                     <img
                       src={item.product.imageUrl}
-                      alt=''
+                      alt={item.product.title}
                       className='me-2'
                       style={{
                         width: '48px',
@@ -377,7 +377,7 @@ function Checkout() {
                   </div>
                 );
               })}
-              {hascoupon ? (
+              {hascoupon && (
                 <table className='table mt-4 border-top border-bottom text-muted'>
                   <tbody>
                     <tr>
@@ -404,8 +404,6 @@ function Checkout() {
                     </tr>
                   </tbody>
                 </table>
-              ) : (
-                ''
               )}
 
               <div className='d-flex justify-content-between mt-4'>
