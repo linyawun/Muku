@@ -151,33 +151,36 @@ function Cart() {
             <>
               {cartData?.carts?.map((item) => {
                 return (
-                  <div className='d-flex mt-4 mb-4 bg-light' key={item.id}>
+                  <div
+                    className='d-flex mt-4 mb-4 p-2 bg-light align-items-center'
+                    key={item.id}
+                  >
                     <img
                       src={item.product.imageUrl}
                       alt='productImg'
                       className='object-cover'
                       style={{
-                        width: '120px',
-                        height: '120px',
+                        width: '100px',
+                        height: '100px',
                       }}
                     />
-                    <div className='w-100 p-3 position-relative d-flex flex-column justify-content-between'>
+                    <div className='w-100 ms-3 position-relative d-flex flex-column justify-content-between'>
                       <button
                         type='button'
                         className='position-absolute btn border-0'
-                        style={{ top: '10px', right: '10px' }}
+                        style={{ top: '-8px', right: '-8px' }}
                         onClick={() => debouncedClick(item.id)}
                         aria-label='Delete'
                       >
                         <i className='bi bi-x-lg'></i>
                       </button>
 
-                      <p className='mb-0' style={{ width: '90%' }}>
+                      <p className='mb-2' style={{ width: '90%' }}>
                         {item.product.title}
                       </p>
 
                       <div className='row justify-content-between align-items-center w-100'>
-                        <div className='col-lg-4 col-5 ps-3'>
+                        <div className='col-lg-4 col-sm-5 col-7 md-mb-0 mb-2'>
                           <select
                             name=''
                             className='form-select'
@@ -197,13 +200,11 @@ function Cart() {
                             })}
                           </select>
                         </div>
-                        <div className='col-lg-7 col-7 d-flex justify-content-end'>
-                          {hascoupon ? (
+                        <div className='col-lg-8 col-sm-7 col-12 d-flex justify-content-sm-end justify-content-start'>
+                          {hascoupon && (
                             <p className='mb-0 text-decoration-line-through text-muted text-end me-1'>
                               <small>NT$ {item.total.toLocaleString()}</small>
                             </p>
-                          ) : (
-                            ''
                           )}
                           <p className='mb-0 text-end'>
                             NT$ {item.final_total?.toLocaleString()}
@@ -258,7 +259,7 @@ function Cart() {
                   </div>
                 )}
               </div>
-              {hascoupon ? (
+              {hascoupon && (
                 <table className='table text-muted'>
                   <tbody>
                     <tr>
@@ -282,8 +283,6 @@ function Cart() {
                     </tr>
                   </tbody>
                 </table>
-              ) : (
-                ''
               )}
               <div className='d-flex justify-content-between mt-4'>
                 <p className='mb-0 h4 fw-bold'>總付款金額</p>

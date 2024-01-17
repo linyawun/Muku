@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Input, CheckboxRadio } from './FormElement';
 import { timeStampToTime } from '../helpers/util';
@@ -9,18 +9,15 @@ import {
   handleErrorMessage,
 } from '../store/messageStore';
 
-function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
-  const initData = useMemo(
-    () => ({
-      title: '',
-      is_enabled: 1,
-      percent: 80,
-      due_date: new Date(),
-      code: 'muku',
-    }),
-    []
-  );
+const initData = {
+  title: '',
+  is_enabled: 1,
+  percent: 80,
+  due_date: new Date(),
+  code: 'muku',
+};
 
+function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
   const [tempData, setTempData] = useState(initData);
   const {
     register,
@@ -48,7 +45,7 @@ function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
         due_date: timeStampToTime(tempCoupon.due_date),
       });
     }
-  }, [type, tempCoupon, initData]);
+  }, [type, tempCoupon]);
 
   useEffect(() => {
     const resetForm = () => {

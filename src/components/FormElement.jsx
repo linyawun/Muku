@@ -84,7 +84,7 @@ export const CheckboxRadio = ({
         {labelText}
       </label>
 
-      {hasErrorMsg ? <FormErrorMsg errors={errors} name={name} /> : ''}
+      {hasErrorMsg && <FormErrorMsg errors={errors} name={name} />}
     </div>
   );
 };
@@ -118,9 +118,7 @@ export const Selectbox = ({
               placeholder={placeholder}
               data={data}
               value={value}
-              onChange={(text) => {
-                onChange(text);
-              }}
+              onChange={onChange}
               messages={{ emptyFilter: '目前無此分類' }}
               onBlur={onBlur}
               inputProps={{
