@@ -25,6 +25,14 @@
 - [x] 填寫顧客資訊，表單驗證
 - [x] 送出訂單
 
+## TODOs
+- [ ] 多國語系(i18n)
+- [ ] 加入 Google Analytics
+- [ ] 加入測試
+- [ ] 改用 react query fetch API
+- [ ] 以 TypeScript 改寫
+- [ ] (Optional) migrate to Next.js
+
 ## 畫面
 - 前台-商品列表
 ![image](https://i.imgur.com/vZkSfiKg.jpg)
