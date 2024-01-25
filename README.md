@@ -28,7 +28,7 @@
 ## TODOs
 - [ ] 改善效能
 - [ ] 多國語系(i18n)
-- [ ] 加入 Google Analytics
+- [x] 加入 Google Analytics
 - [ ] 加入測試
 - [ ] 改用 react query fetch API
 - [ ] 以 TypeScript 改寫
