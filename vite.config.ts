@@ -4,6 +4,7 @@ import path from 'path';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import viteCompression from 'vite-plugin-compression';
 import pluginPurgeCss from '@mojojoejo/vite-plugin-purgecss';
+import { VitePluginRadar } from 'vite-plugin-radar';
 
 export default defineConfig({
   plugins: [
@@ -13,6 +14,11 @@ export default defineConfig({
     }),
     pluginPurgeCss({
       variables: true,
+    }),
+    VitePluginRadar({
+      analytics: {
+        id: 'G-K63GFRNPPF',
+      },
     }),
   ],
   resolve: {
