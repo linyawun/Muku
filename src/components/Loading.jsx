@@ -7,6 +7,9 @@ function Loading({ isLoading }) {
     } else {
       body.style.overflow = 'auto';
     }
+    return () => {
+      body.style.overflow = 'auto';
+    };
   }, [isLoading]);
   return (
     <>
