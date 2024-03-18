@@ -8,19 +8,21 @@ import Loading from '../../components/Loading';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+const pagination = {
+  clickable: true,
+  renderBullet: function (index, className) {
+    return `
+      <div class="${className}">
+        <span class=""></span>
+      </div>
+    `;
+  },
+};
+
 function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const pagination = {
-    clickable: true,
-    renderBullet: function (index, className) {
-      return `
-        <div class="${className}">
-          <span class=""></span>
-        </div>
-      `;
-    },
-  };
+
   const getProducts = async (page = 1) => {
     setIsLoading(true);
     const productRes = await axios.get(
