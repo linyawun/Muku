@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Input } from '../components/FormElement';
+import Loading from '../components/Loading';
 
 function Login() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ function Login() {
     password: '',
   });
   const [loginMsg, setLoginMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,8 +48,38 @@ function Login() {
     }
   };
 
+  //取出 token
+  const token = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('hexToken='))
+    ?.split('=')[1];
+  axios.defaults.headers.common['Authorization'] = token;
+  useEffect(() => {
+    //路由保護，確認有token
+    if (!token) {
+      document.cookie = 'hexToken=';
+    }
+    //確認token正確性與時效
+    (async () => {
+      setIsLoading(true);
+      try {
+        const res = await axios.post('/v2/api/user/check');
+        if (res.data.success) {
+          navigate('/admin/products');
+        }
+        setIsLoading(false);
+      } catch (error) {
+        if (!error.response.data.success) {
+          document.cookie = 'hexToken=';
+        }
+        setIsLoading(false);
+      }
+    })();
+  }, [navigate, token]);
+
   return (
     <div className='container login'>
+      <Loading isLoading={isLoading} />
       <div className='row justify-content-center align-items-center flex-md-row flex-column-reverse'>
         <div className='col-md-5 d-flex'>
           <form onSubmit={handleSubmit(submit)} className='col'>

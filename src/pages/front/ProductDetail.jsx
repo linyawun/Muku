@@ -16,6 +16,17 @@ import Product from '../../components/Product';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+const pagination = {
+  clickable: true,
+  renderBullet: function (index, className) {
+    return `
+      <div class="${className}">
+        <span class=""></span>
+      </div>
+    `;
+  },
+};
+
 function ProductDetail() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -26,16 +37,6 @@ function ProductDetail() {
   const { getCart } = useOutletContext();
   const dispatch = useDispatch();
 
-  const pagination = {
-    clickable: true,
-    renderBullet: function (index, className) {
-      return `
-        <div class="${className}">
-          <span class=""></span>
-        </div>
-      `;
-    },
-  };
   const getProduct = useCallback(
     async (id) => {
       setIsLoading(true);
