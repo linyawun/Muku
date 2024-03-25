@@ -72,7 +72,7 @@ function Footer() {
         </div>
         <div className='d-flex align-items-center justify-content-center text-primary py-3'>
           <p className='mb-0'>
-            <small>© 2023 Muku All Rights Reserved.</small>
+            <small>{`© ${new Date().getFullYear()} Muku All Rights Reserved.`}</small>
           </p>
         </div>
       </div>
