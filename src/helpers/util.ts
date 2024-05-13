@@ -1,4 +1,4 @@
-export const timeStampToTime = (timeStamp) => {
+export const timeStampToTime = (timeStamp: number) => {
   if (!timeStamp) {
     return;
   }

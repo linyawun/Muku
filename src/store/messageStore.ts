@@ -1,14 +1,40 @@
+import { Dispatch } from '@reduxjs/toolkit';
 import { createContext } from 'react';
 // useContext 跨元件傳遞
 export const MessageContext = createContext({});
 
-export const initState = {
+type TMessageState = {
+  type: string;
+  title: string;
+  text: string;
+};
+
+type TAction = {
+  type: string;
+  payload?: TMessageState;
+};
+
+type TResponse = {
+  data: {
+    message: string;
+  };
+};
+
+type TCustomError = Error & {
+  response?: {
+    data?: {
+      message: string | string[];
+    };
+  };
+};
+
+export const initState: TMessageState = {
   type: '',
   title: '',
   text: '',
 };
 // Reducer
-export const messageReducer = (state, action) => {
+export const messageReducer = (state: TMessageState, action: TAction) => {
   switch (action.type) {
     case 'POST_MESSAGE':
       return {
@@ -23,7 +49,10 @@ export const messageReducer = (state, action) => {
   }
 };
 
-export function handleSuccessMessage(dispatch, res) {
+export function handleSuccessMessage(
+  dispatch: Dispatch<TAction>,
+  res: TResponse
+) {
   dispatch({
     type: 'POST_MESSAGE',
     payload: {
@@ -38,7 +67,10 @@ export function handleSuccessMessage(dispatch, res) {
     });
   }, 3000);
 }
-export function handleErrorMessage(dispatch, error) {
+export function handleErrorMessage(
+  dispatch: Dispatch<TAction>,
+  error: TCustomError
+) {
   dispatch({
     type: 'POST_MESSAGE',
     payload: {
@@ -46,7 +78,7 @@ export function handleErrorMessage(dispatch, error) {
       title: '失敗',
       text: Array.isArray(error?.response?.data?.message)
         ? error?.response?.data?.message.join('、')
-        : error?.response?.data?.message,
+        : error?.response?.data?.message || '',
     },
   });
   setTimeout(() => {
