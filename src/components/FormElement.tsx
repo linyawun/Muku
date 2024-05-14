@@ -3,6 +3,7 @@ import {
   FieldValues,
   RegisterOptions,
   UseFormReturn,
+  Controller,
 } from 'react-hook-form';
 import { Combobox } from 'react-widgets';
 
@@ -49,9 +50,8 @@ type TCheckboxRadioProps = {
 };
 
 type TSelectboxProps = {
-  Controller: any; // replace with the correct type
-  control: Control; // replace with the correct type
-  data: any[]; // replace with the correct type
+  control: Control;
+  data: string[];
   labelText: string;
   id: string;
   placeholder: string;
@@ -159,7 +159,6 @@ export const CheckboxRadio = ({
 };
 
 export const Selectbox = ({
-  Controller,
   control,
   data,
   labelText,
@@ -186,7 +185,7 @@ export const Selectbox = ({
               name={id}
               placeholder={placeholder}
               data={data}
-              value={value}
+              value={value as string}
               onChange={onChange}
               messages={{ emptyFilter: '目前無此分類' }}
               onBlur={onBlur}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { resetUploadImg } from '../slice/uploadImgSlice';
 import {
@@ -169,7 +169,6 @@ function ProductModal({
                 <div className='row'>
                   <div className='form-group mb-3 col-md-6'>
                     <Selectbox
-                      Controller={Controller}
                       control={control}
                       data={categoryList}
                       labelText='分類*'
