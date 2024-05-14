@@ -23,7 +23,6 @@ function Pagination({ pagination, changePage }) {
             _,
             i //i 從0開始，頁數從1開始
           ) => (
-            // eslint-disable-next-line react/no-array-index-key
             <li className='page-item' key={`${i}_page`}>
               <a
                 className={`page-link ${

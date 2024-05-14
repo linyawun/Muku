@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Input, Textarea, CheckboxRadio, Selectbox } from './FormElement';
-import UploadImg from './UploadImg';
-import {
-  MessageContext,
-  handleSuccessMessage,
-  handleErrorMessage,
-} from '../store/messageStore';
 import { useDispatch } from 'react-redux';
 import { resetUploadImg } from '../slice/uploadImgSlice';
+import {
+  MessageContext,
+  handleErrorMessage,
+  handleSuccessMessage,
+} from '../store/messageStore';
+import { CheckboxRadio, Input, Selectbox, Textarea } from './FormElement';
+import UploadImg from './UploadImg';
 
 function ProductModal({
   closeProductModal,
@@ -73,7 +73,7 @@ function ProductModal({
       dispatchRedux(resetUploadImg());
       let { imagesUrl } = tempProduct;
       if (!imagesUrl) {
-        imagesUrl = Array.from({ length: 5 }, (_, __) => '');
+        imagesUrl = Array.from({ length: 5 }, () => '');
       }
       const imageData = imagesUrl?.reduce((result, url, index) => {
         result[`detailImg${index + 1}`] = url;

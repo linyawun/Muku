@@ -1,10 +1,10 @@
-import { Combobox } from 'react-widgets';
 import {
-  UseFormReturn,
-  RegisterOptions,
-  FieldValues,
   Control,
+  FieldValues,
+  RegisterOptions,
+  UseFormReturn,
 } from 'react-hook-form';
+import { Combobox } from 'react-widgets';
 
 type TErrorType = {
   [key: string]: { message: string };
@@ -50,7 +50,7 @@ type TCheckboxRadioProps = {
 
 type TSelectboxProps = {
   Controller: any; // replace with the correct type
-  control: any; // replace with the correct type
+  control: Control; // replace with the correct type
   data: any[]; // replace with the correct type
   labelText: string;
   id: string;

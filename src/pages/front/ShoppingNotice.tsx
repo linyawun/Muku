@@ -13,12 +13,15 @@ function ShoppingNotice() {
                 <span className='fw-bold'>商品下單後，幾天內會收到呢？</span>
                 <ul>
                   <li>
-                    現貨商品－將於　
-                    <span className='fw-bold'>7工作天內(不含例假日)</span>　寄出
+                    現貨商品－將於
+                    <span className='mx-2 fw-bold'>7工作天內(不含例假日)</span>
+                    寄出
                   </li>
                   <li>
-                    預購商品－約於收單日後　
-                    <span className='fw-bold'>7-21個工作天(不含例假日)</span>
+                    預購商品－約於收單日後
+                    <span className='mx-2 fw-bold'>
+                      7-21個工作天(不含例假日)
+                    </span>
                     寄出
                   </li>
                   <li>
@@ -95,7 +98,7 @@ function ShoppingNotice() {
             <p className='text-muted mb-3'>－商品の返品、交換について－</p>
             <ul className='ps-0'>
               <li className='mb-3'>
-                <span className='fw-bold'>【 瑕疵退換 】</span>
+                <p className='fw-bold mb-0'>【 瑕疵退換 】</p>
                 <ul>
                   <li>
                     － 如收到瑕疵或錯誤的商品內容，我們非常抱歉！請於收件日起
@@ -113,7 +116,7 @@ function ShoppingNotice() {
                 </ul>
               </li>
               <li className='mb-3'>
-                <span className='fw-bold'>【 無法退換貨之商品 】</span>
+                <p className='fw-bold mb-0'>【 無法退換貨之商品 】</p>
                 <ul>
                   <li>－ 逾期申請換貨之訂單</li>
                   <li>－ 已拆除商品吊牌、備釦遺失</li>
@@ -126,9 +129,9 @@ function ShoppingNotice() {
                 </ul>
               </li>
               <li className='mb-3'>
-                <span className='fw-bold'>
-                  ※　以下情況非屬國際驗貨之瑕疵標準
-                </span>
+                <p className='fw-bold mb-0'>
+                  ※<span className='ms-2'>以下情況非屬國際驗貨之瑕疵標準</span>
+                </p>
                 <ul>
                   <li>－ ±2cm以內尺寸誤差</li>
                   <li>－ 直徑1cm以內輕微污損</li>
@@ -140,7 +143,10 @@ function ShoppingNotice() {
               </li>
               <li>
                 <span className='fw-bold'>
-                  ※　頻繁退貨多次，代表 Muku 的商品很可能不適合您！
+                  ※
+                  <span className='ms-2'>
+                    頻繁退貨多次，代表 Muku 的商品很可能不適合您！
+                  </span>
                 </span>
                 <ul>
                   <li>
