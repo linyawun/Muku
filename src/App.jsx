@@ -1,33 +1,37 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useReducer } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import {
-  Login,
-  Dashboard,
-  AdminProducts,
-  AdminCoupons,
-  AdminOrders,
-  FrontLayout,
-  Home,
-  Products,
-  ProductDetail,
-  AboutUs,
-  Cart,
-  Checkout,
-  CheckoutSuccess,
-  ShoppingNotice,
-  NotFound,
-} from './pages';
+import { Route, Routes } from 'react-router-dom';
 import BackToTopBtn from './components/BackToTopBtn';
 import ScrollToTop from './components/ScrollToTop';
 import {
+  AboutUs,
+  AdminCoupons,
+  AdminOrders,
+  AdminProducts,
+  Cart,
+  Checkout,
+  CheckoutSuccess,
+  Dashboard,
+  FrontLayout,
+  Home,
+  Login,
+  NotFound,
+  ProductDetail,
+  Products,
+  ShoppingNotice,
+} from './pages';
+import {
   MessageContext,
-  messageReducer,
   initState,
+  messageReducer,
 } from './store/messageStore';
+
 function App() {
   const reducer = useReducer(messageReducer, initState);
+  const queryClient = new QueryClient();
   return (
-    <div className='App'>
+    <QueryClientProvider client={queryClient}>
       <MessageContext.Provider value={reducer}>
         <ScrollToTop />
         <Routes>
@@ -53,8 +57,9 @@ function App() {
           <Route path='*' element={<NotFound />}></Route>
         </Routes>
         <BackToTopBtn />
+        <ReactQueryDevtools initialIsOpen={false} />
       </MessageContext.Provider>
-    </div>
+    </QueryClientProvider>
   );
 }
 

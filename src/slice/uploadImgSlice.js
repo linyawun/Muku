@@ -1,29 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
+const createImageState = () => ({
+  uploadMsg: '',
+  uploadVal: '',
+});
+
 const initialState = {
-  mainImg: {
-    uploadMsg: '',
-    uploadVal: '',
-  },
-  detailImg1: {
-    uploadMsg: '',
-    uploadVal: '',
-  },
-  detailImg2: {
-    uploadMsg: '',
-    uploadVal: '',
-  },
-  detailImg3: {
-    uploadMsg: '',
-    uploadVal: '',
-  },
-  detailImg4: {
-    uploadMsg: '',
-    uploadVal: '',
-  },
-  detailImg5: {
-    uploadMsg: '',
-    uploadVal: '',
-  },
+  mainImg: createImageState(),
+  detailImg1: createImageState(),
+  detailImg2: createImageState(),
+  detailImg3: createImageState(),
+  detailImg4: createImageState(),
+  detailImg5: createImageState(),
 };
 
 export const uploadImgSlice = createSlice({

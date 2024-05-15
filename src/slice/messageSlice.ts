@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { TMessage } from '@/types';
 
@@ -7,7 +7,7 @@ type TMessageState = TMessage[];
 type TCreateMessagePayload = {
   id: string;
   success: boolean;
-  message: string | string[];
+  message: string;
 };
 
 const initialState: TMessageState = [];
@@ -16,7 +16,7 @@ export const messageSlice = createSlice({
   name: 'message',
   initialState,
   reducers: {
-    createMessage(state, action) {
+    createMessage(state, action: PayloadAction<TCreateMessagePayload>) {
       if (action.payload.success) {
         state.push({
           id: action.payload.id,
@@ -52,7 +52,7 @@ export const messageSlice = createSlice({
 
 export const createAsyncMessage = createAsyncThunk(
   'message/createAsyncMessage',
-  async function (payload: TCreateMessagePayload, { dispatch, requestId }) {
+  function (payload: TCreateMessagePayload, { dispatch, requestId }) {
     const message = {
       ...payload,
       id: requestId,

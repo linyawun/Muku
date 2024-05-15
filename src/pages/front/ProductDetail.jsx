@@ -1,31 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import { useDispatch } from 'react-redux';
 import {
+  Link,
   useNavigate,
   useOutletContext,
   useParams,
-  Link,
 } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { createAsyncMessage } from '../../slice/messageSlice';
-import { Link as ScrollLink, Element as ScrollElement } from 'react-scroll';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Element as ScrollElement, Link as ScrollLink } from 'react-scroll';
 import { Autoplay, Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import Loading from '../../components/Loading';
 import Product from '../../components/Product';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import { createAsyncMessage } from '../../slice/messageSlice';
 
-const pagination = {
-  clickable: true,
-  renderBullet: function (index, className) {
-    return `
-      <div class="${className}">
-        <span class=""></span>
-      </div>
-    `;
-  },
-};
+import { pagination } from '@/utils/constant';
 
 function ProductDetail() {
   const navigate = useNavigate();

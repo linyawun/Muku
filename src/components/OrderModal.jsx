@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { timeStampToTime } from '../helpers/util';
 import {
   MessageContext,
-  handleSuccessMessage,
   handleErrorMessage,
+  handleSuccessMessage,
 } from '../store/messageStore';
+import { timeStampToTime } from '../utils/factory';
 
 function OrderModal({ closeModal, getOrders, tempOrder }) {
   const [isLoading, setIsLoading] = useState(false);

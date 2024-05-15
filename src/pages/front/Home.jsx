@@ -1,39 +1,42 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper';
-import Product from '../../components/Product';
-import Loading from '../../components/Loading';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { Link } from 'react-router-dom';
+import { Autoplay, Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import Loading from '../../components/Loading';
+import Product from '../../components/Product';
 
-const pagination = {
-  clickable: true,
-  renderBullet: function (index, className) {
-    return `
-      <div class="${className}">
-        <span class=""></span>
-      </div>
-    `;
-  },
-};
+import { useUserProductsQuery } from '@/hooks/api/front/product/queries';
+
+import { pagination } from '@/utils/constant';
 
 function Home() {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [products, setProducts] = useState([]);
+  //const [isLoading, setIsLoading] = useState(false);
+  const {
+    status,
+    data: products,
+    isLoading,
+  } = useUserProductsQuery(
+    {
+      page: 1,
+    },
+    {
+      select: (data) => data.data.products,
+    }
+  );
 
-  const getProducts = async (page = 1) => {
-    setIsLoading(true);
-    const productRes = await axios.get(
-      `/v2/api/${import.meta.env.VITE_APP_API_PATH}/products?page=${page}`
-    );
-    setProducts(productRes.data.products);
-    setIsLoading(false);
-  };
-  useEffect(() => {
-    getProducts(1);
-  }, []);
+  // const getProducts = async (page = 1) => {
+  //   setIsLoading(true);
+  //   const productRes = await axios.get(
+  //     `/v2/api/${import.meta.env.VITE_APP_API_PATH}/products?page=${page}`
+  //   );
+  //   setProducts(productRes.data.products);
+  //   setIsLoading(false);
+  // };
+  // useEffect(() => {
+  //   getProducts(1);
+  // }, []);
 
   return (
     <>
@@ -169,13 +172,15 @@ function Home() {
           </div>
         </div>
         <div className='row mb-5'>
-          {products.map((product) => {
-            return (
+          {status !== 'success' ? (
+            <div>Loading...</div>
+          ) : (
+            products.map((product) => (
               <div className='col-lg-3 col-6 mb-4' key={product.id}>
                 <Product product={product} />
               </div>
-            );
-          })}
+            ))
+          )}
         </div>
       </div>
     </>
