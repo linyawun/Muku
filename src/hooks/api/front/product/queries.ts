@@ -9,18 +9,6 @@ import {
   TUserProductsParams,
 } from '@/types';
 
-// const getUserProductsAll = (): Promise<TAxiosRes<TUserProductAll>> => {
-//   return request.get('/products/all');
-// };
-
-// export const useUserProductsAllQuery = (config = {}) => {
-//   return useQuery({
-//     queryKey: ['userProducts', 'all'],
-//     queryFn: () => getUserProductsAll(),
-//     ...config,
-//   });
-// };
-
 const getUserProducts = (
   params: TUserProductsParams
 ): Promise<TAxiosRes<TUserProducts>> => {
@@ -56,11 +44,3 @@ export const useUserProductQuery = (
     ...config,
   });
 };
-
-// export const useProductsQuery = (params, config = {}) => {
-//   return useQuery({
-//     queryKey: ['products', params],
-//     queryFn: () => getProducts(params),
-//     ...config,
-//   });
-// };

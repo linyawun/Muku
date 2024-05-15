@@ -32,6 +32,23 @@ export type UseQueryOptions<T> = ParamsOption<T> &
     };
   };
 
+export type UseMutationOptions<T> =
+  | (ParamsOption<T> &
+      RequestBodyOption<T> & {
+        reactQuery?: {
+          onSuccess?: (data: any) => void;
+          onError?: (error: any) => void;
+          onSettled?: (data: any, error: any) => void;
+        };
+      })
+  | {
+      reactQuery?: {
+        onSuccess?: (data: any) => void;
+        onError?: (error: any) => void;
+        onSettled?: (data: any, error: any) => void;
+      };
+    };
+
 // user products
 export type TUserProducts = definitions['userProductsAll'];
 
@@ -44,6 +61,14 @@ export type TUserProductParams = Pick<
   paths['/v2/api/{api_path}/product/{id}']['get']['parameters']['path'],
   'id'
 >;
+
+// user cart
+export type TUserCarts = definitions['userGetCarts'];
+
+export type TAddUserCartPayload =
+  paths['/v2/api/{api_path}/cart']['post']['parameters']['body']['data'];
+
+export type TAddUserCartResponse = definitions['userAddCart'];
 
 export type TResponse<T = any> = {
   success: boolean;

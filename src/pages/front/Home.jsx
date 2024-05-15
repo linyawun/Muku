@@ -22,7 +22,7 @@ function Home() {
       page: 1,
     },
     {
-      select: (data) => data.data.products,
+      select: (res) => res.data.products,
     }
   );
 
