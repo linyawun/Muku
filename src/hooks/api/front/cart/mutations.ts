@@ -11,9 +11,7 @@ const addCart = (payload: TAddUserCartPayload = {}) => {
   const { product_id, qty } = payload.data;
   if (!product_id || !qty) throw new Error('product_id or qty is empty');
 
-  return request.post(`/cart`, {
-    payload,
-  });
+  return request.post(`/cart`, payload);
 };
 
 export const useAddCartMutation = (config = {}) => {

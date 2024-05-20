@@ -34,7 +34,7 @@ const getUserProductById = (
   return request.get(`/product/${id}`);
 };
 
-export const useUserProductQuery = (
+export const useUserProductByIdQuery = (
   params: TUserProductParams,
   config = {}
 ) => {

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -11,11 +10,13 @@ import Loading from '../../components/Loading';
 import Product from '../../components/Product';
 import { createAsyncMessage } from '../../slice/messageSlice';
 
+import { useAddCartMutation } from '@/hooks/api/front/cart/mutations';
 import {
   useUserProductByIdQuery,
   useUserProductsQuery,
 } from '@/hooks/api/front/product/queries';
 import { pagination } from '@/utils/constant';
+import axios from 'axios';
 
 function ProductDetail() {
   //const navigate = useNavigate();
@@ -23,6 +24,7 @@ function ProductDetail() {
   // const [product, setProduct] = useState({});
   const [cartQuantity, setCartQuantity] = useState(1);
   const { id } = useParams();
+  //FIX: isLoading 的state要再修正看如何用在畫面上
   const [isLoading, setIsLoading] = useState(false);
   const { getCart } = useOutletContext();
   const dispatch = useDispatch();
@@ -56,12 +58,38 @@ function ProductDetail() {
       }
     );
 
+  const { mutate: addToCart1, status: addToCartStatus } = useAddCartMutation();
+
   const isAPILoading =
     productStatus === 'pending' || relatedProductsStatus === 'pending';
 
   console.log('currentProduct', product);
 
   console.log('relatedProducts', relatedProducts);
+
+  const handleAddToCart = () => {
+    const payload = {
+      data: {
+        product_id: product.id,
+        qty: cartQuantity,
+      },
+    };
+
+    setIsLoading(true); // 在发送请求之前设置 isLoading 为 true
+
+    addToCart1(payload, {
+      onSuccess: (res) => {
+        dispatch(createAsyncMessage(res.data));
+        getCart();
+      },
+      onError: (error) => {
+        dispatch(createAsyncMessage(error.response.data));
+      },
+      onSettled: () => {
+        setIsLoading(false); // 请求完成后设置 isLoading 为 false
+      },
+    });
+  };
 
   // const getProduct = useCallback(
   //   async (id) => {
@@ -269,8 +297,8 @@ function ProductDetail() {
                   type='button'
                   href='./checkout.html'
                   className='btn btn-primary w-100 py-2 mb-4'
-                  onClick={() => addToCart()}
-                  disabled={isLoading}
+                  onClick={handleAddToCart}
+                  disabled={addToCartStatus === 'loading'}
                   aria-label='Add to cart'
                 >
                   加入購物車
