@@ -16,7 +16,6 @@ import {
   useUserProductsQuery,
 } from '@/hooks/api/front/product/queries';
 import { pagination } from '@/utils/constant';
-import axios from 'axios';
 
 function ProductDetail() {
   //const navigate = useNavigate();
@@ -58,7 +57,7 @@ function ProductDetail() {
       }
     );
 
-  const { mutate: addToCart1, status: addToCartStatus } = useAddCartMutation();
+  const { mutate: addToCart, status: addToCartStatus } = useAddCartMutation();
 
   const isAPILoading =
     productStatus === 'pending' || relatedProductsStatus === 'pending';
@@ -75,9 +74,7 @@ function ProductDetail() {
       },
     };
 
-    setIsLoading(true); // 在发送请求之前设置 isLoading 为 true
-
-    addToCart1(payload, {
+    addToCart(payload, {
       onSuccess: (res) => {
         dispatch(createAsyncMessage(res.data));
         getCart();
@@ -85,12 +82,8 @@ function ProductDetail() {
       onError: (error) => {
         dispatch(createAsyncMessage(error.response.data));
       },
-      onSettled: () => {
-        setIsLoading(false); // 请求完成后设置 isLoading 为 false
-      },
     });
   };
-  console.log('addToCartStatus', addToCartStatus);
 
   // const getProduct = useCallback(
   //   async (id) => {
@@ -110,27 +103,27 @@ function ProductDetail() {
   //   },
   //   [navigate, dispatch]
   // );
-  const addToCart = async () => {
-    const data = {
-      data: {
-        product_id: product.id,
-        qty: cartQuantity,
-      },
-    };
-    setIsLoading(true);
-    try {
-      const res = await axios.post(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart`,
-        data
-      );
-      dispatch(createAsyncMessage(res.data));
-      getCart();
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      dispatch(createAsyncMessage(error.response.data));
-    }
-  };
+  // const addToCart = async () => {
+  //   const data = {
+  //     data: {
+  //       product_id: product.id,
+  //       qty: cartQuantity,
+  //     },
+  //   };
+  //   setIsLoading(true);
+  //   try {
+  //     const res = await axios.post(
+  //       `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart`,
+  //       data
+  //     );
+  //     dispatch(createAsyncMessage(res.data));
+  //     getCart();
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     setIsLoading(false);
+  //     dispatch(createAsyncMessage(error.response.data));
+  //   }
+  // };
   // const getRelatedProducts = async (page = 1, category) => {
   //   setIsLoading(true);
   //   const productRes = await axios.get(
@@ -160,7 +153,6 @@ function ProductDetail() {
         <Loading isLoading={true} />
       ) : (
         <>
-          {/* <Loading isLoading={isLoading} /> */}
           <div className='container-lg mb-5'>
             <div className='row'>
               <div className='col-lg-8 mb-lg-0 mb-3'>

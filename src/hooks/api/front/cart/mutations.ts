@@ -10,11 +10,7 @@ const addCart = (payload: TAddUserCartPayload = {}) => {
 
   const { product_id, qty } = payload.data;
   if (!product_id || !qty) throw new Error('product_id or qty is empty');
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(request.post(`/cart`, payload));
-    }, 1000);
-  });
+
   return request.post(`/cart`, payload);
 };
 
@@ -23,4 +19,14 @@ export const useAddCartMutation = (config = {}) => {
     mutationFn: (payload: TAddUserCartPayload) => addCart(payload),
     ...config,
   });
+};
+
+// update cart
+const updateCart = (payload: TUpdateUserCartPayload = {}) => {
+  if (!payload.data) throw new Error('Payload data is empty');
+
+  const { product_id, qty } = payload.data;
+  if (!product_id || !qty) throw new Error('product_id or qty is empty');
+
+  return request.put(`/cart`, payload);
 };

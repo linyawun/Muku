@@ -1,32 +1,52 @@
-import { Link, useOutletContext } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { createAsyncMessage } from '../slice/messageSlice';
+import { useAddCartMutation } from '@/hooks/api/front/cart/mutations';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { useDispatch } from 'react-redux';
+import { Link, useOutletContext } from 'react-router-dom';
+import { createAsyncMessage } from '../slice/messageSlice';
 
 function Product({ product }) {
   const { getCart } = useOutletContext();
   const dispatch = useDispatch();
+  const { mutate: addToCart, status: addToCartStatus } = useAddCartMutation();
 
-  const addToCart = async () => {
-    const data = {
+  const handleAddToCart = () => {
+    const payload = {
       data: {
         product_id: product.id,
         qty: 1,
       },
     };
-    try {
-      const res = await axios.post(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart`,
-        data
-      );
-      dispatch(createAsyncMessage(res.data));
-      getCart();
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-    }
+
+    addToCart(payload, {
+      onSuccess: (res) => {
+        dispatch(createAsyncMessage(res.data));
+        getCart();
+      },
+      onError: (error) => {
+        dispatch(createAsyncMessage(error.response.data));
+      },
+    });
   };
+
+  // const addToCart = async () => {
+  //   const data = {
+  //     data: {
+  //       product_id: product.id,
+  //       qty: 1,
+  //     },
+  //   };
+  //   try {
+  //     const res = await axios.post(
+  //       `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart`,
+  //       data
+  //     );
+  //     dispatch(createAsyncMessage(res.data));
+  //     getCart();
+  //   } catch (error) {
+  //     dispatch(createAsyncMessage(error.response.data));
+  //   }
+  // };
   return (
     <div className='card border-0 mb-4 position-relative h-100'>
       <Link
@@ -59,11 +79,19 @@ function Product({ product }) {
               type='button'
               aria-label='Add to cart'
               className='btn btn-primary py-2 add-to-cart d-md-block d-none'
+              disabled={addToCartStatus === 'pending'}
               onClick={(e) => {
                 e.preventDefault();
-                addToCart();
+                handleAddToCart();
               }}
             >
+              {addToCartStatus === 'pending' && (
+                <span
+                  class='spinner-border spinner-border-sm me-2'
+                  role='status'
+                  aria-hidden='true'
+                ></span>
+              )}
               加入購物車
             </button>
           </div>
@@ -89,9 +117,17 @@ function Product({ product }) {
       <button
         type='button'
         className='btn btn-primary add-to-cart-icon w-100 d-md-none d-block'
-        onClick={() => addToCart()}
+        onClick={handleAddToCart}
+        disabled={addToCartStatus === 'pending'}
         aria-label='Add to cart'
       >
+        {addToCartStatus === 'pending' && (
+          <span
+            class='spinner-border spinner-border-sm me-2'
+            role='status'
+            aria-hidden='true'
+          ></span>
+        )}
         <i className='bi bi-cart-fill'></i>
       </button>
     </div>
