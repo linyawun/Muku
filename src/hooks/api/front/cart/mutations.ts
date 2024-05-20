@@ -10,7 +10,11 @@ const addCart = (payload: TAddUserCartPayload = {}) => {
 
   const { product_id, qty } = payload.data;
   if (!product_id || !qty) throw new Error('product_id or qty is empty');
-
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(request.post(`/cart`, payload));
+    }, 1000);
+  });
   return request.post(`/cart`, payload);
 };
 

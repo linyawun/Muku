@@ -90,6 +90,7 @@ function ProductDetail() {
       },
     });
   };
+  console.log('addToCartStatus', addToCartStatus);
 
   // const getProduct = useCallback(
   //   async (id) => {
@@ -159,6 +160,7 @@ function ProductDetail() {
         <Loading isLoading={true} />
       ) : (
         <>
+          {/* <Loading isLoading={isLoading} /> */}
           <div className='container-lg mb-5'>
             <div className='row'>
               <div className='col-lg-8 mb-lg-0 mb-3'>
@@ -298,9 +300,16 @@ function ProductDetail() {
                   href='./checkout.html'
                   className='btn btn-primary w-100 py-2 mb-4'
                   onClick={handleAddToCart}
-                  disabled={addToCartStatus === 'loading'}
+                  disabled={addToCartStatus === 'pending'}
                   aria-label='Add to cart'
                 >
+                  {addToCartStatus === 'pending' && (
+                    <span
+                      class='spinner-border spinner-border-sm me-2'
+                      role='status'
+                      aria-hidden='true'
+                    ></span>
+                  )}
                   加入購物車
                 </button>
                 <ul className='ps-0 text-muted'>
