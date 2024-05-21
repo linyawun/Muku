@@ -21,6 +21,11 @@ export type ExtractJsonResponse<T> = T extends {
   ? ContentType
   : never;
 
+export type TResponse<T = any> = {
+  success: boolean;
+  message?: Record<string, any>[];
+} & T;
+
 // react-query options
 export type UseQueryOptions<T> = ParamsOption<T> &
   RequestBodyOption<T> & {
@@ -70,7 +75,9 @@ export type TAddUserCartPayload =
 
 export type TAddUserCartResponse = definitions['userAddCart'];
 
-export type TResponse<T = any> = {
-  success: boolean;
-  message?: Record<string, any>[];
-} & T;
+export type TUpdateUserCartPayload =
+  paths['/v2/api/{api_path}/cart/{id}']['put']['parameters']['body']['data'];
+
+// user coupon
+export type TSubmitUserCouponPayload =
+  paths['/v2/api/{api_path}/coupon']['post']['parameters']['body']['data'];

@@ -10,7 +10,7 @@ import Loading from '../../components/Loading';
 import Product from '../../components/Product';
 import { createAsyncMessage } from '../../slice/messageSlice';
 
-import { useAddCartMutation } from '@/hooks/api/front/cart/mutations';
+import { useAddToCartMutation } from '@/hooks/api/front/cart/mutations';
 import {
   useUserProductByIdQuery,
   useUserProductsQuery,
@@ -57,7 +57,7 @@ function ProductDetail() {
       }
     );
 
-  const { mutate: addToCart, status: addToCartStatus } = useAddCartMutation();
+  const { mutate: addToCart, status: addToCartStatus } = useAddToCartMutation();
 
   const isAPILoading =
     productStatus === 'pending' || relatedProductsStatus === 'pending';
