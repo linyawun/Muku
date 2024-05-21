@@ -1,7 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { TSubmitUserCouponPayload } from '@/types';
+import { TSubmitUserCouponPayload, UseMutationOptions } from '@/types';
 import request from '@/utils/request';
+import { paths } from '@/lib/api/v1';
+
+const SUBMIT_USER_COUPON = '/v2/api/{api_path}/coupon';
 
 // submitCoupon
 const submitCoupon = (payload: TSubmitUserCouponPayload = {}) => {
@@ -13,9 +16,11 @@ const submitCoupon = (payload: TSubmitUserCouponPayload = {}) => {
   return request.post(`/coupon`, payload);
 };
 
-export const useSubmitCouponMutation = (config = {}) => {
+export const useSubmitCouponMutation = ({
+  reactQuery = {},
+}: UseMutationOptions<paths[typeof SUBMIT_USER_COUPON]['post']> = {}) => {
   return useMutation({
     mutationFn: (payload: TSubmitUserCouponPayload) => submitCoupon(payload),
-    ...config,
+    ...reactQuery,
   });
 };

@@ -1,8 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
 import request from '@/utils/request';
+import { paths } from '@/lib/api/v1';
 
-import { TAddUserCartPayload } from '@/types';
+import { TAddUserCartPayload, UseMutationOptions } from '@/types';
+
+const UPDATE_USER_CART = '/v2/api/{api_path}/cart/{id}';
 
 type TUpdateCartArgs = {
   id: string;
@@ -19,10 +22,10 @@ const addToCart = (payload: TAddUserCartPayload = {}) => {
   return request.post(`/cart`, payload);
 };
 
-export const useAddToCartMutation = (config = {}) => {
+export const useAddToCartMutation = ({ reactQuery = {} }) => {
   return useMutation({
     mutationFn: (payload: TAddUserCartPayload) => addToCart(payload),
-    ...config,
+    ...reactQuery,
   });
 };
 
@@ -37,10 +40,12 @@ const updateCart = ({ id, payload }: TUpdateCartArgs) => {
   return request.put(`/cart/${id}`, payload);
 };
 
-export const useUpdateCartMutation = (config = {}) => {
+export const useUpdateCartMutation = ({
+  reactQuery = {},
+}: UseMutationOptions<paths[typeof UPDATE_USER_CART]['put']> = {}) => {
   return useMutation({
     mutationFn: ({ id, payload }: TUpdateCartArgs) =>
       updateCart({ id, payload }),
-    ...config,
+    ...reactQuery,
   });
 };

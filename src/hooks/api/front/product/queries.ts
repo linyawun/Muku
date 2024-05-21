@@ -3,15 +3,15 @@ import { useQuery } from '@tanstack/react-query';
 import request from '@/utils/request';
 
 import {
-  TAxiosRes,
   TUserProductParams,
   TUserProducts,
   TUserProductsParams,
 } from '@/types';
+import { AxiosResponse } from 'axios';
 
 const getUserProducts = (
   params: TUserProductsParams
-): Promise<TAxiosRes<TUserProducts>> => {
+): Promise<AxiosResponse<TUserProducts>> => {
   return request.get('/products', { params: params });
 };
 
@@ -28,7 +28,7 @@ export const useUserProductsQuery = (
 
 const getUserProductById = (
   params: TUserProductParams
-): Promise<TAxiosRes<TUserProducts>> => {
+): Promise<AxiosResponse<TUserProducts>> => {
   const { id } = params;
   if (!id) throw new Error('id is empty');
   return request.get(`/product/${id}`);

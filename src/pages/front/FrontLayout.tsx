@@ -7,6 +7,11 @@ import Loading from '../../components/Loading';
 import MessageToast from '../../components/MessageToast';
 import Navbar from '../../components/Navbar';
 import { createAsyncMessage } from '../../slice/messageSlice';
+type TCreateMessagePayload = {
+  id: string;
+  success: boolean;
+  message: string;
+};
 function FrontLayout() {
   // const [cartData, setCartData] = useState({});
   const dispatch = useDispatch();
@@ -16,8 +21,11 @@ function FrontLayout() {
     error: cartError,
     refetch: getCart,
   } = useUserCartsQuery({
-    select: (res) => res.data.data,
+    reactQuery: {
+      select: (res) => res?.data,
+    },
   });
+  console.log('cartData', cartData);
 
   // const getCart = useCallback(async () => {
   //   try {
@@ -34,7 +42,8 @@ function FrontLayout() {
   // }, [getCart]);
   useEffect(() => {
     if (cartError) {
-      dispatch(createAsyncMessage(cartError.response.data));
+      const errorData = cartError?.response?.data as TCreateMessagePayload;
+      dispatch(createAsyncMessage(errorData));
     }
   }, [cartError, dispatch]);
 

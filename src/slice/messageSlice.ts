@@ -40,11 +40,14 @@ export const messageSlice = createSlice({
     removeMessage(state, action: PayloadAction<string>) {
       const index = state.findIndex((item) => item.id === action.payload);
       if (index !== -1) {
-        const timerId = state[index].timerId;
-        if (timerId !== null) {
-          clearTimeout(timerId); // 只在 `timerId` 非 `null` 時清除計時器
-        } // 清除計時器
-        state.splice(index, 1);
+        const message = state[index];
+        if (message) {
+          const timerId = message.timerId;
+          if (timerId !== null) {
+            clearTimeout(timerId); // 只在 `timerId` 非 `null` 時清除計時器
+          } // 清除計時器
+          state.splice(index, 1);
+        }
       }
     },
   },

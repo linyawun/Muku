@@ -1,7 +1,7 @@
 import type { ParamsOption, RequestBodyOption } from 'openapi-fetch';
 
 import { definitions, paths } from '../lib/api/v1';
-
+import { UseQueryOptions as ReactQueryUseQueryOptions } from '@tanstack/react-query';
 export type TMessage = {
   id: string;
   type: string;
@@ -12,6 +12,11 @@ export type TMessage = {
 
 // api util types
 export type TAxiosRes<T = undefined> = {
+  data: T;
+};
+
+export type ApiResponse<T> = {
+  success: boolean;
   data: T;
 };
 
@@ -27,28 +32,37 @@ export type TResponse<T = any> = {
 } & T;
 
 // react-query options
-export type UseQueryOptions<T> = ParamsOption<T> &
-  RequestBodyOption<T> & {
-    reactQuery?: {
-      enabled?: boolean;
-      select?: (data: ExtractJsonResponse<T>) => any;
-      onSuccess?: (data: any) => void;
-      onError?: (error: any) => void;
-    };
+export type UseQueryOptions<T> = {
+  reactQuery?: {
+    select: (res: T) => any;
   };
+};
+// export type UseQueryOptions<T> = ParamsOption<T> &
+//   RequestBodyOption<T> & {
+//     reactQuery?: ReactQueryUseQueryOptions<T>;
+//   };
+// export type UseQueryOptions<T> = ParamsOption<T> &
+//   RequestBodyOption<T> & {
+//     reactQuery?: {
+//       enabled?: boolean;
+//       select?: (data: any) => any;
+//       onSuccess?: (data: any) => void;
+//       onError?: (error: any) => void;
+//     };
+//   };
 
 export type UseMutationOptions<T> =
   | (ParamsOption<T> &
       RequestBodyOption<T> & {
         reactQuery?: {
-          onSuccess?: (data: any) => void;
+          onSuccess?: (res: Record<string, any>) => void;
           onError?: (error: any) => void;
           onSettled?: (data: any, error: any) => void;
         };
       })
   | {
       reactQuery?: {
-        onSuccess?: (data: any) => void;
+        onSuccess?: (res: Record<string, any>) => void;
         onError?: (error: any) => void;
         onSettled?: (data: any, error: any) => void;
       };

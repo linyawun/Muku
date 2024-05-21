@@ -2,20 +2,22 @@ import { useSubmitCouponMutation } from '@/hooks/api/front/coupon/mutations';
 import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
-function CouponInput({ hasCoupon }) {
+function CouponInput({ hasCoupon }: { hasCoupon: boolean }) {
   const { getCart } = useOutletContext();
   const [couponCode, setCouponCode] = useState('');
   const [couponMsg, setCouponMsg] = useState('');
   const { mutate: submitCoupon, status: submitCouponStatus } =
     useSubmitCouponMutation({
-      onSuccess: (res) => {
-        if (res.data.success) {
-          setCouponMsg('');
-          getCart();
-        }
-      },
-      onError: (error) => {
-        setCouponMsg(error?.response?.data?.message);
+      reactQuery: {
+        onSuccess: (res) => {
+          if (res?.data?.success) {
+            setCouponMsg('');
+            getCart();
+          }
+        },
+        onError: (error) => {
+          setCouponMsg(error?.response?.data?.message);
+        },
       },
     });
 
@@ -89,7 +91,7 @@ function CouponInput({ hasCoupon }) {
             >
               {submitCouponStatus === 'pending' ? (
                 <span
-                  class='spinner-border spinner-border-sm me-2'
+                  className='spinner-border spinner-border-sm me-2'
                   role='status'
                   aria-hidden='true'
                 ></span>
