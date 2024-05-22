@@ -12,6 +12,7 @@ type TCreateMessagePayload = {
   success: boolean;
   message: string;
 };
+
 function FrontLayout() {
   // const [cartData, setCartData] = useState({});
   const dispatch = useDispatch();
@@ -20,12 +21,7 @@ function FrontLayout() {
     data: cartData,
     error: cartError,
     refetch: getCart,
-  } = useUserCartsQuery({
-    reactQuery: {
-      select: (res) => res?.data,
-    },
-  });
-  console.log('cartData', cartData);
+  } = useUserCartsQuery();
 
   // const getCart = useCallback(async () => {
   //   try {

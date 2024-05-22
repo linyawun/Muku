@@ -1,7 +1,6 @@
 import type { ParamsOption, RequestBodyOption } from 'openapi-fetch';
 
 import { definitions, paths } from '../lib/api/v1';
-import { UseQueryOptions as ReactQueryUseQueryOptions } from '@tanstack/react-query';
 export type TMessage = {
   id: string;
   type: string;
@@ -33,9 +32,7 @@ export type TResponse<T = any> = {
 
 // react-query options
 export type UseQueryOptions<T> = {
-  reactQuery?: {
-    select: (res: T) => any;
-  };
+  select?: (res: T) => T | (T extends object ? Partial<T> : never);
 };
 // export type UseQueryOptions<T> = ParamsOption<T> &
 //   RequestBodyOption<T> & {

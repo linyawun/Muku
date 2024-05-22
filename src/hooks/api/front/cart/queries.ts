@@ -2,23 +2,25 @@ import { useQuery } from '@tanstack/react-query';
 
 import request from '@/utils/request';
 
-import { TUserCarts, UseQueryOptions } from '@/types';
+import { TUserCarts } from '@/types';
 import { AxiosResponse } from 'axios';
 
-const getUserCarts = (): Promise<AxiosResponse<TUserCarts>> => {
-  return request.get('/cart');
+const getUserCarts = async (): Promise<TUserCarts> => {
+  const response: AxiosResponse<TUserCarts> = await request.get('/cart');
+  return response.data;
 };
 
-export const useUserCartsQuery = ({
-  reactQuery,
-}: UseQueryOptions<TUserCarts>) => {
-  return useQuery({
-    queryKey: ['userCarts'],
-    queryFn: async () => {
-      const { data } = await getUserCarts();
-      return data;
-      //throw new Error('getUserCarts failed');
-    },
-    ...reactQuery,
-  });
-};
+export const useUserCartsQuery = () =>
+  //   {
+  //   options,
+  // }: {
+  //   options?: UseQueryOptions<TUserCarts>;
+  // }
+  {
+    return useQuery({
+      queryKey: ['userCarts'],
+      queryFn: getUserCarts,
+      select: (data) => data.data,
+      // ...options,
+    });
+  };
