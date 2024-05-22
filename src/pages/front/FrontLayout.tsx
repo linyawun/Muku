@@ -8,7 +8,7 @@ import MessageToast from '../../components/MessageToast';
 import Navbar from '../../components/Navbar';
 import { createAsyncMessage } from '../../slice/messageSlice';
 type TCreateMessagePayload = {
-  id: string;
+  //id: string;
   success: boolean;
   message: string;
 };
@@ -36,14 +36,16 @@ function FrontLayout() {
   // useEffect(() => {
   //   getCart();
   // }, [getCart]);
+  console.log('cartError', cartError);
+  console.log('cartStatus', cartStatus);
   useEffect(() => {
     if (cartError) {
-      const errorData = cartError?.response?.data;
+      const errorData = cartError.response!.data as TCreateMessagePayload;
       dispatch(createAsyncMessage(errorData));
     }
   }, [cartError, dispatch]);
 
-  return cartStatus === 'pending' ? (
+  return cartStatus !== 'success' ? (
     <Loading isLoading={true} />
   ) : (
     <>

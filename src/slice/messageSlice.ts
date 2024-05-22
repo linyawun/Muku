@@ -5,9 +5,13 @@ import { TMessage } from '@/types';
 type TMessageState = TMessage[];
 
 type TCreateMessagePayload = {
-  id: string;
   success: boolean;
   message: string;
+};
+
+type TMessageWithId = TCreateMessagePayload & {
+  id: string;
+  timerId: NodeJS.Timeout | null;
 };
 
 const initialState: TMessageState = [];
@@ -16,7 +20,7 @@ export const messageSlice = createSlice({
   name: 'message',
   initialState,
   reducers: {
-    createMessage(state, action: PayloadAction<TCreateMessagePayload>) {
+    createMessage(state, action: PayloadAction<TMessageWithId>) {
       if (action.payload.success) {
         state.push({
           id: action.payload.id,
@@ -53,27 +57,27 @@ export const messageSlice = createSlice({
   },
 });
 
-export const createAsyncMessage = createAsyncThunk(
-  'message/createAsyncMessage',
-  function (payload: TCreateMessagePayload, { dispatch, requestId }) {
-    const message = {
-      ...payload,
-      id: requestId,
-      timerId: null, // 新增timerId屬性
-    };
-    dispatch(messageSlice.actions.createMessage(message));
+export const createAsyncMessage = createAsyncThunk<
+  TMessageWithId,
+  TCreateMessagePayload,
+  {}
+>('message/createAsyncMessage', function (payload, { dispatch, requestId }) {
+  const message = {
+    ...payload,
+    id: requestId,
+    timerId: null,
+  };
+  dispatch(messageSlice.actions.createMessage(message));
 
-    // 設定計時器並將timerId儲存在message物件中
-    const timerId = setTimeout(() => {
-      dispatch(messageSlice.actions.removeMessage(requestId));
-    }, 3000);
+  const timerId = setTimeout(() => {
+    dispatch(messageSlice.actions.removeMessage(message.id));
+  }, 3000);
 
-    return {
-      ...message,
-      timerId,
-    };
-  }
-);
+  return {
+    ...message,
+    timerId,
+  };
+});
 
 export const { createMessage, removeMessage } = messageSlice.actions;
 

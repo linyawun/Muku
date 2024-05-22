@@ -6,6 +6,7 @@ import { paths } from '@/lib/api/v1';
 import { TAddUserCartPayload, UseMutationOptions } from '@/types';
 
 const UPDATE_USER_CART = '/v2/api/{api_path}/cart/{id}';
+const ADD_USER_CART = '/v2/api/{api_path}/cart';
 
 type TUpdateCartArgs = {
   id: string;
@@ -22,7 +23,9 @@ const addToCart = (payload: TAddUserCartPayload = {}) => {
   return request.post(`/cart`, payload);
 };
 
-export const useAddToCartMutation = ({ reactQuery = {} }) => {
+export const useAddToCartMutation = ({
+  reactQuery = {},
+}: UseMutationOptions<paths[typeof ADD_USER_CART]['post']> = {}) => {
   return useMutation({
     mutationFn: (payload: TAddUserCartPayload) => addToCart(payload),
     ...reactQuery,
