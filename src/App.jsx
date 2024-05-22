@@ -27,9 +27,11 @@ import {
   messageReducer,
 } from './store/messageStore';
 
+const queryClient = new QueryClient();
+
 function App() {
   const reducer = useReducer(messageReducer, initState);
-  const queryClient = new QueryClient();
+
   return (
     <QueryClientProvider client={queryClient}>
       <MessageContext.Provider value={reducer}>

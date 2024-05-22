@@ -38,7 +38,7 @@ function FrontLayout() {
   // }, [getCart]);
   useEffect(() => {
     if (cartError) {
-      const errorData = cartError?.response?.data as TCreateMessagePayload;
+      const errorData = cartError?.response?.data;
       dispatch(createAsyncMessage(errorData));
     }
   }, [cartError, dispatch]);
