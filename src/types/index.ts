@@ -22,6 +22,16 @@ export type TMessageWithId = TCreateMessagePayload & {
   timerId: NodeJS.Timeout | null;
 };
 
+// upload image types
+export type TImageState = {
+  uploadMsg: string;
+  uploadVal: string;
+};
+
+export type TUploadImgState = {
+  [key: string]: TImageState;
+};
+
 // cart context types
 export type CartContextType = {
   getCart: UseQueryResult['refetch'];

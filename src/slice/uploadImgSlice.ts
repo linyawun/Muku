@@ -1,10 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
-const createImageState = () => ({
+import { TImageState, TUploadImgState } from '@/types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+const createImageState = (): TImageState => ({
   uploadMsg: '',
   uploadVal: '',
 });
 
-const initialState = {
+const initialState: TUploadImgState = {
   mainImg: createImageState(),
   detailImg1: createImageState(),
   detailImg2: createImageState(),
@@ -17,12 +18,13 @@ export const uploadImgSlice = createSlice({
   name: 'uploadImg',
   initialState,
   reducers: {
-    setUploadVal(state, action) {
+    setUploadVal(state, action: PayloadAction<Partial<TUploadImgState>>) {
       Object.keys(action.payload).forEach((key) => {
-        state[key].uploadVal = action.payload[key];
+        state[key as keyof TUploadImgState].uploadVal =
+          action.payload[key as keyof TUploadImgState]?.uploadVal || '';
       });
     },
-    setUploadMsg(state, action) {
+    setUploadMsg(state, action: PayloadAction<Partial<TUploadImgState>>) {
       Object.keys(action.payload).forEach((key) => {
         state[key].uploadMsg = action.payload[key];
       });
