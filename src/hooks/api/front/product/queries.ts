@@ -3,16 +3,21 @@ import { useQuery } from '@tanstack/react-query';
 import request from '@/utils/request';
 
 import {
+  TUserProduct,
   TUserProductParams,
   TUserProducts,
   TUserProductsParams,
 } from '@/types';
 import { AxiosResponse } from 'axios';
 
-const getUserProducts = (
+const getUserProducts = async (
   params: TUserProductsParams
-): Promise<AxiosResponse<TUserProducts>> => {
-  return request.get('/products', { params: params });
+): Promise<TUserProducts> => {
+  const response: AxiosResponse<TUserProducts> = await request.get(
+    '/products',
+    { params: params }
+  );
+  return response.data;
 };
 
 export const useUserProductsQuery = (
@@ -20,18 +25,22 @@ export const useUserProductsQuery = (
   config = {}
 ) => {
   return useQuery({
-    queryKey: ['userProducts', 'all'],
+    queryKey: ['userProducts', params],
     queryFn: () => getUserProducts(params),
+    select: (data) => data?.products,
     ...config,
   });
 };
 
-const getUserProductById = (
+const getUserProductById = async (
   params: TUserProductParams
-): Promise<AxiosResponse<TUserProducts>> => {
+): Promise<TUserProduct> => {
   const { id } = params;
   if (!id) throw new Error('id is empty');
-  return request.get(`/product/${id}`);
+  const response: AxiosResponse<TUserProduct> = await request.get(
+    `/product/${id}`
+  );
+  return response.data;
 };
 
 export const useUserProductByIdQuery = (
@@ -41,6 +50,8 @@ export const useUserProductByIdQuery = (
   return useQuery({
     queryKey: ['userProduct', params],
     queryFn: () => getUserProductById(params),
+    select: (data) => data?.product,
+    retry: 1,
     ...config,
   });
 };

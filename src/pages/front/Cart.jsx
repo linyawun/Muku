@@ -1,9 +1,9 @@
 import { useUpdateCartMutation } from '@/hooks/api/front/cart/mutations';
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
 import { debounce } from 'lodash';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link, useOutletContext } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import CouponInput from '../../components/CouponInput';
@@ -17,7 +17,7 @@ function Cart() {
   const [loadingItems, setLoadingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const deleteModal = useRef(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { mutate: updateCart, status: updateCartStatus } =
     useUpdateCartMutation();
   const hasCoupon = cartData?.final_total !== cartData?.total;

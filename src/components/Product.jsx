@@ -1,13 +1,13 @@
 import { useAddToCartMutation } from '@/hooks/api/front/cart/mutations';
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { useDispatch } from 'react-redux';
 import { Link, useOutletContext } from 'react-router-dom';
 import { createAsyncMessage } from '../slice/messageSlice';
 
 function Product({ product }) {
   const { getCart } = useOutletContext();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { mutate: addToCart, status: addToCartStatus } = useAddToCartMutation();
 
   const handleAddToCart = () => {

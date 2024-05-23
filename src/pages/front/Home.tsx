@@ -17,14 +17,9 @@ function Home() {
     status,
     data: products,
     isLoading,
-  } = useUserProductsQuery(
-    {
-      page: 1,
-    },
-    {
-      select: (res) => res.data.products,
-    }
-  );
+  } = useUserProductsQuery({
+    page: '1',
+  });
 
   // const getProducts = async (page = 1) => {
   //   setIsLoading(true);
@@ -68,7 +63,7 @@ function Home() {
                       https://i.ibb.co/k6nXnkN/Muku-banner-01.webp 1280w
                   `}
                   src='https://i.ibb.co/k6nXnkN/Muku-banner-01.webp'
-                  fetchpriority='high'
+                  // fetchpriority='high'
                   sizes='(max-width: 480px) 480px, (max-width: 1024px) 1024px, 100vw'
                 />
               </Link>
@@ -175,7 +170,7 @@ function Home() {
           {status !== 'success' ? (
             <div>Loading...</div>
           ) : (
-            products.map((product) => (
+            products?.map((product) => (
               <div className='col-lg-3 col-6 mb-4' key={product.id}>
                 <Product product={product} />
               </div>

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
-import { useForm, useWatch } from 'react-hook-form';
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { createAsyncMessage } from '../../slice/messageSlice';
+import { useEffect, useRef, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
-import { Input, Select, CheckboxRadio } from '../../components/FormElement';
+import { CheckboxRadio, Input, Select } from '../../components/FormElement';
 import Loading from '../../components/Loading';
+import { createAsyncMessage } from '../../slice/messageSlice';
 
 function Checkout() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function Checkout() {
   const { cartData, getCart } = useOutletContext();
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const hascoupon = cartData?.final_total !== cartData?.total;
   const defaultVal = useRef({
     name: '',

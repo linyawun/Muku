@@ -1,8 +1,8 @@
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { useDispatch } from 'react-redux';
-import { Link, Navigate, useOutletContext, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { Element as ScrollElement, Link as ScrollLink } from 'react-scroll';
 import { Autoplay, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -15,6 +15,8 @@ import {
   useUserProductByIdQuery,
   useUserProductsQuery,
 } from '@/hooks/api/front/product/queries';
+import { useCartContext } from '@/hooks/useCartContext';
+import { TCreateMessagePayload } from '@/types';
 import { pagination } from '@/utils/constant';
 
 function ProductDetail() {
@@ -25,8 +27,8 @@ function ProductDetail() {
   const { id } = useParams();
   //FIX: isLoading 的state要再修正看如何用在畫面上
   const [isLoading, setIsLoading] = useState(false);
-  const { getCart } = useOutletContext();
-  const dispatch = useDispatch();
+  const { getCart } = useCartContext();
+  const dispatch = useAppDispatch();
 
   const {
     data: product,
@@ -35,11 +37,10 @@ function ProductDetail() {
     error: productError,
   } = useUserProductByIdQuery(
     {
-      id: id,
+      id: id || '',
     },
     {
-      select: (res) => res.data.product,
-      retry: 1,
+      enabled: !!id,
     }
   );
 
@@ -48,11 +49,11 @@ function ProductDetail() {
   const { data: relatedProducts, status: relatedProductsStatus } =
     useUserProductsQuery(
       {
-        page: 1,
+        page: '1',
         category: productCategory,
       },
       {
-        select: (res) => res.data.products,
+        //  select: (res) => res.data.products,
         enabled: !!productCategory,
       }
     );
@@ -69,18 +70,20 @@ function ProductDetail() {
   const handleAddToCart = () => {
     const payload = {
       data: {
-        product_id: product.id,
+        product_id: product?.id,
         qty: cartQuantity,
       },
     };
 
     addToCart(payload, {
       onSuccess: (res) => {
-        dispatch(createAsyncMessage(res.data));
+        const message = res.data as TCreateMessagePayload;
+        void dispatch(createAsyncMessage(message));
         getCart();
       },
       onError: (error) => {
-        dispatch(createAsyncMessage(error.response.data));
+        const message = error?.response.data as TCreateMessagePayload;
+        void dispatch(createAsyncMessage(message));
       },
     });
   };

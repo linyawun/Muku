@@ -1,12 +1,31 @@
 import type { ParamsOption, RequestBodyOption } from 'openapi-fetch';
 
+import { UseQueryResult } from '@tanstack/react-query';
 import { definitions, paths } from '../lib/api/v1';
+
+// message types
 export type TMessage = {
   id: string;
   type: string;
   title: string;
   text: string;
   timerId: number | NodeJS.Timeout | null;
+};
+
+export type TCreateMessagePayload = {
+  success: boolean;
+  message: string;
+};
+
+export type TMessageWithId = TCreateMessagePayload & {
+  id: string;
+  timerId: NodeJS.Timeout | null;
+};
+
+// cart context types
+export type CartContextType = {
+  getCart: UseQueryResult['refetch'];
+  cartData: UseQueryResult['data'];
 };
 
 // api util types

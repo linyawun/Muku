@@ -1,18 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { TMessage } from '@/types';
+import { TCreateMessagePayload, TMessage, TMessageWithId } from '@/types';
 
 type TMessageState = TMessage[];
-
-type TCreateMessagePayload = {
-  success: boolean;
-  message: string;
-};
-
-type TMessageWithId = TCreateMessagePayload & {
-  id: string;
-  timerId: NodeJS.Timeout | null;
-};
 
 const initialState: TMessageState = [];
 

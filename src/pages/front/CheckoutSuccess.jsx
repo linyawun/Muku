@@ -1,12 +1,12 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { createAsyncMessage } from '../../slice/messageSlice';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
+import { createAsyncMessage } from '../../slice/messageSlice';
 function CheckoutSuccess() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { orderId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();

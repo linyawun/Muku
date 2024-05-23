@@ -1,7 +1,7 @@
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import axios from 'axios';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { resetUploadImg } from '../slice/uploadImgSlice';
 import {
   MessageContext,
@@ -37,7 +37,7 @@ function ProductModal({
     []
   );
   const [tempData, setTempData] = useState(initData);
-  const dispatchRedux = useDispatch();
+  const dispatchRedux = useAppDispatch();
   const {
     register,
     handleSubmit,
