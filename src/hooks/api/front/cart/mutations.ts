@@ -1,9 +1,15 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import request from '@/utils/request';
 import { paths } from '@/lib/api/v1';
+import request from '@/utils/request';
 
-import { TAddUserCartPayload, UseMutationOptions } from '@/types';
+import { useAppDispatch } from '@/hooks/reduxHooks';
+import { createAsyncMessage } from '@/slice/messageSlice';
+import {
+  TAddUserCartPayload,
+  TCreateMessagePayload,
+  UseMutationOptions,
+} from '@/types';
 
 const UPDATE_USER_CART = '/v2/api/{api_path}/cart/{id}';
 const ADD_USER_CART = '/v2/api/{api_path}/cart';
@@ -26,8 +32,22 @@ const addToCart = (payload: TAddUserCartPayload = {}) => {
 export const useAddToCartMutation = ({
   reactQuery = {},
 }: UseMutationOptions<paths[typeof ADD_USER_CART]['post']> = {}) => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+
   return useMutation({
     mutationFn: (payload: TAddUserCartPayload) => addToCart(payload),
+    onSuccess: (res) => {
+      const message = res?.data as TCreateMessagePayload;
+      void dispatch(createAsyncMessage(message));
+      void queryClient.invalidateQueries({
+        queryKey: ['userCarts'],
+      });
+    },
+    onError: (error) => {
+      const message = error?.response.data as TCreateMessagePayload;
+      void dispatch(createAsyncMessage(message));
+    },
     ...reactQuery,
   });
 };

@@ -29,7 +29,12 @@ export type TImageState = {
 };
 
 export type TUploadImgState = {
-  [key: string]: TImageState;
+  mainImg: TImageState;
+  detailImg1: TImageState;
+  detailImg2: TImageState;
+  detailImg3: TImageState;
+  detailImg4: TImageState;
+  detailImg5: TImageState;
 };
 
 // cart context types
@@ -82,7 +87,7 @@ export type UseMutationOptions<T> =
       RequestBodyOption<T> & {
         reactQuery?: {
           onSuccess?: (res: Record<string, any>) => void;
-          onError?: (error: any) => void;
+          // onError?: (error) => void;
           onSettled?: (data: any, error: any) => void;
         };
       })

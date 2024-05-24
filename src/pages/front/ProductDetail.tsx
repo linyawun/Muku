@@ -16,7 +16,6 @@ import {
   useUserProductsQuery,
 } from '@/hooks/api/front/product/queries';
 import { useCartContext } from '@/hooks/useCartContext';
-import { TCreateMessagePayload } from '@/types';
 import { pagination } from '@/utils/constant';
 
 function ProductDetail() {
@@ -75,17 +74,7 @@ function ProductDetail() {
       },
     };
 
-    addToCart(payload, {
-      onSuccess: (res) => {
-        const message = res.data as TCreateMessagePayload;
-        void dispatch(createAsyncMessage(message));
-        getCart();
-      },
-      onError: (error) => {
-        const message = error?.response.data as TCreateMessagePayload;
-        void dispatch(createAsyncMessage(message));
-      },
-    });
+    addToCart(payload);
   };
 
   // const getProduct = useCallback(

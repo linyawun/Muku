@@ -32,8 +32,6 @@ function FrontLayout() {
   // useEffect(() => {
   //   getCart();
   // }, [getCart]);
-  console.log('cartError', cartError);
-  console.log('cartStatus', cartStatus);
 
   useEffect(() => {
     if (cartError) {
