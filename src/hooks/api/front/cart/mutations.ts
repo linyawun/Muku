@@ -66,9 +66,19 @@ const updateCart = ({ id, payload }: TUpdateCartArgs) => {
 export const useUpdateCartMutation = ({
   reactQuery = {},
 }: UseMutationOptions<paths[typeof UPDATE_USER_CART]['put']> = {}) => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+
   return useMutation({
     mutationFn: ({ id, payload }: TUpdateCartArgs) =>
       updateCart({ id, payload }),
+    onSuccess: (res) => {
+      const message = res?.data as TCreateMessagePayload;
+      void dispatch(createAsyncMessage(message));
+      void queryClient.invalidateQueries({
+        queryKey: ['userCarts'],
+      });
+    },
     ...reactQuery,
   });
 };

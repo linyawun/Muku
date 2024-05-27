@@ -43,6 +43,12 @@ function Cart() {
         qty: quantity,
       },
     };
+    //todo: 要在更新cart時把該item的select disabled 看如何和 status 整合
+    // updateCart({
+    //   id: item.id,
+    //   payload: data,
+    // });
+
     setLoadingItems((pre) => [...pre, item.id]);
     try {
       const res = await axios.put(
@@ -165,6 +171,7 @@ function Cart() {
                             className='form-select'
                             id=''
                             value={item.qty}
+                            //disabled={updateCartStatus === 'pending'}
                             disabled={loadingItems.includes(item.id)}
                             onChange={(e) => {
                               updateCartItem(item, e.target.value * 1);
