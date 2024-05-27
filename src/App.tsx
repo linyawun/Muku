@@ -1,9 +1,16 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { useReducer } from 'react';
+import { AxiosError } from 'axios';
+import { useReducer, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import BackToTopBtn from './components/BackToTopBtn';
 import ScrollToTop from './components/ScrollToTop';
+import { useAppDispatch } from './hooks/reduxHooks';
 import {
   AboutUs,
   AdminCoupons,
@@ -21,16 +28,34 @@ import {
   Products,
   ShoppingNotice,
 } from './pages';
+import { createAsyncMessage } from './slice/messageSlice';
 import {
   MessageContext,
   initState,
   messageReducer,
 } from './store/messageStore';
-
-const queryClient = new QueryClient();
+import { TCreateMessagePayload } from './types';
 
 function App() {
   const reducer = useReducer(messageReducer, initState);
+  const dispatch = useAppDispatch();
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          onError: (error: AxiosError) => {
+            const errorMessage = error?.response?.data as TCreateMessagePayload;
+            void dispatch(createAsyncMessage(errorMessage));
+          },
+        }),
+        mutationCache: new MutationCache({
+          onError: (error: AxiosError) => {
+            const errorMessage = error?.response?.data as TCreateMessagePayload;
+            void dispatch(createAsyncMessage(errorMessage));
+          },
+        }),
+      })
+  );
 
   return (
     <QueryClientProvider client={queryClient}>

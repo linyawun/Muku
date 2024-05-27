@@ -1,21 +1,16 @@
 import { useUserCartsQuery } from '@/hooks/api/front/cart/queries';
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import { CartContextType, TCreateMessagePayload } from '@/types';
-import { useEffect } from 'react';
+import { CartContextType } from '@/types';
 import { Outlet } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Loading from '../../components/Loading';
 import MessageToast from '../../components/MessageToast';
 import Navbar from '../../components/Navbar';
-import { createAsyncMessage } from '../../slice/messageSlice';
 
 function FrontLayout() {
   // const [cartData, setCartData] = useState({});
-  const dispatch = useAppDispatch();
   const {
     status: cartStatus,
     data: cartData,
-    error: cartError,
     refetch: getCart,
   } = useUserCartsQuery();
 
@@ -33,18 +28,16 @@ function FrontLayout() {
   //   getCart();
   // }, [getCart]);
 
-  useEffect(() => {
-    if (cartError) {
-      const handleError = async () => {
-        const errorData = cartError.response?.data as TCreateMessagePayload;
-        await dispatch(createAsyncMessage(errorData));
-      };
+  // useEffect(() => {
+  //   if (cartError) {
+  //     const handleError = async () => {
+  //       const errorData = cartError.response?.data as TCreateMessagePayload;
+  //       await dispatch(createAsyncMessage(errorData));
+  //     };
 
-      handleError().catch((error) => {
-        console.error('Error dispatching createAsyncMessage:', error);
-      });
-    }
-  }, [cartError, dispatch]);
+  //     void handleError()
+  //   }
+  // }, [cartError, dispatch]);
 
   return cartStatus !== 'success' ? (
     <Loading isLoading={true} />

@@ -1,25 +1,10 @@
 import { useSubmitCouponMutation } from '@/hooks/api/front/coupon/mutations';
 import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
 
 function CouponInput({ hasCoupon }: { hasCoupon: boolean }) {
-  const { getCart } = useOutletContext();
   const [couponCode, setCouponCode] = useState('');
-  const [couponMsg, setCouponMsg] = useState('');
   const { mutate: submitCoupon, status: submitCouponStatus } =
-    useSubmitCouponMutation({
-      reactQuery: {
-        onSuccess: (res) => {
-          if (res?.data?.success) {
-            setCouponMsg('');
-            getCart();
-          }
-        },
-        onError: (error) => {
-          setCouponMsg(error?.response?.data?.message);
-        },
-      },
-    });
+    useSubmitCouponMutation();
 
   const handleSubmitCoupon = () => {
     if (!couponCode) {
@@ -91,7 +76,7 @@ function CouponInput({ hasCoupon }: { hasCoupon: boolean }) {
             >
               {submitCouponStatus === 'pending' ? (
                 <span
-                  className='spinner-border spinner-border-sm me-2'
+                  className='spinner-border spinner-border-sm'
                   role='status'
                   aria-hidden='true'
                 ></span>
@@ -100,12 +85,12 @@ function CouponInput({ hasCoupon }: { hasCoupon: boolean }) {
               )}
             </button>
           </div>
-          <div
+          {/* <div
             className='text-danger w-100'
             style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}
           >
             {couponMsg}
-          </div>
+          </div> */}
         </div>
       )}
     </div>

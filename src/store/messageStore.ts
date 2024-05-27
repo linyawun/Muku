@@ -4,9 +4,9 @@ import { createContext } from 'react';
 export const MessageContext = createContext({});
 
 type TMessageState = {
-  type: string;
-  title: string;
-  text: string;
+  type?: string;
+  title?: string;
+  text?: string;
 };
 
 type TAction = {

@@ -44,10 +44,10 @@ export const useAddToCartMutation = ({
         queryKey: ['userCarts'],
       });
     },
-    onError: (error) => {
-      const message = error?.response.data as TCreateMessagePayload;
-      void dispatch(createAsyncMessage(message));
-    },
+    // onError: (error) => {
+    //   const message = error.response.data as TCreateMessagePayload;
+    //   void dispatch(createAsyncMessage(message));
+    // },
     ...reactQuery,
   });
 };

@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/hooks/reduxHooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { Link, Navigate, useParams } from 'react-router-dom';
@@ -8,7 +8,6 @@ import { Autoplay, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Loading from '../../components/Loading';
 import Product from '../../components/Product';
-import { createAsyncMessage } from '../../slice/messageSlice';
 
 import { useAddToCartMutation } from '@/hooks/api/front/cart/mutations';
 import {
@@ -33,7 +32,6 @@ function ProductDetail() {
     data: product,
     status: productStatus,
     isError: isProductError,
-    error: productError,
   } = useUserProductByIdQuery(
     {
       id: id || '',
@@ -130,12 +128,12 @@ function ProductDetail() {
   //   getProduct(id);
   // }, [id, getProduct]);
 
-  useEffect(() => {
-    if (productError) {
-      // navigate('/products/all');
-      dispatch(createAsyncMessage(productError.response.data));
-    }
-  }, [productError, dispatch]);
+  // useEffect(() => {
+  //   if (productError) {
+  //     // navigate('/products/all');
+  //     dispatch(createAsyncMessage(productError.response.data));
+  //   }
+  // }, [productError, dispatch]);
 
   return (
     <>
