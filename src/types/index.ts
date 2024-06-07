@@ -123,6 +123,11 @@ export type TAddUserCartResponse = definitions['userAddCart'];
 export type TUpdateUserCartPayload =
   paths['/v2/api/{api_path}/cart/{id}']['put']['parameters']['body']['data'];
 
+export type TDeleteUserCartPayload = Omit<
+  paths['/v2/api/{api_path}/cart/{id}']['delete']['parameters']['path'],
+  'api_path'
+>;
+
 // user coupon
 export type TSubmitUserCouponPayload =
   paths['/v2/api/{api_path}/coupon']['post']['parameters']['body']['data'];

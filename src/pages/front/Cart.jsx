@@ -1,83 +1,54 @@
-import { useUpdateCartMutation } from '@/hooks/api/front/cart/mutations';
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import axios from 'axios';
+import {
+  useDeleteAllCartMutation,
+  useDeleteCartMutation,
+  useUpdateCartMutation,
+} from '@/hooks/api/front/cart/mutations';
+import { useCartContext } from '@/hooks/useCartContext';
 import { Modal } from 'bootstrap';
-import { debounce } from 'lodash';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import CouponInput from '../../components/CouponInput';
 import DeleteModal from '../../components/DeleteModal';
 import Loading from '../../components/Loading';
 import NoCartData from '../../components/NoCartData';
-import { createAsyncMessage } from '../../slice/messageSlice';
 
 function Cart() {
-  const { cartData, getCart } = useOutletContext();
-  const [loadingItems, setLoadingItems] = useState([]);
+  const { cartData } = useCartContext();
   const [isLoading, setIsLoading] = useState(false);
   const deleteModal = useRef(null);
-  const dispatch = useAppDispatch();
   const { mutate: updateCart, status: updateCartStatus } =
     useUpdateCartMutation();
+  const { mutate: deleteCart, status: deleteCartStatus } =
+    useDeleteCartMutation();
+  const { mutateAsync: deleteAllCart } = useDeleteAllCartMutation({
+    reactQuery: {
+      onSettled: () => {
+        closeDeleteModal();
+      },
+    },
+  });
   const hasCoupon = cartData?.final_total !== cartData?.total;
 
-  const removeCartItem = useMemo(
-    () => async (id) => {
-      try {
-        const res = await axios.delete(
-          `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart/${id}`
-        );
-        getCart();
-        dispatch(createAsyncMessage(res.data));
-      } catch (error) {
-        dispatch(createAsyncMessage(error.response.data));
-      }
-    },
-    [dispatch, getCart]
-  );
-  const updateCartItem = async (item, quantity) => {
+  const handleUpdateCartItem = (item, quantity) => {
     const data = {
       data: {
         product_id: item.product_id,
         qty: quantity,
       },
     };
-    //todo: 要在更新cart時把該item的select disabled 看如何和 status 整合
-    // updateCart({
-    //   id: item.id,
-    //   payload: data,
-    // });
-
-    setLoadingItems((pre) => [...pre, item.id]);
-    try {
-      const res = await axios.put(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart/${item.id}`,
-        data
-      );
-      setLoadingItems(
-        loadingItems.filter((loadingObj) => loadingObj !== item.id)
-      );
-      dispatch(createAsyncMessage(res.data));
-      getCart();
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-      setLoadingItems(
-        loadingItems.filter((loadingObj) => loadingObj !== item.id)
-      );
-    }
+    updateCart({
+      id: item.id,
+      payload: data,
+    });
   };
-  const deleteAllCart = async () => {
-    try {
-      const res = await axios.delete(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/carts`
-      );
-      getCart();
-      closeDeleteModal();
-      dispatch(createAsyncMessage(res.data));
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-    }
+
+  const handleDeleteAllCart = async () => {
+    await deleteAllCart();
+  };
+
+  const handleRemoveCartItem = (id) => {
+    deleteCart({ id });
   };
 
   const openDeleteModal = () => {
@@ -87,22 +58,18 @@ function Cart() {
     deleteModal.current.hide();
   };
   useEffect(() => {
-    deleteModal.current = new Modal('#deleteModal', {
+    deleteModal.current = new Modal(deleteModal.current, {
       backdrop: 'static',
     });
   }, []);
 
-  const debouncedClick = useMemo(
-    () => debounce((id) => removeCartItem(id), 200),
-    [removeCartItem]
-  );
-
   return (
     <div className='container'>
       <DeleteModal
+        ref={deleteModal}
         close={closeDeleteModal}
         text='全部商品'
-        handleDelete={deleteAllCart}
+        handleDelete={handleDeleteAllCart}
       />
       <Loading isLoading={isLoading} />
       <div className='row justify-content-center'>
@@ -154,8 +121,9 @@ function Cart() {
                         type='button'
                         className='position-absolute btn border-0'
                         style={{ top: '-8px', right: '-8px' }}
-                        onClick={() => debouncedClick(item.id)}
+                        onClick={() => handleRemoveCartItem(item.id)}
                         aria-label='Delete'
+                        disabled={deleteCartStatus === 'pending'}
                       >
                         <i className='bi bi-x-lg'></i>
                       </button>
@@ -171,10 +139,9 @@ function Cart() {
                             className='form-select'
                             id=''
                             value={item.qty}
-                            //disabled={updateCartStatus === 'pending'}
-                            disabled={loadingItems.includes(item.id)}
+                            disabled={updateCartStatus === 'pending'}
                             onChange={(e) => {
-                              updateCartItem(item, e.target.value * 1);
+                              handleUpdateCartItem(item, e.target.value * 1);
                             }}
                           >
                             {[...new Array(20)].map((i, num) => {

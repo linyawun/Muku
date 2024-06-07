@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAllUserProductsQuery } from '@/hooks/api/front/product/queries';
 import axios from 'axios';
 import { Collapse } from 'bootstrap';
-import Product from '../../components/Product';
-import Pagination from '../../components/Pagination';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Loading from '../../components/Loading';
+import Pagination from '../../components/Pagination';
+import Product from '../../components/Product';
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -14,6 +15,7 @@ function Products() {
   const { category } = useParams();
   const categoryCollapse = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { data: allUserProducts } = useAllUserProductsQuery();
   const getProducts = useCallback(
     async (page = 1) => {
       setIsLoading(true);

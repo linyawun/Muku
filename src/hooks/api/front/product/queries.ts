@@ -10,6 +10,22 @@ import {
 } from '@/types';
 import { AxiosResponse } from 'axios';
 
+const getAllUserProducts = async () => {
+  const response: AxiosResponse<TUserProducts> = await request.get(
+    '/products/all'
+  );
+  return response.data;
+};
+
+const useAllUserProductsQuery = (config = {}) => {
+  return useQuery({
+    queryKey: ['allUserProducts'],
+    queryFn: () => getAllUserProducts(),
+    select: (data) => data?.products,
+    ...config,
+  });
+};
+
 const getUserProducts = async (
   params: TUserProductsParams
 ): Promise<TUserProducts> => {

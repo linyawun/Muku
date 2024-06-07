@@ -8,11 +8,14 @@ import { createAsyncMessage } from '@/slice/messageSlice';
 import {
   TAddUserCartPayload,
   TCreateMessagePayload,
+  TDeleteUserCartPayload,
   UseMutationOptions,
 } from '@/types';
 
 const UPDATE_USER_CART = '/v2/api/{api_path}/cart/{id}';
 const ADD_USER_CART = '/v2/api/{api_path}/cart';
+const DELETE_USER_CART = '/v2/api/{api_path}/cart/{id}';
+const DELETE_ALL_USER_CARTS = '/v2/api/{api_path}/carts';
 
 type TUpdateCartArgs = {
   id: string;
@@ -72,6 +75,56 @@ export const useUpdateCartMutation = ({
   return useMutation({
     mutationFn: ({ id, payload }: TUpdateCartArgs) =>
       updateCart({ id, payload }),
+    onSuccess: (res) => {
+      const message = res?.data as TCreateMessagePayload;
+      void dispatch(createAsyncMessage(message));
+      void queryClient.invalidateQueries({
+        queryKey: ['userCarts'],
+      });
+    },
+    ...reactQuery,
+  });
+};
+
+// delete cart item
+const deleteCart = ({ id }: TDeleteUserCartPayload) => {
+  if (!id) throw new Error('id is empty');
+
+  return request.delete(`/cart/${id}`);
+};
+
+export const useDeleteCartMutation = ({
+  reactQuery = {},
+}: UseMutationOptions<paths[typeof DELETE_USER_CART]['delete']> = {}) => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+
+  return useMutation({
+    mutationFn: ({ id }: TDeleteUserCartPayload) => deleteCart({ id }),
+    onSuccess: (res) => {
+      const message = res?.data as TCreateMessagePayload;
+      void dispatch(createAsyncMessage(message));
+      void queryClient.invalidateQueries({
+        queryKey: ['userCarts'],
+      });
+    },
+    ...reactQuery,
+  });
+};
+
+// delete all cart
+const deleteAllCart = () => {
+  return request.delete(`/carts`);
+};
+
+export const useDeleteAllCartMutation = ({
+  reactQuery = {},
+}: UseMutationOptions<paths[typeof DELETE_ALL_USER_CARTS]['delete']> = {}) => {
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+
+  return useMutation({
+    mutationFn: () => deleteAllCart(),
     onSuccess: (res) => {
       const message = res?.data as TCreateMessagePayload;
       void dispatch(createAsyncMessage(message));
