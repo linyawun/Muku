@@ -1,11 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useAllUserProductsQuery } from '@/hooks/api/front/product/queries';
 import { Collapse } from 'bootstrap';
-import { NavLink, Link } from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import mukuLogo from '../assets/mukuLogo-03.svg';
+
 function Navbar({ cartData }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [categoryList, setCategoryList] = useState([]);
+  const { data: allUserProducts } = useAllUserProductsQuery();
+  const categoryList = allUserProducts
+    ? [...new Set(Object.values(allUserProducts).map((obj) => obj.category))]
+    : [];
   const dataToggle = useRef(null);
   const menuToggle = useRef(null);
   const bsCollapse = useRef(null);
@@ -13,25 +17,14 @@ function Navbar({ cartData }) {
   const handleClick = () => {
     setIsCollapsed((pre) => !pre);
   };
-  const getCategory = async () => {
-    const res = await axios.get(
-      `/v2/api/${import.meta.env.VITE_APP_API_PATH}/products/all`
-    );
-    const categories = [
-      ...new Set(Object.values(res.data.products).map((obj) => obj.category)),
-    ];
-    setCategoryList(categories);
-  };
-  useEffect(() => {
-    getCategory();
-  }, []);
+
   useEffect(() => {
     dataToggle.current = document.querySelectorAll('[data-toggle]');
     function handleCollapse() {
       bsCollapse.current.hide();
       setIsCollapsed(false);
     }
-    if (menuToggle.current && categoryList) {
+    if (menuToggle.current) {
       bsCollapse.current = new Collapse(menuToggle.current, {
         toggle: false,
       });
@@ -45,7 +38,7 @@ function Navbar({ cartData }) {
         item.removeEventListener('click', handleCollapse);
       });
     };
-  }, [categoryList]);
+  }, []);
 
   return (
     <header className='bg-white sticky-top'>
@@ -101,7 +94,7 @@ function Navbar({ cartData }) {
                       所有商品
                     </NavLink>
                   </li>
-                  {categoryList.map((category) => {
+                  {categoryList?.map((category) => {
                     return (
                       <li key={category}>
                         <NavLink

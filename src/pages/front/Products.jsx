@@ -1,5 +1,7 @@
-import { useAllUserProductsQuery } from '@/hooks/api/front/product/queries';
-import axios from 'axios';
+import {
+  useAllUserProductsQuery,
+  useUserProductsQuery,
+} from '@/hooks/api/front/product/queries';
 import { Collapse } from 'bootstrap';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -11,42 +13,41 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({});
   const navigate = useNavigate();
-  const [categoryList, setCategoryList] = useState([]);
   const { category } = useParams();
   const categoryCollapse = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { data: allUserProducts } = useAllUserProductsQuery();
+  const [productsParams, setProductsParams] = useState({});
+  const { data: allProducts } = useAllUserProductsQuery();
+  const { data: products1, status: productsStatus } = useUserProductsQuery({
+    page: 1,
+    category: category === 'all' ? '' : category,
+  });
+  const pagination = products1?.pagination;
+  const categoryList = allProducts
+    ? [...new Set(Object.values(allProducts).map((obj) => obj.category))]
+    : [];
+
   const getProducts = useCallback(
     async (page = 1) => {
-      setIsLoading(true);
-      const filterCategory = category === 'all' ? '' : category;
-      const productRes = await axios.get(
-        `/v2/api/${
-          import.meta.env.VITE_APP_API_PATH
-        }/products?page=${page}&category=${filterCategory}`
-      );
-      if (productRes.data.products.length === 0) {
-        navigate('/products/all');
-      }
-      setProducts(productRes.data.products);
-      setPagination(productRes.data.pagination);
-      setIsLoading(false);
+      // setIsLoading(true);
+      //const filterCategory = category === 'all' ? '' : category;
+      // const productRes = await axios.get(
+      //   `/v2/api/${
+      //     import.meta.env.VITE_APP_API_PATH
+      //   }/products?page=${page}&category=${filterCategory}`
+      // );
+      // if (productRes.data.products.length === 0) {
+      //   navigate('/products/all');
+      // }
+      //setProducts(productRes.data.products);
+      //setPagination(productRes.data.pagination);
+      // setIsLoading(false);
     },
     [category, navigate]
   );
-  const getCategory = async () => {
-    const res = await axios.get(
-      `/v2/api/${import.meta.env.VITE_APP_API_PATH}/products/all`
-    );
-    const categories = [
-      ...new Set(Object.values(res.data.products).map((obj) => obj.category)),
-    ];
-    setCategoryList(categories);
-  };
 
   useEffect(() => {
     categoryCollapse.current = new Collapse('#categoryCollapse');
-    getCategory();
   }, []);
 
   useEffect(() => {

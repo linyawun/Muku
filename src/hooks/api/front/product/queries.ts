@@ -37,14 +37,14 @@ const getUserProducts = async (
 };
 
 export const useUserProductsQuery = (
-  params: TUserProductsParams,
-  config = {}
+  params: TUserProductsParams
+  //config = {}
 ) => {
   return useQuery({
     queryKey: ['userProducts', params],
     queryFn: () => getUserProducts(params),
     select: (data) => data?.products,
-    ...config,
+    //...config,
   });
 };
 
