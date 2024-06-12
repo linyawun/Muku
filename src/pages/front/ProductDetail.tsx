@@ -1,4 +1,3 @@
-import { useAppDispatch } from '@/hooks/reduxHooks';
 import { useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
@@ -14,55 +13,43 @@ import {
   useUserProductByIdQuery,
   useUserProductsQuery,
 } from '@/hooks/api/front/product/queries';
-import { useCartContext } from '@/hooks/useCartContext';
 import { pagination } from '@/utils/constant';
 
 function ProductDetail() {
-  //const navigate = useNavigate();
-  //const [products, setProducts] = useState([]);
-  // const [product, setProduct] = useState({});
   const [cartQuantity, setCartQuantity] = useState(1);
   const { id } = useParams();
-  //FIX: isLoading 的state要再修正看如何用在畫面上
-  const [isLoading, setIsLoading] = useState(false);
-  const { getCart } = useCartContext();
-  const dispatch = useAppDispatch();
 
   const {
     data: product,
     status: productStatus,
     isError: isProductError,
-  } = useUserProductByIdQuery(
-    {
+  } = useUserProductByIdQuery({
+    params: {
       id: id || '',
     },
-    {
+    reactQuery: {
       enabled: !!id,
-    }
-  );
+    },
+  });
 
   const productCategory = product?.category;
 
-  const { data: relatedProducts, status: relatedProductsStatus } =
-    useUserProductsQuery(
-      {
+  const { data: relatedProductsData, status: relatedProductsStatus } =
+    useUserProductsQuery({
+      params: {
         page: '1',
         category: productCategory,
       },
-      {
+      reactQuery: {
         //  select: (res) => res.data.products,
         enabled: !!productCategory,
-      }
-    );
+      },
+    });
 
   const { mutate: addToCart, status: addToCartStatus } = useAddToCartMutation();
 
   const isAPILoading =
     productStatus === 'pending' || relatedProductsStatus === 'pending';
-
-  console.log('currentProduct', product);
-
-  console.log('relatedProducts', relatedProducts);
 
   const handleAddToCart = () => {
     const payload = {
@@ -161,11 +148,10 @@ function ProductDetail() {
                       alt='productImg'
                       effect='blur'
                       src={product?.imageUrl}
-                      fetchpriority='high'
                     />
                   </SwiperSlide>
-                  {product.imagesUrl &&
-                    product.imagesUrl.map(
+                  {product?.imagesUrl &&
+                    product?.imagesUrl.map(
                       (imageUrl, index) =>
                         imageUrl && (
                           <SwiperSlide key={`${imageUrl}_swiper_${index}`}>
@@ -173,7 +159,6 @@ function ProductDetail() {
                               alt='productImg'
                               effect='blur'
                               src={imageUrl}
-                              fetchpriority='high'
                             />
                           </SwiperSlide>
                         )
@@ -194,29 +179,29 @@ function ProductDetail() {
                     </li>
                     <li className='breadcrumb-item active' aria-current='page'>
                       <Link
-                        to={`/products/${product.category}`}
+                        to={`/products/${product?.category}`}
                         className='link'
-                        aria-label={product.category}
+                        aria-label={product?.category}
                       >
-                        <small>{product.category}</small>
+                        <small>{product?.category}</small>
                       </Link>
                     </li>
                   </ol>
                 </nav>
-                <h3 className='mb-1 text-primary'>{product.title}</h3>
-                {product.description && (
+                <h3 className='mb-1 text-primary'>{product?.title}</h3>
+                {product?.description && (
                   <>
                     <p className='text-muted'>
-                      <small>{product.description}</small>
+                      <small>{product?.description}</small>
                     </p>
                     <hr className='text-secondary' />
                   </>
                 )}
                 <h5 className='fw-bold text-primary mb-0'>
-                  NT$ {product.price?.toLocaleString()}
+                  NT$ {product?.price?.toLocaleString()}
                 </h5>
                 <p className='text-decoration-line-through text-muted'>
-                  <small>NT$ {product.origin_price?.toLocaleString()}</small>
+                  <small>NT$ {product?.origin_price?.toLocaleString()}</small>
                 </p>
                 <div className='row mb-3 align-items-center justify-content-between'>
                   <div className='col-lg-5 col-md-4'>
@@ -279,7 +264,7 @@ function ProductDetail() {
                 </div>
                 <button
                   type='button'
-                  href='./checkout.html'
+                  //href='./checkout.html'
                   className='btn btn-primary w-100 py-2 mb-4'
                   onClick={handleAddToCart}
                   disabled={addToCartStatus === 'pending'}
@@ -348,11 +333,11 @@ function ProductDetail() {
               <ScrollElement name='productContent'>
                 <div className='mb-4'>
                   <h4 className='text-primary'>商品描述</h4>
-                  {product.content ? (
+                  {product?.content ? (
                     <p
                       className='mb-0'
                       dangerouslySetInnerHTML={{
-                        __html: product.content.replace(/\n/g, '<br/>'),
+                        __html: product?.content.replace(/\n/g, '<br/>'),
                       }}
                     ></p>
                   ) : null}
@@ -387,12 +372,12 @@ function ProductDetail() {
                   <LazyLoadImage
                     alt='productImg'
                     effect='blur'
-                    src={product.imageUrl}
+                    src={product?.imageUrl}
                     className='img-fluid mb-4'
                     loading='lazy'
                   />
-                  {product.imagesUrl &&
-                    product.imagesUrl.map((imageUrl, index) =>
+                  {product?.imagesUrl &&
+                    product?.imagesUrl.map((imageUrl, index) =>
                       imageUrl ? (
                         <LazyLoadImage
                           alt='productImg'
@@ -410,8 +395,8 @@ function ProductDetail() {
                 <div className='mb-4'>
                   <h4 className='text-primary'>相關商品</h4>
                   <div className='row'>
-                    {relatedProducts
-                      .filter((item) => item.id !== product.id)
+                    {relatedProductsData?.products
+                      ?.filter((item) => item?.id !== product?.id)
                       .slice(0, 4)
                       .map((product) => {
                         return (

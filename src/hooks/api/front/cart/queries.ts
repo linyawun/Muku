@@ -10,17 +10,10 @@ const getUserCarts = async (): Promise<TUserCarts> => {
   return response.data;
 };
 
-export const useUserCartsQuery = () =>
-  //   {
-  //   options,
-  // }: {
-  //   options?: UseQueryOptions<TUserCarts>;
-  // }
-  {
-    return useQuery({
-      queryKey: ['userCarts'],
-      queryFn: getUserCarts,
-      select: (data) => data.data,
-      // ...options,
-    });
-  };
+export const useUserCartsQuery = () => {
+  return useQuery({
+    queryKey: ['userCarts'],
+    queryFn: getUserCarts,
+    select: (data) => data.data,
+  });
+};

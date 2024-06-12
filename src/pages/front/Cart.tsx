@@ -4,19 +4,18 @@ import {
   useUpdateCartMutation,
 } from '@/hooks/api/front/cart/mutations';
 import { useCartContext } from '@/hooks/useCartContext';
+import { TModal } from '@/types';
 import { Modal } from 'bootstrap';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import CouponInput from '../../components/CouponInput';
 import DeleteModal from '../../components/DeleteModal';
-import Loading from '../../components/Loading';
 import NoCartData from '../../components/NoCartData';
 
 function Cart() {
   const { cartData } = useCartContext();
-  const [isLoading, setIsLoading] = useState(false);
-  const deleteModal = useRef(null);
+  const deleteModal = useRef<TModal | null>(null);
   const { mutate: updateCart, status: updateCartStatus } =
     useUpdateCartMutation();
   const { mutate: deleteCart, status: deleteCartStatus } =
@@ -30,15 +29,15 @@ function Cart() {
   });
   const hasCoupon = cartData?.final_total !== cartData?.total;
 
-  const handleUpdateCartItem = (item, quantity) => {
+  const handleUpdateCartItem = (item: any, quantity: number) => {
     const data = {
       data: {
-        product_id: item.product_id,
+        product_id: item?.product_id,
         qty: quantity,
       },
     };
     updateCart({
-      id: item.id,
+      id: item?.id,
       payload: data,
     });
   };
@@ -47,31 +46,30 @@ function Cart() {
     await deleteAllCart();
   };
 
-  const handleRemoveCartItem = (id) => {
+  const handleRemoveCartItem = (id: string) => {
     deleteCart({ id });
   };
 
   const openDeleteModal = () => {
-    deleteModal.current.show();
+    deleteModal.current?.show();
   };
   const closeDeleteModal = () => {
-    deleteModal.current.hide();
+    deleteModal.current?.hide();
   };
   useEffect(() => {
-    deleteModal.current = new Modal(deleteModal.current, {
+    deleteModal.current = new Modal('#deleteModal', {
       backdrop: 'static',
-    });
+    }) as TModal;
   }, []);
 
   return (
     <div className='container'>
       <DeleteModal
-        ref={deleteModal}
         close={closeDeleteModal}
         text='全部商品'
         handleDelete={handleDeleteAllCart}
       />
-      <Loading isLoading={isLoading} />
+
       <div className='row justify-content-center'>
         <div
           className='col-lg-6 col-md-8 bg-white py-5'
@@ -108,7 +106,7 @@ function Cart() {
                     key={item.id}
                   >
                     <img
-                      src={item.product.imageUrl}
+                      src={item?.product?.imageUrl}
                       alt='productImg'
                       className='object-cover'
                       style={{
@@ -121,7 +119,11 @@ function Cart() {
                         type='button'
                         className='position-absolute btn border-0'
                         style={{ top: '-8px', right: '-8px' }}
-                        onClick={() => handleRemoveCartItem(item.id)}
+                        onClick={() => {
+                          if (item?.id) {
+                            handleRemoveCartItem(item.id);
+                          }
+                        }}
                         aria-label='Delete'
                         disabled={deleteCartStatus === 'pending'}
                       >
@@ -129,7 +131,7 @@ function Cart() {
                       </button>
 
                       <p className='mb-2' style={{ width: '90%' }}>
-                        {item.product.title}
+                        {item?.product?.title}
                       </p>
 
                       <div className='row justify-content-between align-items-center w-100'>
@@ -141,22 +143,23 @@ function Cart() {
                             value={item.qty}
                             disabled={updateCartStatus === 'pending'}
                             onChange={(e) => {
-                              handleUpdateCartItem(item, e.target.value * 1);
+                              handleUpdateCartItem(
+                                item,
+                                Number(e.target.value)
+                              );
                             }}
                           >
-                            {[...new Array(20)].map((i, num) => {
-                              return (
-                                <option value={num + 1} key={num}>
-                                  {num + 1}
-                                </option>
-                              );
-                            })}
+                            {Array.from({ length: 20 }, (_, num) => (
+                              <option value={num + 1} key={num}>
+                                {num + 1}
+                              </option>
+                            ))}
                           </select>
                         </div>
                         <div className='col-lg-8 col-sm-7 col-12 d-flex justify-content-sm-end justify-content-start'>
                           {hasCoupon && (
                             <p className='mb-0 text-decoration-line-through text-muted text-end me-1'>
-                              <small>NT$ {item.total.toLocaleString()}</small>
+                              <small>NT$ {item?.total?.toLocaleString()}</small>
                             </p>
                           )}
                           <p className='mb-0 text-end'>
@@ -177,7 +180,7 @@ function Cart() {
                         商品總金額
                       </th>
                       <td className='text-end border-0 px-0'>
-                        NT$ ${cartData.total?.toLocaleString()}
+                        NT$ ${cartData?.total?.toLocaleString()}
                       </td>
                     </tr>
                     <tr>
@@ -187,7 +190,7 @@ function Cart() {
                       <td className='text-end border-0 px-0 pt-0'>
                         -NT${' '}
                         {(
-                          cartData.total - cartData.final_total
+                          (cartData?.total || 0) - (cartData?.final_total || 0)
                         ).toLocaleString()}
                       </td>
                     </tr>
@@ -197,7 +200,7 @@ function Cart() {
               <div className='d-flex justify-content-between mt-4'>
                 <p className='mb-0 h4 fw-bold'>總付款金額</p>
                 <p className='mb-0 h4 fw-bold'>
-                  NT$ {Math.round(cartData.final_total)?.toLocaleString()}
+                  NT$ {Math.round(cartData?.final_total || 0)?.toLocaleString()}
                 </p>
               </div>
               <Link

@@ -1,4 +1,11 @@
 function Pagination({ pagination, changePage }) {
+  const scrollToTop = () => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'instant',
+    });
+  };
   return (
     <nav
       aria-label='Page navigation example'
@@ -7,12 +14,13 @@ function Pagination({ pagination, changePage }) {
       <ul className='pagination '>
         <li className='page-item'>
           <a
-            className={`page-link ${pagination.has_pre ? '' : 'd-none'}`}
+            className={`page-link ${!pagination.has_pre && 'd-none'}`}
             href='/'
             aria-label='Previous'
             onClick={(e) => {
               e.preventDefault();
               changePage(pagination.current_page - 1);
+              scrollToTop();
             }}
           >
             <i className='bi bi-chevron-left'></i>
@@ -32,6 +40,7 @@ function Pagination({ pagination, changePage }) {
                 onClick={(e) => {
                   e.preventDefault();
                   changePage(i + 1);
+                  scrollToTop();
                 }}
               >
                 {i + 1}
@@ -41,12 +50,13 @@ function Pagination({ pagination, changePage }) {
         )}
         <li className='page-item'>
           <a
-            className={`page-link ${pagination.has_next ? '' : 'd-none'}`}
+            className={`page-link ${!pagination.has_next && 'd-none'}`}
             href='/'
             aria-label='Next'
             onClick={(e) => {
               e.preventDefault();
               changePage(pagination.current_page + 1);
+              scrollToTop();
             }}
           >
             <i className='bi bi-chevron-right'></i>

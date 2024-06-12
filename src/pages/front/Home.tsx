@@ -15,10 +15,10 @@ function Home() {
   //const [isLoading, setIsLoading] = useState(false);
   const {
     status,
-    data: products,
+    data: productsData,
     isLoading,
   } = useUserProductsQuery({
-    page: '1',
+    params: { page: '1' },
   });
 
   // const getProducts = async (page = 1) => {
@@ -170,7 +170,7 @@ function Home() {
           {status !== 'success' ? (
             <div>Loading...</div>
           ) : (
-            products?.map((product) => (
+            productsData?.products?.map((product) => (
               <div className='col-lg-3 col-6 mb-4' key={product.id}>
                 <Product product={product} />
               </div>

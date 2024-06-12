@@ -59,6 +59,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition='bottom-left' />
       <MessageContext.Provider value={reducer}>
         <ScrollToTop />
         <Routes>
@@ -84,7 +85,6 @@ function App() {
           <Route path='*' element={<NotFound />}></Route>
         </Routes>
         <BackToTopBtn />
-        <ReactQueryDevtools initialIsOpen={false} />
       </MessageContext.Provider>
     </QueryClientProvider>
   );

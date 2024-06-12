@@ -1,13 +1,9 @@
-import { RefObject } from 'react';
-
 function DeleteModal({
-  ref,
   close,
   text,
   handleDelete,
   id,
 }: {
-  ref: RefObject<HTMLDivElement>;
   close: () => void;
   text: string;
   handleDelete: (id?: string) => void;
@@ -15,7 +11,6 @@ function DeleteModal({
 }) {
   return (
     <div
-      ref={ref}
       className='modal fade'
       tabIndex={-1}
       id='deleteModal'

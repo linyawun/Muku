@@ -37,10 +37,24 @@ export type TUploadImgState = {
   detailImg5: TImageState;
 };
 
+// bootstrap types
+export type TCollapse = {
+  toggle: () => void;
+  show: () => void;
+  hide: () => void;
+  dispose: () => void;
+};
+
+export type TModal = {
+  show: () => void;
+  hide: () => void;
+  toggle: () => void;
+};
+
 // cart context types
 export type CartContextType = {
   getCart: UseQueryResult['refetch'];
-  cartData: UseQueryResult['data'];
+  cartData: TUserCarts['data'];
 };
 
 // api util types
@@ -67,7 +81,9 @@ export type TResponse<T = any> = {
 // react-query options
 export type UseQueryOptions<T> = {
   select?: (res: T) => T | (T extends object ? Partial<T> : never);
+  enabled?: boolean;
 };
+
 // export type UseQueryOptions<T> = ParamsOption<T> &
 //   RequestBodyOption<T> & {
 //     reactQuery?: ReactQueryUseQueryOptions<T>;
@@ -99,8 +115,18 @@ export type UseMutationOptions<T> =
       };
     };
 
+export type pagination = {
+  total_pages?: number;
+  current_page?: number;
+  has_pre?: boolean;
+  has_next?: boolean;
+  category?: string;
+};
+
 // user products
-export type TUserProducts = definitions['userProductsAll'];
+export type TUserProducts = definitions['userProductsAll'] & {
+  pagination: pagination;
+};
 
 export type TUserProductsParams =
   paths['/v2/api/{api_path}/products']['get']['parameters']['query'];
