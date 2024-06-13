@@ -128,18 +128,48 @@ export type TUserProducts = definitions['userProductsAll'] & {
   pagination: pagination;
 };
 
-export type TUserProductsParams =
+export type TUserProductsPayload =
   paths['/v2/api/{api_path}/products']['get']['parameters']['query'];
 
 export type TUserProduct = definitions['userProduct'];
 
-export type TUserProductParams = Pick<
+export type TUserProductPayload = Pick<
   paths['/v2/api/{api_path}/product/{id}']['get']['parameters']['path'],
   'id'
 >;
 
 // user cart
 export type TUserCarts = definitions['userGetCarts'];
+
+export type TUserCartItem = {
+  coupon?: {
+    code?: string;
+    due_date?: number;
+    id?: string;
+    is_enabled?: number;
+    percent?: number;
+    title?: string;
+  };
+  final_total?: number;
+  id?: string;
+  product?: {
+    category?: string;
+    content?: string;
+    description?: string;
+    id?: string;
+    imageUrl?: string;
+    imagesUrl?: string[];
+    is_enabled?: number;
+    num?: number;
+    origin_price?: number;
+    price?: number;
+    title?: string;
+    unit?: string;
+  };
+  product_id?: string;
+  qty?: number;
+  total?: number;
+};
 
 export type TAddUserCartPayload =
   paths['/v2/api/{api_path}/cart']['post']['parameters']['body']['data'];
@@ -157,3 +187,29 @@ export type TDeleteUserCartPayload = Omit<
 // user coupon
 export type TSubmitUserCouponPayload =
   paths['/v2/api/{api_path}/coupon']['post']['parameters']['body']['data'];
+
+// user order
+export type TUserOrder = definitions['userGetOrder'] & {
+  order: { products: TUserOrderProductItem[] };
+};
+
+export type TUserOrderPayload = Pick<
+  paths['/v2/api/{api_path}/order/{order_id}']['get']['parameters']['path'],
+  'order_id'
+>;
+
+export type TUserOrderProductItem = {
+  coupon: TUserCartItem['coupon'];
+  final_total: number;
+  product: TUserCartItem['product'];
+  id: string;
+  product_id: string;
+  qty: number;
+  total: number;
+};
+
+// user pay order
+export type TPayUserOrderPayload = Pick<
+  paths['/v2/api/{api_path}/pay/{order_id}']['post']['parameters']['path'],
+  'order_id'
+>;

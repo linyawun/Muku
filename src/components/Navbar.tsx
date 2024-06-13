@@ -1,18 +1,19 @@
 import { useAllUserProductsQuery } from '@/hooks/api/front/product/queries';
+import { TCollapse, TUserCarts } from '@/types';
 import { Collapse } from 'bootstrap';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import mukuLogo from '../assets/mukuLogo-03.svg';
 
-function Navbar({ cartData }) {
+function Navbar({ cartData }: { cartData: TUserCarts['data'] }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { data: allUserProducts } = useAllUserProductsQuery();
   const categoryList = allUserProducts
     ? [...new Set(Object.values(allUserProducts).map((obj) => obj.category))]
     : [];
-  const dataToggle = useRef(null);
+  const dataToggle = useRef<NodeListOf<Element> | null>(null);
   const menuToggle = useRef(null);
-  const bsCollapse = useRef(null);
+  const bsCollapse = useRef<TCollapse | null>(null);
 
   const handleClick = () => {
     setIsCollapsed((pre) => !pre);
@@ -21,7 +22,7 @@ function Navbar({ cartData }) {
   useEffect(() => {
     dataToggle.current = document.querySelectorAll('[data-toggle]');
     function handleCollapse() {
-      bsCollapse.current.hide();
+      bsCollapse.current?.hide();
       setIsCollapsed(false);
     }
     if (menuToggle.current) {
@@ -29,12 +30,12 @@ function Navbar({ cartData }) {
         toggle: false,
       });
 
-      dataToggle.current.forEach((item) => {
+      dataToggle.current?.forEach((item) => {
         item.addEventListener('click', handleCollapse);
       });
     }
     return () => {
-      dataToggle.current.forEach((item) => {
+      dataToggle.current?.forEach((item) => {
         item.removeEventListener('click', handleCollapse);
       });
     };

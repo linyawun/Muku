@@ -1,14 +1,10 @@
 import { useAddToCartMutation } from '@/hooks/api/front/cart/mutations';
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import { useCartContext } from '@/hooks/useCartContext';
 import { TUserProduct } from '@/types';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { Link } from 'react-router-dom';
 
 function Product({ product }: { product: TUserProduct['product'] }) {
-  const { getCart } = useCartContext();
-  const dispatch = useAppDispatch();
   const { mutate: addToCart, status: addToCartStatus } = useAddToCartMutation();
 
   const handleAddToCart = () => {

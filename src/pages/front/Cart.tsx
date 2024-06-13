@@ -4,7 +4,7 @@ import {
   useUpdateCartMutation,
 } from '@/hooks/api/front/cart/mutations';
 import { useCartContext } from '@/hooks/useCartContext';
-import { TModal } from '@/types';
+import { TModal, TUserCartItem } from '@/types';
 import { Modal } from 'bootstrap';
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -29,17 +29,19 @@ function Cart() {
   });
   const hasCoupon = cartData?.final_total !== cartData?.total;
 
-  const handleUpdateCartItem = (item: any, quantity: number) => {
+  const handleUpdateCartItem = (item: TUserCartItem, quantity: number) => {
     const data = {
       data: {
         product_id: item?.product_id,
         qty: quantity,
       },
     };
-    updateCart({
-      id: item?.id,
-      payload: data,
-    });
+    if (item?.id) {
+      updateCart({
+        id: item.id,
+        payload: data,
+      });
+    }
   };
 
   const handleDeleteAllCart = async () => {

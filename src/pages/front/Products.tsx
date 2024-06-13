@@ -2,7 +2,7 @@ import {
   useAllUserProductsQuery,
   useUserProductsQuery,
 } from '@/hooks/api/front/product/queries';
-import { TCollapse, TUserProductsParams } from '@/types';
+import { TCollapse, TUserProductsPayload } from '@/types';
 import { Collapse } from 'bootstrap';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -14,7 +14,7 @@ function Products() {
   const navigate = useNavigate();
   const { category } = useParams();
   const categoryCollapse = useRef<TCollapse | null>(null);
-  const [productsParams, setProductsParams] = useState<TUserProductsParams>({
+  const [productsParams, setProductsParams] = useState<TUserProductsPayload>({
     page: '1',
     category: category === 'all' ? '' : category,
   });

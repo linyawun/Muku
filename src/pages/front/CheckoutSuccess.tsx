@@ -1,59 +1,33 @@
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useUserOrderByIdQuery } from '@/hooks/api/front/order/queries';
+import { usePayOrderMutation } from '@/hooks/api/front/pay/mutations';
+import { TUserOrder } from '@/types';
+import { Link, useParams } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Loading from '../../components/Loading';
-import { createAsyncMessage } from '../../slice/messageSlice';
+
+type TCouponData = {
+  hasCoupon: boolean;
+  discount: number;
+};
+
 function CheckoutSuccess() {
-  const dispatch = useAppDispatch();
   const { orderId } = useParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-  const [orderData, setOrderData] = useState({});
-  const [couponData, setCouponData] = useState({});
-
-  const getOrder = useCallback(
-    async (orderId) => {
-      setIsLoading(true);
-      try {
-        const res = await axios.get(
-          `/v2/api/${import.meta.env.VITE_APP_API_PATH}/order/${orderId}`
-        );
-        if (res.data.order) {
-          setOrderData(res.data.order);
-        } else {
-          navigate('/');
-        }
-        setIsLoading(false);
-      } catch (error) {
-        dispatch(createAsyncMessage(error.response.data));
-        setIsLoading(false);
-      }
+  const { data: orderData, status: orderDataStatus } = useUserOrderByIdQuery({
+    params: {
+      order_id: orderId,
     },
-    [dispatch, navigate]
-  );
+    reactQuery: {
+      enabled: !!orderId,
+    },
+  });
+  const { mutate: payOrder, status: payOrderStatus } = usePayOrderMutation();
 
-  const payOrder = async (orderId) => {
-    try {
-      const res = await axios.post(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/pay/${orderId}`
-      );
-      if (res.data.success) {
-        dispatch(createAsyncMessage(res.data));
-        getOrder(orderId);
-      }
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
-    }
-  };
-  useEffect(() => {
-    getOrder(orderId);
-  }, [orderId, getOrder]);
+  const calculateCoupon = (orderData: TUserOrder['order']): TCouponData => {
+    let couponData: TCouponData;
+    const firstProduct = Object.values(orderData?.products || {})[0];
 
-  useEffect(() => {
-    if (Object.values(orderData?.products || {})[0]?.coupon) {
-      setCouponData({
+    if (firstProduct?.coupon) {
+      couponData = {
         hasCoupon: true,
         discount: Object.values(orderData?.products || {}).reduce(
           (total, cur) => {
@@ -62,18 +36,29 @@ function CheckoutSuccess() {
           },
           0
         ),
-      });
+      };
     } else {
-      setCouponData({
+      couponData = {
         hasCoupon: false,
         discount: 0,
-      });
+      };
     }
-  }, [orderData]);
+
+    return couponData;
+  };
+
+  const couponData = orderData && calculateCoupon(orderData);
+
+  const handlePayOrder = (orderId: string) => {
+    payOrder({
+      order_id: orderId,
+    });
+  };
+
   return (
     <div className='container'>
-      <Loading isLoading={isLoading} />
-      {orderData ? (
+      <Loading isLoading={orderDataStatus === 'pending'} />
+      {orderDataStatus === 'success' && orderData ? (
         <div
           className='mt-5 mb-7'
           style={{ minHeight: 'calc((100vh - 70px) - 350px)' }}
@@ -115,6 +100,7 @@ function CheckoutSuccess() {
                 <div className='card-body px-4 py-0'>
                   <ul className='list-group list-group-flush'>
                     {Object.values(orderData?.products || {}).map((item) => {
+                      if (!item.product) return;
                       return (
                         <li className='list-group-item px-0' key={item.id}>
                           <div className='d-flex mt-2'>
@@ -177,7 +163,7 @@ function CheckoutSuccess() {
                               <td className='text-end border-0 px-0 pt-0'>
                                 -NT${' '}
                                 {(
-                                  couponData?.discount - orderData.total
+                                  couponData?.discount - (orderData?.total || 0)
                                 )?.toLocaleString()}
                               </td>
                             </tr>
@@ -188,16 +174,28 @@ function CheckoutSuccess() {
                         <p className='mb-0 h5'>付款狀態</p>
                         <p className='mb-0'>
                           {orderData?.is_paid === false ? (
-                            <button
-                              type='button'
-                              className='btn btn-primary'
-                              onClick={() => {
-                                payOrder(orderId);
-                              }}
-                              aria-label='Pay'
-                            >
-                              確認付款
-                            </button>
+                            <>
+                              <button
+                                type='button'
+                                className='btn btn-primary'
+                                onClick={() => {
+                                  if (orderId) {
+                                    handlePayOrder(orderId);
+                                  }
+                                }}
+                                aria-label='payOrder'
+                                disabled={payOrderStatus === 'pending'}
+                              >
+                                {payOrderStatus === 'pending' && (
+                                  <span
+                                    className='spinner-border spinner-border-sm me-2'
+                                    role='status'
+                                    aria-hidden='true'
+                                  ></span>
+                                )}
+                                確認付款
+                              </button>
+                            </>
                           ) : (
                             '已付款'
                           )}
@@ -223,17 +221,22 @@ function CheckoutSuccess() {
           className='my-7'
           style={{ minHeight: 'calc((100vh - 70px) - 350px)' }}
         >
-          <div className='row flex-column justify-content-center align-items-center py-5'>
-            <h5 className='col-lg-4 col-10 text-center mb-4'>此訂單不存在</h5>
-            <Link
-              to='/'
-              type='button'
-              className='col-lg-4 col-10 btn btn-primary py-2'
-              aria-label='Go to Home'
-            >
-              回到首頁
-            </Link>
-          </div>
+          {orderDataStatus === 'success' &&
+            !orderData && ( //成功後但發現此id的order不存在
+              <div className='row flex-column justify-content-center align-items-center py-5'>
+                <h5 className='col-lg-4 col-10 text-center mb-4'>
+                  此訂單不存在
+                </h5>
+                <Link
+                  to='/'
+                  type='button'
+                  className='col-lg-4 col-10 btn btn-primary py-2'
+                  aria-label='Go to Home'
+                >
+                  回到首頁
+                </Link>
+              </div>
+            )}
         </div>
       )}
     </div>
