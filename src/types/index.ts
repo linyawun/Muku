@@ -188,6 +188,11 @@ export type TDeleteUserCartPayload = Omit<
 export type TSubmitUserCouponPayload =
   paths['/v2/api/{api_path}/coupon']['post']['parameters']['body']['data'];
 
+export type TCouponData = {
+  hasCoupon: boolean;
+  discount: number;
+};
+
 // user order
 export type TUserOrder = definitions['userGetOrder'] & {
   order: { products: TUserOrderProductItem[] };
