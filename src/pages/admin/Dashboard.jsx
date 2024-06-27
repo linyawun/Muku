@@ -2,10 +2,13 @@ import { Outlet, useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 import Message from '../../components/Message';
+import { useLogoutMutation } from '@/hooks/api/admin/signin/mutations';
 
 function Dashboard() {
   const navigate = useNavigate();
+  const { mutate: logoutMutate } = useLogoutMutation();
   const logout = () => {
+    logoutMutate();
     document.cookie = 'hexToken=';
     navigate('/');
   };

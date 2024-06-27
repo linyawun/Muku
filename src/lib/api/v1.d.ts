@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  "/v2/admin/signin": {
+  '/v2/admin/signin': {
     post: {
       parameters: {
         body: {
@@ -19,14 +19,14 @@ export interface paths {
       responses: {
         /** 登入成功 */
         200: {
-          schema: definitions["adminSignin"];
+          schema: definitions['adminSignin'];
         };
         /** Bad Request */
         400: unknown;
       };
     };
   };
-  "/v2/logout": {
+  '/v2/logout': {
     post: {
       parameters: {};
       responses: {
@@ -37,22 +37,22 @@ export interface paths {
       };
     };
   };
-  "/v2/api/user/check": {
+  '/v2/api/user/check': {
     post: {
       parameters: {};
       responses: {
         /** 登入成功 */
         200: {
-          schema: definitions["checkLoginAuth"];
+          schema: definitions['checkLoginAuth'];
         };
         /** 重新登入 */
         403: {
-          schema: definitions["checkLoginError"];
+          schema: definitions['checkLoginError'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/products/all": {
+  '/v2/api/{api_path}/admin/products/all': {
     get: {
       parameters: {
         path: {
@@ -62,12 +62,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["getProductsAll"];
+          schema: definitions['getProductsAll'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/products": {
+  '/v2/api/{api_path}/admin/products': {
     get: {
       parameters: {
         path: {
@@ -81,12 +81,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["getProducts"];
+          schema: definitions['getProducts'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/product": {
+  '/v2/api/{api_path}/admin/product': {
     post: {
       parameters: {
         path: {
@@ -149,7 +149,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/admin/product/{id}": {
+  '/v2/api/{api_path}/admin/product/{id}': {
     put: {
       parameters: {
         path: {
@@ -261,7 +261,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/admin/orders": {
+  '/v2/api/{api_path}/admin/orders': {
     get: {
       parameters: {
         path: {
@@ -274,12 +274,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["getOrders"];
+          schema: definitions['getOrders'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/order/{id}": {
+  '/v2/api/{api_path}/admin/order/{id}': {
     put: {
       parameters: {
         path: {
@@ -325,7 +325,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["updateOrderById"];
+          schema: definitions['updateOrderById'];
         };
         /** Bad Request */
         400: {
@@ -349,12 +349,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["removeOrdersByOrderId"];
+          schema: definitions['removeOrdersByOrderId'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/orders/all": {
+  '/v2/api/{api_path}/admin/orders/all': {
     delete: {
       parameters: {
         path: {
@@ -364,12 +364,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["removeAllOrders"];
+          schema: definitions['removeAllOrders'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/coupon": {
+  '/v2/api/{api_path}/admin/coupon': {
     post: {
       parameters: {
         path: {
@@ -414,7 +414,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/admin/coupon/{id}": {
+  '/v2/api/{api_path}/admin/coupon/{id}': {
     put: {
       parameters: {
         path: {
@@ -497,7 +497,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/admin/coupons": {
+  '/v2/api/{api_path}/admin/coupons': {
     get: {
       parameters: {
         path: {
@@ -510,12 +510,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["getCoupons"];
+          schema: definitions['getCoupons'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/upload": {
+  '/v2/api/{api_path}/admin/upload': {
     /** 表單上傳<br/>  <p>請注意，僅限使用 jpg、jpeg 與 png 格式，檔案大小限制為 3MB 以下。</p>  <pre>  <code>  &lt;form action="/api/thisismycourse2/admin/upload" enctype="multipart/form-data"  method="post"&gt;<br/>  &lt;input type="file" name="file-to-upload"&gt;<br/>  &lt;input type="submit" value="Upload"&gt;<br/>  &lt;/form&gt;  </code>  </pre> */
     post: {
       parameters: {
@@ -526,16 +526,16 @@ export interface paths {
       responses: {
         /** 上傳成功 */
         200: {
-          schema: definitions["uploadSuccess"];
+          schema: definitions['uploadSuccess'];
         };
         /** 上傳失敗 */
         400: {
-          schema: definitions["uploadError"];
+          schema: definitions['uploadError'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/articles": {
+  '/v2/api/{api_path}/admin/articles': {
     get: {
       parameters: {
         path: {
@@ -548,12 +548,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["getArticles"];
+          schema: definitions['getArticles'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/admin/article/{id}": {
+  '/v2/api/{api_path}/admin/article/{id}': {
     get: {
       parameters: {
         path: {
@@ -564,7 +564,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["getArticleById"];
+          schema: definitions['getArticleById'];
         };
       };
     };
@@ -652,7 +652,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/admin/article": {
+  '/v2/api/{api_path}/admin/article': {
     post: {
       parameters: {
         path: {
@@ -707,7 +707,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/products/all": {
+  '/v2/api/{api_path}/products/all': {
     get: {
       parameters: {
         path: {
@@ -717,12 +717,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userProductsAll"];
+          schema: definitions['userProductsAll'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/products": {
+  '/v2/api/{api_path}/products': {
     get: {
       parameters: {
         path: {
@@ -736,12 +736,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userProductsAll"];
+          schema: definitions['userProductsAll'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/product/{id}": {
+  '/v2/api/{api_path}/product/{id}': {
     get: {
       parameters: {
         path: {
@@ -752,7 +752,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userProduct"];
+          schema: definitions['userProduct'];
         };
         /** Bad Request */
         400: unknown;
@@ -761,7 +761,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/cart": {
+  '/v2/api/{api_path}/cart': {
     get: {
       parameters: {
         path: {
@@ -771,7 +771,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userGetCarts"];
+          schema: definitions['userGetCarts'];
         };
       };
     };
@@ -794,12 +794,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userAddCart"];
+          schema: definitions['userAddCart'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/cart/{id}": {
+  '/v2/api/{api_path}/cart/{id}': {
     put: {
       parameters: {
         path: {
@@ -820,7 +820,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userUpdateCart"];
+          schema: definitions['userUpdateCart'];
         };
         /** Bad Request */
         400: unknown;
@@ -838,12 +838,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userDeleteCart"];
+          schema: definitions['userDeleteCart'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/carts": {
+  '/v2/api/{api_path}/carts': {
     delete: {
       parameters: {
         path: {
@@ -853,14 +853,14 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userDeleteCartAll"];
+          schema: definitions['userDeleteCartAll'];
         };
         /** Bad Request */
         400: unknown;
       };
     };
   };
-  "/v2/api/{api_path}/coupon": {
+  '/v2/api/{api_path}/coupon': {
     post: {
       parameters: {
         path: {
@@ -878,7 +878,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userApplyCoupon"];
+          schema: definitions['userApplyCoupon'];
         };
         /** Bad Request */
         400: unknown;
@@ -887,7 +887,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/order": {
+  '/v2/api/{api_path}/order': {
     post: {
       parameters: {
         path: {
@@ -915,7 +915,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userCheckoutOrder"];
+          schema: definitions['userCheckoutOrder'];
         };
         /** Bad Request */
         400: unknown;
@@ -924,7 +924,7 @@ export interface paths {
       };
     };
   };
-  "/v2/api/{api_path}/orders": {
+  '/v2/api/{api_path}/orders': {
     get: {
       parameters: {
         path: {
@@ -937,12 +937,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userGetOrders"];
+          schema: definitions['userGetOrders'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/order/{order_id}": {
+  '/v2/api/{api_path}/order/{order_id}': {
     get: {
       parameters: {
         path: {
@@ -953,12 +953,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userGetOrder"];
+          schema: definitions['userGetOrder'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/pay/{order_id}": {
+  '/v2/api/{api_path}/pay/{order_id}': {
     post: {
       parameters: {
         path: {
@@ -969,12 +969,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userGetOrder"];
+          schema: definitions['userGetOrder'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/articles": {
+  '/v2/api/{api_path}/articles': {
     get: {
       parameters: {
         path: {
@@ -987,12 +987,12 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userGetArticles"];
+          schema: definitions['userGetArticles'];
         };
       };
     };
   };
-  "/v2/api/{api_path}/article/{id}": {
+  '/v2/api/{api_path}/article/{id}': {
     get: {
       parameters: {
         path: {
@@ -1003,7 +1003,7 @@ export interface paths {
       responses: {
         /** OK */
         200: {
-          schema: definitions["userGetArticles"];
+          schema: definitions['userGetArticles'];
         };
         /** Bad Request */
         400: unknown;
@@ -1016,6 +1016,8 @@ export interface paths {
 
 export interface definitions {
   adminSignin: {
+    /** @example true */
+    success?: boolean;
     /** @example true */
     status?: boolean;
     /** @example 登入成功 */
@@ -1030,6 +1032,7 @@ export interface definitions {
   checkLoginAuth: {
     /** @example true */
     success?: boolean;
+    message?: string;
     /** @example QZDQO0zht4MNp7CE2t1 */
     uid?: string;
   };
@@ -1067,7 +1070,7 @@ export interface definitions {
     /** @example true */
     success?: boolean;
     products?: {
-      "-L9tH8jxVb2Ka_DYPwng"?: {
+      '-L9tH8jxVb2Ka_DYPwng'?: {
         /** @example 衣服3 */
         category?: string;
         /** @example 這是內容 */
@@ -1159,7 +1162,7 @@ export interface definitions {
     /** @example true */
     success?: boolean;
     products?: {
-      "-L9tH8jxVb2Ka_DYPwng"?: {
+      '-L9tH8jxVb2Ka_DYPwng'?: {
         /** @example 衣服3 */
         category?: string;
         /** @example 這是內容 */

@@ -21,7 +21,6 @@ function CheckoutSuccess() {
   const calculateCoupon = (orderData: TUserOrder['order']): TCouponData => {
     let couponData: TCouponData;
     const firstProduct = Object.values(orderData?.products || {})[0];
-
     if (firstProduct?.coupon) {
       couponData = {
         hasCoupon: true,

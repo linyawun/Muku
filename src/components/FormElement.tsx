@@ -24,7 +24,7 @@ type TInputProps = {
   labelText: string;
   rules: RegisterOptions<FieldValues>;
   placeholder?: string;
-  onChange: (event: any) => void; // replace with the correct type
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 type TTextareaProps = {

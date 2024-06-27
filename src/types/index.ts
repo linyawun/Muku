@@ -123,6 +123,31 @@ export type pagination = {
   category?: string;
 };
 
+// admin signin
+export type TSigninPayload =
+  paths['/v2/admin/signin']['post']['parameters']['body']['data'];
+
+export type TSigninResponse = definitions['adminSignin'];
+
+export type TSigninErrorResponse = {
+  response?: {
+    data?: {
+      error?: {
+        code: string;
+      };
+    };
+  };
+};
+
+// admin user check
+export type TUserCheckResponse = definitions['checkLoginAuth'];
+
+export type TUserCheckErrorResponse = {
+  response?: {
+    data?: TUserCheckResponse;
+  };
+};
+
 // user products
 export type TUserProducts = definitions['userProductsAll'] & {
   pagination: pagination;

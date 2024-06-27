@@ -1,5 +1,3 @@
-// -O0K6EWXf00nR4q9rTCN 訂單號碼
-
 import CheckoutSteps from '@/components/CheckoutSteps';
 import { Link } from 'react-router-dom';
 import { TUserOrder } from '@/types';
