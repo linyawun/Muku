@@ -2,38 +2,44 @@ import { Outlet, useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 import Message from '../../components/Message';
-import { useLogoutMutation } from '@/hooks/api/admin/signin/mutations';
+import {
+  useLogoutMutation,
+  useUserCheckMutation,
+} from '@/hooks/api/admin/signin/mutations';
+import { TUserCheckErrorResponse } from '@/types';
 
 function Dashboard() {
   const navigate = useNavigate();
   const { mutate: logoutMutate } = useLogoutMutation();
-  const logout = () => {
-    logoutMutate();
-    document.cookie = 'hexToken=';
-    navigate('/');
-  };
   //取出 token
   const token = document.cookie
     .split('; ')
     .find((row) => row.startsWith('hexToken='))
     ?.split('=')[1];
   axios.defaults.headers.common['Authorization'] = token;
+  const { mutate: userCheckMutation } = useUserCheckMutation({
+    reactQuery: {
+      onError: (error: TUserCheckErrorResponse) => {
+        if (!error?.response?.data?.success) {
+          document.cookie = 'hexToken=';
+          navigate('/login');
+        }
+      },
+    },
+  });
+  const logout = () => {
+    logoutMutate();
+    document.cookie = 'hexToken=';
+    navigate('/');
+  };
+
   useEffect(() => {
-    //路由保護，確認有token
     if (!token) {
       return navigate('/login');
     }
-    //確認token正確性與時效
-    (async () => {
-      try {
-        await axios.post('/v2/api/user/check');
-      } catch (error) {
-        if (!error.response.data.success) {
-          navigate('/login');
-        }
-      }
-    })();
-  }, [navigate, token]);
+    userCheckMutation();
+  }, [token, navigate, userCheckMutation]);
+
   return (
     <>
       <Message />
