@@ -1,22 +1,24 @@
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CheckoutSteps from '../../components/CheckoutSteps';
 import { CheckboxRadio, Input, Select } from '../../components/FormElement';
 import Loading from '../../components/Loading';
-import { createAsyncMessage } from '../../slice/messageSlice';
+import { useCartContext } from '@/hooks/useCartContext';
+import { usePostOrderMutation } from '@/hooks/api/front/order/mutations';
+import {
+  useCitiesQueries,
+  useDistrictsQuery,
+} from '@/hooks/api/front/city/queries';
+import { TCheckoutFormData, TDistrictItem, TDistrictPayload } from '@/types';
 
 function Checkout() {
   const navigate = useNavigate();
-  const [cityList, setCityList] = useState([]);
-  const [districtList, setDistrictList] = useState([]);
-  const { cartData, getCart } = useOutletContext();
+  const { cartData } = useCartContext();
   const [disableSubmit, setDisableSubmit] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useAppDispatch();
-  const hascoupon = cartData?.final_total !== cartData?.total;
+  const [districtListParams, setDistrictListParams] =
+    useState<TDistrictPayload>({});
+  const hasCoupon = cartData?.final_total !== cartData?.total;
   const defaultVal = useRef({
     name: '',
     email: '',
@@ -36,10 +38,19 @@ function Checkout() {
     defaultValues: defaultVal.current,
     mode: 'onTouched',
   });
+  const { data: cityList, status: cityListStatus } = useCitiesQueries();
+  const { data: districtList, status: districtListStatus } = useDistrictsQuery({
+    params: districtListParams,
+    reactQuery: {
+      enabled: !!districtListParams.countyCode,
+    },
+  });
+  const { mutateAsync: postOrderAsync, status: postOrderStatus } =
+    usePostOrderMutation();
   const cityInput = getValues().city;
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: TCheckoutFormData) => {
     const { name, email, tel, city, district, address, message } = data;
-    let msg = message ? message : ' ';
+    const msg = message ? message : ' ';
     const form = {
       data: {
         user: {
@@ -51,58 +62,26 @@ function Checkout() {
         message: msg,
       },
     };
-    try {
-      const res = await axios.post(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/order`,
-        form
-      );
-      if (res.data.success) {
-        getCart();
-        navigate(`/checkoutSuccess/${res.data.orderId}`);
-        dispatch(createAsyncMessage(res.data));
-      }
-    } catch (error) {
-      dispatch(createAsyncMessage(error.response.data));
+
+    const res = await postOrderAsync(form);
+    if (res.data.success) {
+      navigate(`/checkoutSuccess/${res.data.orderId}`);
     }
   };
+
   useEffect(() => {
     if (cartData?.carts?.length === 0) {
       navigate('/');
     }
   }, [cartData, navigate]);
-  useEffect(() => {
-    const getCity = async () => {
-      setIsLoading(true);
-      const result = await axios.get(
-        'https://api.nlsc.gov.tw/other/ListCounty'
-      );
-      const xmlString = result.data;
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
-      const countyItems = xmlDoc.getElementsByTagName('countyItem');
-      // 將每個 countyItem 元素轉換為物件，並存儲到陣列中
-      const countyList = Array.from(countyItems, (countyItem) => ({
-        countyName: countyItem.querySelector('countyname').textContent,
-        countyCode: countyItem.querySelector('countycode01').textContent,
-      }));
 
-      setCityList(countyList);
-      setIsLoading(false);
-    };
-    getCity();
-  }, []);
   useEffect(() => {
-    const getDistrict = async (countyCode) => {
-      const res = await axios.get(
-        `https://api.nlsc.gov.tw/other/ListTown1/${countyCode}`
-      );
-      setDistrictList(res.data);
-    };
-    if (cityInput) {
-      const { countyCode } = cityList.find(
-        (item) => item.countyName === cityInput
-      );
-      getDistrict(countyCode);
+    if (cityInput && cityList) {
+      const cityItem = cityList.find((item) => item.countyName === cityInput);
+      if (cityItem) {
+        const { countyCode } = cityItem;
+        setDistrictListParams({ countyCode });
+      }
     }
   }, [cityInput, cityList]);
 
@@ -117,7 +96,7 @@ function Checkout() {
 
   return (
     <div className='pt-5 pb-7'>
-      <Loading isLoading={isLoading} />
+      <Loading isLoading={cityListStatus === 'pending'} />
       <div className='container'>
         <CheckoutSteps
           data={[
@@ -225,18 +204,20 @@ function Checkout() {
                       rules={{
                         required: { value: true, message: '鄉鎮市區為必填' },
                       }}
-                      disabled={!getValues().city}
+                      disabled={
+                        !getValues().city || districtListStatus === 'pending'
+                      }
                     >
                       <option value='' disabled>
                         請選擇鄉鎮市區
                       </option>
-                      {getValues().city
-                        ? districtList.map((area) => (
-                            <option value={area.townname} key={area.towncode01}>
-                              {area.townname}
-                            </option>
-                          ))
-                        : ''}
+                      {getValues().city &&
+                        districtList &&
+                        districtList?.map((area) => (
+                          <option value={area.townname} key={area.towncode01}>
+                            {area.townname}
+                          </option>
+                        ))}
                     </Select>
                   </div>
                 </div>
@@ -295,7 +276,7 @@ function Checkout() {
                   <h5>訂單備註</h5>
                   <textarea
                     className='form-control'
-                    rows='3'
+                    rows={3}
                     placeholder='有什麼資訊想備註給店家嗎?'
                   ></textarea>
                 </div>
@@ -306,7 +287,6 @@ function Checkout() {
                     type='checkbox'
                     name='isSubscribed'
                     id='checkbox'
-                    rules=''
                     labelText='我想收到最新資訊及優惠方案'
                     hasErrorMsg={false}
                   />
@@ -323,12 +303,19 @@ function Checkout() {
                   <button
                     type='submit'
                     className='btn btn-primary py-3 px-7'
-                    disabled={disableSubmit}
+                    disabled={disableSubmit || postOrderStatus === 'pending'}
                     style={{
                       pointerEvents: 'auto',
                     }}
                     aria-label='Submit'
                   >
+                    {postOrderStatus === 'pending' && (
+                      <span
+                        className='spinner-border spinner-border-sm me-2'
+                        role='status'
+                        aria-hidden='true'
+                      ></span>
+                    )}
                     確認送出
                   </button>
                 </div>
@@ -342,8 +329,8 @@ function Checkout() {
                 return (
                   <div className='d-flex mb-3' key={item.id}>
                     <img
-                      src={item.product.imageUrl}
-                      alt={item.product.title}
+                      src={item.product?.imageUrl}
+                      alt={item.product?.title}
                       className='me-2'
                       style={{
                         width: '48px',
@@ -354,7 +341,7 @@ function Checkout() {
                     <div className='w-100'>
                       <div className='d-flex justify-content-between'>
                         <p className='mb-0'>
-                          <small>{item.product.title}</small>
+                          <small>{item.product?.title}</small>
                         </p>
                         <p className='mb-0'>
                           <small>x{item.qty}</small>
@@ -363,21 +350,21 @@ function Checkout() {
                       <div className='d-flex justify-content-between'>
                         <p
                           className={`text-muted mb-0 text-decoration-line-through me-1 ${
-                            hascoupon ? 'd-block' : 'd-none'
+                            hasCoupon ? 'd-block' : 'd-none'
                           }`}
                         >
-                          <small>NT$ {item.total.toLocaleString()}</small>
+                          <small>NT$ {item.total?.toLocaleString()}</small>
                         </p>
 
                         <p className='mb-0'>
-                          NT$ {item.final_total.toLocaleString()}
+                          NT$ {item.final_total?.toLocaleString()}
                         </p>
                       </div>
                     </div>
                   </div>
                 );
               })}
-              {hascoupon && (
+              {hasCoupon && (
                 <table className='table mt-4 border-top border-bottom text-muted'>
                   <tbody>
                     <tr>
@@ -385,7 +372,7 @@ function Checkout() {
                         商品總金額
                       </th>
                       <td className='text-end border-0 px-0 pt-4'>
-                        NT$ {cartData.total?.toLocaleString()}
+                        NT$ {cartData?.total?.toLocaleString()}
                       </td>
                     </tr>
                     <tr>
@@ -398,7 +385,7 @@ function Checkout() {
                       <td className='text-end border-0 px-0 pt-0 pb-4'>
                         -NT${' '}
                         {(
-                          cartData.total - cartData.final_total
+                          (cartData?.total || 0) - (cartData?.final_total || 0)
                         ).toLocaleString()}
                       </td>
                     </tr>
@@ -409,7 +396,7 @@ function Checkout() {
               <div className='d-flex justify-content-between mt-4'>
                 <p className='mb-0 h5 fw-bold'>總付款金額</p>
                 <p className='mb-0 h5 fw-bold'>
-                  NT$ {Math.round(cartData.final_total)?.toLocaleString()}
+                  NT$ {Math.round(cartData?.final_total || 0)?.toLocaleString()}
                 </p>
               </div>
             </div>

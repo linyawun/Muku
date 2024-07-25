@@ -49,6 +49,14 @@ module.exports = {
       },
       rules: {
         '@typescript-eslint/no-explicit-any': 'off', // 全局關閉 no-explicit-any 規則，日後可開
+        '@typescript-eslint/no-misused-promises': [
+          2,
+          {
+            checksVoidReturn: {
+              attributes: false,
+            },
+          },
+        ],
       },
     },
   ],

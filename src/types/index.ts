@@ -148,6 +148,36 @@ export type TUserCheckErrorResponse = {
   };
 };
 
+// admin coupon
+export type TCouponsPayload =
+  paths['/v2/api/{api_path}/admin/coupons']['get']['parameters']['query'];
+
+export type TAdminCoupons = definitions['getCoupons'];
+
+export type TCreateCouponPayload =
+  paths['/v2/api/{api_path}/admin/coupon']['post']['parameters']['body']['data'];
+
+export type TEditCouponPayload = {
+  id?: string;
+  payloadData?: TCreateCouponPayload;
+};
+
+// city and district
+export type TCityItem = {
+  countyName: string;
+  countyCode: string;
+};
+
+export type TDistrictPayload = {
+  countyCode?: string;
+};
+
+export type TDistrictItem = {
+  townname: string;
+  towncode: string;
+  towncode01: string;
+};
+
 // user products
 export type TUserProducts = definitions['userProductsAll'] & {
   pagination: pagination;
@@ -228,6 +258,9 @@ export type TUserOrderPayload = Pick<
   'order_id'
 >;
 
+export type TPostUserOrderPayload =
+  paths['/v2/api/{api_path}/order']['post']['parameters']['body']['data'];
+
 export type TUserOrderProductItem = {
   coupon: TUserCartItem['coupon'];
   final_total: number;
@@ -243,3 +276,14 @@ export type TPayUserOrderPayload = Pick<
   paths['/v2/api/{api_path}/pay/{order_id}']['post']['parameters']['path'],
   'order_id'
 >;
+
+// user checkout order form
+export type TCheckoutFormData = {
+  name: string;
+  email: string;
+  tel: string;
+  city: string;
+  district: string;
+  address: string;
+  message: string;
+};

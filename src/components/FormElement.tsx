@@ -22,7 +22,7 @@ type TInputProps = {
   id: string;
   type: string;
   labelText: string;
-  rules: RegisterOptions<FieldValues>;
+  rules: RegisterOptions;
   placeholder?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -44,7 +44,7 @@ type TCheckboxRadioProps = {
   name: string;
   id: string;
   value: string;
-  rules: RegisterOptions<FieldValues>;
+  rules?: RegisterOptions<FieldValues>;
   labelText: string;
   hasErrorMsg: boolean;
 };
