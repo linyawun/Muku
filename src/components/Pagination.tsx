@@ -1,4 +1,12 @@
-function Pagination({ pagination, changePage }) {
+import { TPagination } from '@/types';
+
+function Pagination({
+  pagination,
+  changePage,
+}: {
+  pagination: TPagination;
+  changePage: (page: number) => void;
+}) {
   const scrollToTop = () => {
     window.scroll({
       top: 0,
@@ -19,8 +27,10 @@ function Pagination({ pagination, changePage }) {
             aria-label='Previous'
             onClick={(e) => {
               e.preventDefault();
-              changePage(pagination.current_page - 1);
-              scrollToTop();
+              if (pagination.current_page) {
+                changePage(Number(pagination.current_page) - 1);
+                scrollToTop();
+              }
             }}
           >
             <i className='bi bi-chevron-left'></i>
@@ -55,8 +65,10 @@ function Pagination({ pagination, changePage }) {
             aria-label='Next'
             onClick={(e) => {
               e.preventDefault();
-              changePage(pagination.current_page + 1);
-              scrollToTop();
+              if (pagination.current_page) {
+                changePage(Number(pagination.current_page) + 1);
+                scrollToTop();
+              }
             }}
           >
             <i className='bi bi-chevron-right'></i>
