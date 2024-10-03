@@ -4,12 +4,11 @@ import {
   RegisterOptions,
   UseFormReturn,
   Controller,
+  FieldErrors,
 } from 'react-hook-form';
 import { Combobox } from 'react-widgets';
 
-type TErrorType = {
-  [key: string]: { message: string };
-};
+export type TErrorType = FieldErrors;
 
 type TFormErrorMsgProps = {
   errors: TErrorType;
@@ -24,7 +23,7 @@ type TInputProps = {
   labelText: string;
   rules: RegisterOptions;
   placeholder?: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 type TTextareaProps = {
@@ -43,7 +42,7 @@ type TCheckboxRadioProps = {
   type: string;
   name: string;
   id: string;
-  value: string;
+  value?: string;
   rules?: RegisterOptions<FieldValues>;
   labelText: string;
   hasErrorMsg: boolean;
@@ -71,7 +70,9 @@ type TSelectProps = {
 const FormErrorMsg = ({ errors, name }: TFormErrorMsgProps) => {
   return (
     errors[name] && (
-      <div className='invalid-feedback'>{errors?.[name]?.message}</div>
+      <div className='invalid-feedback'>
+        {errors[name]?.message as React.ReactNode}
+      </div>
     )
   );
 };

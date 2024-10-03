@@ -9,11 +9,6 @@ const BASE_URL = import.meta.env.VITE_APP_BASE_URL as string;
 // const checkAuth = () => {
 //   const token = JSON.parse(auth.getToken());
 //   const identityToken = JSON.parse(auth.get(IDENTITY_TOKEN_KEY));
-//   /**
-//    * Note:
-//    * 如果有identity token，表示他有切換身份的功能，優先使用該把身份的token
-//    * 每次刷新頁面，都會清除identity token，亦即恢復身份
-//    */
 //   if (identityToken) {
 //     return `Bearer ${identityToken}`;
 //   } else if (token) {

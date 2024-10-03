@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-
 import request from '@/utils/request';
-
 import { TUserCarts } from '@/types';
 import { AxiosResponse } from 'axios';
 

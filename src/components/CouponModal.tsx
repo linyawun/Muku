@@ -1,24 +1,49 @@
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  MessageContext,
-  handleErrorMessage,
-  handleSuccessMessage,
-} from '../store/messageStore';
 import { timeStampToTime } from '../utils/factory';
 import { CheckboxRadio, Input } from './FormElement';
+import {
+  useCreateCouponMutation,
+  useEditCouponMutation,
+} from '@/hooks/api/admin/coupon/mutations';
+import { TAdminCoupon, TAdminModalType } from '@/types';
 
-const initData = {
-  title: '',
-  is_enabled: 1,
-  percent: 80,
-  due_date: new Date(),
-  code: 'muku',
+type TCouponModalProps = {
+  closeModal: () => void;
+  type: TAdminModalType;
+  tempCoupon: TAdminCoupon;
 };
 
-function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
-  const [tempData, setTempData] = useState(initData);
+const determineTempData = (
+  type: TAdminModalType,
+  tempCoupon?: TAdminCoupon
+): Record<string, any> => {
+  const initData = {
+    title: '',
+    is_enabled: 1,
+    percent: 80,
+    due_date: new Date(),
+    code: 'muku',
+  };
+
+  if (type === 'create') {
+    return {
+      ...initData,
+      due_date: timeStampToTime(initData.due_date.getTime()),
+    };
+  } else if (type === 'edit' && tempCoupon) {
+    return {
+      ...tempCoupon,
+      due_date: timeStampToTime(tempCoupon.due_date as number),
+    };
+  }
+  return initData;
+};
+
+function CouponModal({ closeModal, type, tempCoupon }: TCouponModalProps) {
+  const tempData = useMemo(() => {
+    return determineTempData(type, tempCoupon);
+  }, [type, tempCoupon]);
   const {
     register,
     handleSubmit,
@@ -26,66 +51,86 @@ function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      ...initData,
-      due_date: timeStampToTime(initData.due_date),
+      ...tempData,
     },
     mode: 'onTouched',
   });
-  const [, dispatch] = useContext(MessageContext);
-
-  useEffect(() => {
-    if (type === 'create') {
-      setTempData({
-        ...initData,
-        due_date: timeStampToTime(initData.due_date),
-      });
-    } else if (type === 'edit') {
-      setTempData({
-        ...tempCoupon,
-        due_date: timeStampToTime(tempCoupon.due_date),
-      });
-    }
-  }, [type, tempCoupon]);
+  const { mutate: createCouponMutate } = useCreateCouponMutation({
+    reactQuery: {
+      onSuccess: () => {
+        closeModal();
+      },
+    },
+  });
+  const { mutate: editCouponMutate } = useEditCouponMutation({
+    reactQuery: {
+      onSuccess: () => {
+        closeModal();
+      },
+    },
+  });
 
   useEffect(() => {
     const resetForm = () => {
       reset(tempData);
     };
     resetForm();
-  }, [tempData, reset]);
+  }, [reset, tempData]);
 
-  const submit = async (data) => {
-    try {
-      let api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/coupon`;
-      let method = 'post';
-      if (type === 'edit') {
-        //如果是編輯，要更改api路徑和方法
-        api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/coupon/${
-          tempCoupon.id
-        }`;
-        method = 'put';
-      }
+  const submit = (data) => {
+    const preparedData = {
+      data: {
+        ...data,
+        is_enabled: +data.is_enabled,
+        due_date: data.due_date.getTime(), //轉換成 unix timestamp
+      },
+    };
 
-      const res = await axios[method](api, {
-        data: {
-          ...data,
-          is_enabled: +data.is_enabled,
-          due_date: data.due_date.getTime(), //轉換成 unix timestamp
-        },
+    // 根據類型選擇合適的函式
+    if (type === 'edit') {
+      editCouponMutate({
+        id: tempCoupon.id,
+        payloadData: preparedData,
       });
-      if (res.data.success) {
-        handleSuccessMessage(dispatch, res);
-        closeModal();
-        getCoupons();
-      }
-    } catch (error) {
-      handleErrorMessage(dispatch, error);
+    } else {
+      createCouponMutate(preparedData);
     }
   };
+
+  // const submit = async (data) => {
+  //   try {
+  //     let api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/coupon`;
+  //     let method = 'post';
+  //     if (type === 'edit') {
+  //       //如果是編輯，要更改api路徑和方法
+  //       api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/coupon/${
+  //         tempCoupon.id
+  //       }`;
+  //       method = 'put';
+  //     }
+
+  //     const res = await axios[method](api, {
+  //       data: {
+  //         ...data,
+  //         is_enabled: +data.is_enabled,
+  //         due_date: data.due_date.getTime(), //轉換成 unix timestamp
+  //       },
+  //     });
+  //     if (res.data.success) {
+  //       handleSuccessMessage(dispatch, res);
+  //       closeModal();
+  //       void queryClient.invalidateQueries({
+  //         queryKey: ['adminCoupons'],
+  //       });
+  //     }
+  //   } catch (error) {
+  //     handleErrorMessage(dispatch, error);
+  //   }
+  // };
   return (
     <div
       className='modal fade'
-      tabIndex='-1'
+      tabIndex={-1}
       id='couponModal'
       aria-labelledby='couponModalLabel'
       aria-hidden='true'
@@ -143,10 +188,7 @@ function CouponModal({ closeModal, getCoupons, type, tempCoupon }) {
                         value: 99,
                         message: '折扣不能大於 99',
                       },
-                      valueAsNumber: {
-                        value: true,
-                        message: '請輸入數值',
-                      },
+                      valueAsNumber: true,
                     }}
                   />
                 </div>

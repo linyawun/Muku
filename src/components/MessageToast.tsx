@@ -1,7 +1,7 @@
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/hooks/reduxHooks';
 import { TMessage } from '@/types';
 function Message() {
-  const messages = useSelector(
+  const messages = useAppSelector(
     (state: { message: TMessage[] }) => state.message
   );
   return (

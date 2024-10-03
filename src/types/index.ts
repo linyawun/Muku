@@ -115,7 +115,7 @@ export type UseMutationOptions<T> =
       };
     };
 
-export type pagination = {
+export type TPagination = {
   total_pages?: number;
   current_page?: number;
   has_pre?: boolean;
@@ -154,6 +154,8 @@ export type TCouponsPayload =
 
 export type TAdminCoupons = definitions['getCoupons'];
 
+export type TAdminCoupon = NonNullable<TAdminCoupons['coupons']>[number];
+
 export type TCreateCouponPayload =
   paths['/v2/api/{api_path}/admin/coupon']['post']['parameters']['body']['data'];
 
@@ -161,6 +163,13 @@ export type TEditCouponPayload = {
   id?: string;
   payloadData?: TCreateCouponPayload;
 };
+
+export type TDeleteCouponPayload = Omit<
+  paths['/v2/api/{api_path}/admin/coupon/{id}']['delete']['parameters']['path'],
+  'api_path'
+>;
+
+export type TAdminModalType = 'create' | 'edit';
 
 // city and district
 export type TCityItem = {
@@ -180,7 +189,7 @@ export type TDistrictItem = {
 
 // user products
 export type TUserProducts = definitions['userProductsAll'] & {
-  pagination: pagination;
+  pagination: TPagination;
 };
 
 export type TUserProductsPayload =

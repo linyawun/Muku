@@ -10,7 +10,7 @@ import {
   useCitiesQueries,
   useDistrictsQuery,
 } from '@/hooks/api/front/city/queries';
-import { TCheckoutFormData, TDistrictItem, TDistrictPayload } from '@/types';
+import { TCheckoutFormData, TDistrictPayload } from '@/types';
 
 function Checkout() {
   const navigate = useNavigate();

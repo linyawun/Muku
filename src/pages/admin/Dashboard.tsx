@@ -7,6 +7,8 @@ import {
   useUserCheckMutation,
 } from '@/hooks/api/admin/signin/mutations';
 import { TUserCheckErrorResponse } from '@/types';
+import request from '@/utils/request';
+import MessageToast from '@/components/MessageToast';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ function Dashboard() {
     .find((row) => row.startsWith('hexToken='))
     ?.split('=')[1];
   axios.defaults.headers.common['Authorization'] = token;
+  request.defaults.headers.common['Authorization'] = token;
   const { mutate: userCheckMutation } = useUserCheckMutation({
     reactQuery: {
       onError: (error: TUserCheckErrorResponse) => {
@@ -89,7 +92,12 @@ function Dashboard() {
           </div>
           <div className='col-md-10'>
             {/* 有token才渲染outlet */}
-            {token && <Outlet />}
+            {token && (
+              <>
+                <MessageToast />
+                <Outlet />
+              </>
+            )}
           </div>
         </div>
       </div>

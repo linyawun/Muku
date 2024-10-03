@@ -1350,6 +1350,8 @@ export interface definitions {
     /** @example true */
     success?: boolean;
     coupons?: {
+      id?: string;
+      code?: string;
       /** @example 6547658 */
       due_date?: number;
       /** @example 1 */
@@ -1358,6 +1360,7 @@ export interface definitions {
       percent?: number;
       /** @example 超級特惠價格 */
       title?: string;
+      num?: number;
     }[];
     pagination?: {
       /** @example 1 */

@@ -14,6 +14,7 @@ import {
   TUserCheckErrorResponse,
   TUserCheckResponse,
 } from '@/types';
+import request from '@/utils/request';
 
 function Login() {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ function Login() {
     .find((row) => row.startsWith('hexToken='))
     ?.split('=')[1];
   axios.defaults.headers.common['Authorization'] = token;
+  request.defaults.headers.common['Authorization'] = token;
 
   const { mutate: signInMutate, status: signInStatus } = useSignInMutation({
     reactQuery: {
