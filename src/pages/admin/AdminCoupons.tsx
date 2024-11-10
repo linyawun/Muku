@@ -81,7 +81,7 @@ function AdminCoupons() {
       />
       <DeleteModal
         close={closeDeleteModal}
-        text={`優惠券「${tempCoupon.title || ''}」`}
+        text={`優惠券 ${tempCoupon.title || ''}`}
         handleDelete={(id) => id && deleteCoupon(id)}
         id={tempCoupon.id || ''}
       />

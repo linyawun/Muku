@@ -1290,6 +1290,9 @@ export interface definitions {
       is_paid?: boolean;
       /** @example 這是留言 */
       message?: string;
+      total?: number;
+      status?: string;
+      paid_date;
       products?: {
         L8nBrq8Ym4ARI1Kog4t?: {
           /** @example L8nBrq8Ym4ARI1Kog4t */
@@ -1298,6 +1301,40 @@ export interface definitions {
           product_id?: string;
           /** @example 3 */
           qty?: string;
+          product?: {
+            /** @example 衣服3 */
+            category?: string;
+            /** @example 這是內容 */
+            content?: string;
+            /** @example Sit down please 名設計師設計 */
+            description?: string;
+            /** @example -L9tH8jxVb2Ka_DYPwng */
+            id?: string;
+            /** @example 主圖網址 */
+            imageUrl?: string;
+            /**
+             * @example [
+             *   "圖片網址一",
+             *   "圖片網址二",
+             *   "圖片網址三",
+             *   "圖片網址四",
+             *   "圖片網址五"
+             * ]
+             */
+            imagesUrl?: string[];
+            /** @example 1 */
+            is_enabled?: number;
+            /** @example 1 */
+            num?: number;
+            /** @example 500 */
+            origin_price?: number;
+            /** @example 600 */
+            price?: number;
+            /** @example [賣]動物園造型衣服3 */
+            title?: string;
+            /** @example 個 */
+            unit?: string;
+          };
         };
       };
       user?: {

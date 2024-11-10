@@ -97,36 +97,6 @@ function CouponModal({ closeModal, type, tempCoupon }: TCouponModalProps) {
     }
   };
 
-  // const submit = async (data) => {
-  //   try {
-  //     let api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/coupon`;
-  //     let method = 'post';
-  //     if (type === 'edit') {
-  //       //如果是編輯，要更改api路徑和方法
-  //       api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/coupon/${
-  //         tempCoupon.id
-  //       }`;
-  //       method = 'put';
-  //     }
-
-  //     const res = await axios[method](api, {
-  //       data: {
-  //         ...data,
-  //         is_enabled: +data.is_enabled,
-  //         due_date: data.due_date.getTime(), //轉換成 unix timestamp
-  //       },
-  //     });
-  //     if (res.data.success) {
-  //       handleSuccessMessage(dispatch, res);
-  //       closeModal();
-  //       void queryClient.invalidateQueries({
-  //         queryKey: ['adminCoupons'],
-  //       });
-  //     }
-  //   } catch (error) {
-  //     handleErrorMessage(dispatch, error);
-  //   }
-  // };
   return (
     <div
       className='modal fade'

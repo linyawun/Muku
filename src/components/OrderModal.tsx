@@ -1,23 +1,30 @@
-import axios from 'axios';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import {
-  MessageContext,
-  handleErrorMessage,
-  handleSuccessMessage,
-} from '../store/messageStore';
+import { useEffect, useMemo, useState } from 'react';
 import { timeStampToTime } from '../utils/factory';
+import { TAdminOrder } from '@/types';
+import { useEditOrderMutation } from '@/hooks/api/admin/order/mutations';
 
-function OrderModal({ closeModal, getOrders, tempOrder }) {
-  const [isLoading, setIsLoading] = useState(false);
+type TOrderModalProps = {
+  closeModal: () => void;
+  tempOrder: TAdminOrder;
+};
+
+function OrderModal({ closeModal, tempOrder }: TOrderModalProps) {
   const initData = useMemo(
     () => ({
-      is_paid: '',
+      is_paid: false,
       ...tempOrder,
     }),
     [tempOrder]
   );
-  const [tempData, setTempData] = useState(initData);
-  const [, dispatch] = useContext(MessageContext);
+  const [tempData, setTempData] = useState<TAdminOrder>(initData);
+  const { mutate: editOrderMutate, status: editOrderStatus } =
+    useEditOrderMutation({
+      reactQuery: {
+        onSuccess: () => {
+          closeModal();
+        },
+      },
+    });
 
   useEffect(() => {
     setTempData({
@@ -25,12 +32,15 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
       is_paid: tempOrder.is_paid,
       status: tempOrder.status,
     });
-  }, [tempOrder, initData]);
+  }, [tempOrder]);
 
-  const handleChange = (e) => {
-    const { name, value, checked } = e.target;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
     if (['is_paid'].includes(name)) {
-      //如果是is_paid的欄位
+      // Handle checkbox input
+      const checked = (e.target as HTMLInputElement).checked;
       setTempData((preState) => ({
         ...preState,
         [name]: checked,
@@ -41,32 +51,17 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
     }
   };
 
-  const submit = async () => {
-    setIsLoading(true);
-    try {
-      let api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/order/${
-        tempOrder.id
-      }`;
-      const res = await axios.put(api, {
-        data: {
-          ...tempData,
-        },
-      });
-      if (res.data.success) {
-        handleSuccessMessage(dispatch, res);
-        setIsLoading(false);
-        getOrders();
-        closeModal();
-      }
-    } catch (error) {
-      setIsLoading(false);
-      handleErrorMessage(dispatch, error);
-    }
+  const submit = () => {
+    editOrderMutate({
+      id: tempOrder.id,
+      payloadData: { data: tempData },
+    });
   };
+
   return (
     <div
       className='modal fade'
-      tabIndex='-1'
+      tabIndex={-1}
       id='orderModal'
       aria-labelledby='orderModalLabel'
       aria-hidden='true'
@@ -103,7 +98,11 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                   type='text'
                   readOnly
                   className='form-control-plaintext'
-                  defaultValue={timeStampToTime(tempOrder?.create_at)}
+                  defaultValue={
+                    tempOrder?.create_at
+                      ? timeStampToTime(tempOrder.create_at)
+                      : ''
+                  }
                 />
               </div>
             </div>
@@ -149,7 +148,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                 <textarea
                   name=''
                   id=''
-                  cols='30'
+                  cols={30}
                   readOnly
                   className='form-control-plaintext'
                   defaultValue={tempOrder.message}
@@ -167,7 +166,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                 <tbody>
                   {Object.values(tempOrder.products).map((cart) => (
                     <tr key={cart.id}>
-                      <td>{cart.product.title}</td>
+                      <td>{cart.product?.title}</td>
                       <td>{cart.qty}</td>
                     </tr>
                   ))}
@@ -176,7 +175,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                   <tr>
                     <td className='border-0 text-end'>總金額</td>
                     <td className='border-0'>
-                      ${Math.round(tempOrder.total)?.toLocaleString()}
+                      ${Math.round(tempOrder.total || 0)?.toLocaleString()}
                     </td>
                   </tr>
                 </tfoot>
@@ -198,7 +197,7 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                   付款狀態 (
                   {tempData.is_paid
                     ? `已付款，付款時間為 ${timeStampToTime(
-                        tempData.paid_date ? tempData.paid_date : new Date()
+                        (tempData.paid_date as number) || new Date().getTime()
                       )}`
                     : '未付款'}
                   )
@@ -217,12 +216,12 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
                   id='status'
                   value={tempData.status}
                   onChange={handleChange}
-                  disabled={isLoading}
+                  disabled={editOrderStatus === 'pending'}
                 >
-                  <option value={0}>未確認</option>
-                  <option value={1}>已確認</option>
-                  <option value={2}>外送中</option>
-                  <option value={3}>已送達</option>
+                  <option value={'0'}>未確認</option>
+                  <option value={'1'}>已確認</option>
+                  <option value={'2'}>外送中</option>
+                  <option value={'3'}>已送達</option>
                 </select>
               </div>
             </div>
@@ -236,7 +235,12 @@ function OrderModal({ closeModal, getOrders, tempOrder }) {
             >
               關閉
             </button>
-            <button type='button' className='btn btn-primary' onClick={submit}>
+            <button
+              type='button'
+              className='btn btn-primary'
+              onClick={submit}
+              disabled={editOrderStatus === 'pending'}
+            >
               儲存
             </button>
           </div>

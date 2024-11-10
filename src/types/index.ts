@@ -169,7 +169,25 @@ export type TDeleteCouponPayload = Omit<
   'api_path'
 >;
 
+// admin order
+export type TAdminOrdersPayload =
+  paths['/v2/api/{api_path}/admin/orders']['get']['parameters']['query'];
+
+export type TAdminOrders = definitions['getOrders'];
+
+export type TAdminOrder = NonNullable<TAdminOrders['orders']>[number];
+
 export type TAdminModalType = 'create' | 'edit';
+
+export type TEditOrderPayload = {
+  id?: string;
+  payloadData?: { data: TAdminOrder };
+};
+
+export type TDeleteOrderPayload = Omit<
+  paths['/v2/api/{api_path}/admin/order/{id}']['delete']['parameters']['path'],
+  'api_path'
+>;
 
 // city and district
 export type TCityItem = {

@@ -1,62 +1,55 @@
-import axios from 'axios';
 import { Modal } from 'bootstrap';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DeleteModal from '../../components/DeleteModal';
 import Loading from '../../components/Loading';
 import OrderModal from '../../components/OrderModal';
 import Pagination from '../../components/Pagination';
-import {
-  MessageContext,
-  handleErrorMessage,
-  handleSuccessMessage,
-} from '../../store/messageStore';
 import { timeStampToTime } from '../../utils/factory';
+import { useAdminOrdersQuery } from '@/hooks/api/admin/order/queries';
+import { TAdminOrder, TAdminOrdersPayload, TDeleteOrderPayload } from '@/types';
+import { useDeleteOrderMutation } from '@/hooks/api/admin/order/mutations';
 function AdminOrders() {
-  const [orders, setOrders] = useState([]);
-  const [pagination, setPagination] = useState({});
-  const [tempOrder, setTempOrder] = useState({});
-  const orderModal = useRef(null);
-  const deleteModal = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [, dispatch] = useContext(MessageContext);
-
-  const getOrders = async (page = 1) => {
-    setIsLoading(true);
-    const res = await axios.get(
-      `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/orders?page=${page}`
-    );
-    setOrders(res.data.orders);
-    setPagination(res.data.pagination);
-    setIsLoading(false);
+  const [ordersParams, setOrdersParams] = useState<TAdminOrdersPayload>({
+    page: '1',
+  });
+  const { data: orders, status: ordersStatus } = useAdminOrdersQuery({
+    params: ordersParams,
+  });
+  const pagination = orders?.pagination || {};
+  const [tempOrder, setTempOrder] = useState<TAdminOrder>({});
+  const orderModal = useRef<Modal | null>(null);
+  const deleteModal = useRef<Modal | null>(null);
+  const { mutate: deleteOrderMutate, status: deleteOrderStatus } =
+    useDeleteOrderMutation({
+      reactQuery: {
+        onSuccess: () => {
+          closeDeleteModal();
+        },
+      },
+    });
+  const changePage = (page: number) => {
+    setOrdersParams((pre) => ({
+      ...pre,
+      page: page.toString(),
+    }));
   };
-  const deleteOrder = async (id) => {
-    try {
-      const res = await axios.delete(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/order/${id}`
-      );
-      if (res.data.success) {
-        handleSuccessMessage(dispatch, res);
-        getOrders();
-        closeDeleteModal();
-      }
-    } catch (error) {
-      handleErrorMessage(dispatch, error);
-    }
+  const deleteOrder = (id: TDeleteOrderPayload['id']) => {
+    deleteOrderMutate({ id });
   };
-  const openOrderModal = (order) => {
+  const openOrderModal = (order: TAdminOrder) => {
     setTempOrder(order);
-    orderModal.current.show();
+    orderModal.current?.show();
   };
   const closeModal = () => {
     setTempOrder({});
-    orderModal.current.hide();
+    orderModal.current?.hide();
   };
-  const openDeleteModal = (order) => {
+  const openDeleteModal = (order: TAdminOrder) => {
     setTempOrder(order);
-    deleteModal.current.show();
+    deleteModal.current?.show();
   };
   const closeDeleteModal = () => {
-    deleteModal.current.hide();
+    deleteModal.current?.hide();
   };
 
   useEffect(() => {
@@ -66,21 +59,16 @@ function AdminOrders() {
     deleteModal.current = new Modal('#deleteModal', {
       backdrop: 'static',
     });
-    getOrders();
   }, []);
 
   return (
     <div className='p-3'>
-      <Loading isLoading={isLoading} />
-      <OrderModal
-        closeModal={closeModal}
-        getOrders={getOrders}
-        tempOrder={{ ...tempOrder, status: 0 }}
-      />
+      <Loading isLoading={ordersStatus === 'pending'} />
+      <OrderModal closeModal={closeModal} tempOrder={{ ...tempOrder }} />
       <DeleteModal
         close={closeDeleteModal}
         text={`訂單 ${tempOrder.id}`}
-        handleDelete={deleteOrder}
+        handleDelete={(id) => id && deleteOrder(id)}
         id={tempOrder.id}
       />
       <h3>訂單列表</h3>
@@ -99,14 +87,14 @@ function AdminOrders() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => {
+            {orders?.orders?.map((order) => {
               return (
                 <tr key={order.id}>
                   <td>
                     <small>{order.id}</small>
                   </td>
                   <td>{order.user?.name}</td>
-                  <td>${Math.round(order.total)?.toLocaleString()}</td>
+                  <td>${Math.round(order.total || 0).toLocaleString()}</td>
                   <td>
                     {order.is_paid ? (
                       <span className='text-success fw-bold'>付款完成</span>
@@ -114,7 +102,7 @@ function AdminOrders() {
                       '未付款'
                     )}
                   </td>
-                  <td>{timeStampToTime(order.create_at)}</td>
+                  <td>{timeStampToTime(order.create_at || 0)}</td>
                   <td>
                     {order.status
                       ? ['未確認', '已確認', '外送中', '已送達'][order.status]
@@ -137,6 +125,7 @@ function AdminOrders() {
                         className='btn btn-outline-danger btn-sm'
                         onClick={() => openDeleteModal(order)}
                         aria-label='Delete'
+                        disabled={deleteOrderStatus === 'pending'}
                       >
                         刪除
                       </button>
@@ -148,7 +137,7 @@ function AdminOrders() {
           </tbody>
         </table>
       </div>
-      <Pagination pagination={pagination} changePage={getOrders} />
+      <Pagination pagination={pagination} changePage={changePage} />
     </div>
   );
 }
