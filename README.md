@@ -33,6 +33,7 @@
 - [ ] 改用 react query fetch API
 - [ ] 以 TypeScript 改寫
 - [ ] (Optional) migrate to Next.js
+- [ ] (Optional) UI 套件改用 TailwindCSS or Shadcn
 
 ## 畫面
 - 前台-商品列表
