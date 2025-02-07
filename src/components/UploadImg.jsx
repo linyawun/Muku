@@ -1,10 +1,9 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setUploadVal, setUploadMsg } from '../slice/uploadImgSlice';
+import { setUploadMsg, setUploadVal } from '../slice/uploadImgSlice';
 function UploadImg({ id, property, setValue, imgUrl, setTempData }) {
-  const uploadImages = useSelector((state) => state.uploadImg);
-  const dispatchRedux = useDispatch();
+  const uploadImages = useAppSelector((state) => state.uploadImg);
+  const dispatchRedux = useAppDispatch();
   const uploadImg = async (e, property, name) => {
     dispatchRedux(
       setUploadVal({
