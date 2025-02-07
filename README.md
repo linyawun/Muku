@@ -31,9 +31,10 @@
 - [x] 加入 Google Analytics
 - [ ] 加入測試
 - [x] 改用 react query fetch API
-- [ ] 以 TypeScript 改寫
+- [x] 以 TypeScript 改寫
+- [ ] 優化 TypeScript 寫法
 - [ ] (Optional) migrate to Next.js
-- [ ] (Optional) UI 套件改用 TailwindCSS or Shadcn
+- [ ] (Optional) UI 套件改用 TailwindCSS + Shadcn
 
 ## 畫面
 - 前台-商品列表
