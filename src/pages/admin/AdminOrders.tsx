@@ -8,6 +8,20 @@ import { timeStampToTime } from '../../utils/factory';
 import { useAdminOrdersQuery } from '@/hooks/api/admin/order/queries';
 import { TAdminOrder, TAdminOrdersPayload, TDeleteOrderPayload } from '@/types';
 import { useDeleteOrderMutation } from '@/hooks/api/admin/order/mutations';
+
+const defaultOrder: TAdminOrder = {
+  create_at: 0,
+  id: '',
+  is_paid: false,
+  message: '',
+  total: 0,
+  status: '',
+  paid_date: null,
+  products: {},
+  user: {},
+  num: 0,
+};
+
 function AdminOrders() {
   const [ordersParams, setOrdersParams] = useState<TAdminOrdersPayload>({
     page: '1',
@@ -16,7 +30,7 @@ function AdminOrders() {
     params: ordersParams,
   });
   const pagination = orders?.pagination || {};
-  const [tempOrder, setTempOrder] = useState<TAdminOrder>({});
+  const [tempOrder, setTempOrder] = useState<TAdminOrder>(defaultOrder);
   const orderModal = useRef<Modal | null>(null);
   const deleteModal = useRef<Modal | null>(null);
   const { mutate: deleteOrderMutate, status: deleteOrderStatus } =
@@ -27,7 +41,7 @@ function AdminOrders() {
         },
       },
     });
-  const changePage = (page: number) => {
+  const changePage = (page: string | number) => {
     setOrdersParams((pre) => ({
       ...pre,
       page: page.toString(),
@@ -41,7 +55,6 @@ function AdminOrders() {
     orderModal.current?.show();
   };
   const closeModal = () => {
-    setTempOrder({});
     orderModal.current?.hide();
   };
   const openDeleteModal = (order: TAdminOrder) => {
@@ -70,6 +83,7 @@ function AdminOrders() {
         text={`訂單 ${tempOrder.id}`}
         handleDelete={(id) => id && deleteOrder(id)}
         id={tempOrder.id}
+        deleteDisabled={deleteOrderStatus === 'pending'}
       />
       <h3>訂單列表</h3>
       <hr />

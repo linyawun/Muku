@@ -189,6 +189,34 @@ export type TDeleteOrderPayload = Omit<
   'api_path'
 >;
 
+// admin product
+export type TAdminAllProducts = definitions['getProductsAll'];
+
+export type TAdminAllProductsPayload = Omit<
+  paths['/v2/api/{api_path}/admin/products/all']['get']['parameters']['path'],
+  'api_path'
+>;
+
+export type TAdminProducts = definitions['getProducts'];
+
+export type TAdminProductsPayload =
+  paths['/v2/api/{api_path}/admin/products']['get']['parameters']['query'];
+
+export type TAdminProduct = NonNullable<TAdminProducts['products']>[number];
+
+export type TDeleteProductPayload = Omit<
+  paths['/v2/api/{api_path}/admin/product/{id}']['delete']['parameters']['path'],
+  'api_path'
+>;
+
+export type TEditProductPayload = {
+  id?: string;
+  payloadData?: { data: TAdminProduct };
+};
+
+export type TCreateProductPayload =
+  paths['/v2/api/{api_path}/admin/product']['post']['parameters']['body']['data'];
+
 // city and district
 export type TCityItem = {
   countyName: string;

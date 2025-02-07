@@ -1,23 +1,16 @@
 import { useAppDispatch } from '@/hooks/reduxHooks';
-import axios from 'axios';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { resetUploadImg } from '../slice/uploadImgSlice';
-import {
-  MessageContext,
-  handleErrorMessage,
-  handleSuccessMessage,
-} from '../store/messageStore';
 import { CheckboxRadio, Input, Selectbox, Textarea } from './FormElement';
 import UploadImg from './UploadImg';
+import {
+  useCreateProductMutation,
+  useEditProductMutation,
+} from '@/hooks/api/admin/product/mutations';
+import { TAdminProduct } from '@/types';
 
-function ProductModal({
-  closeProductModal,
-  getProducts,
-  type,
-  tempProduct,
-  categoryList,
-}) {
+function ProductModal({ closeProductModal, type, tempProduct, categoryList }) {
   const initData = useMemo(
     () => ({
       title: '',
@@ -36,7 +29,25 @@ function ProductModal({
     }),
     []
   );
-  const [tempData, setTempData] = useState(initData);
+  const { mutate: createProductMutate, status: createProductStatus } =
+    useCreateProductMutation({
+      reactQuery: {
+        onSuccess: () => {
+          closeProductModal();
+        },
+      },
+    });
+  const { mutate: editProductMutate, status: editProductStatus } =
+    useEditProductMutation({
+      reactQuery: {
+        onSuccess: () => {
+          closeProductModal();
+        },
+      },
+    });
+  const loadingStatus =
+    type === 'create' ? createProductStatus : editProductStatus;
+  const [tempData, setTempData] = useState<TAdminProduct>(initData);
   const dispatchRedux = useAppDispatch();
   const {
     register,
@@ -50,20 +61,21 @@ function ProductModal({
     defaultValues: tempData,
     mode: 'onTouched',
   });
-  let imageUrl = watch('imageUrl');
-  let detailImg1 = watch('detailImg1');
-  let detailImg2 = watch('detailImg2');
-  let detailImg3 = watch('detailImg3');
-  let detailImg4 = watch('detailImg4');
-  let detailImg5 = watch('detailImg5');
-  let originPrice = watch('origin_price');
+  const imageUrl = watch('imageUrl');
+  // TODO: 後續要再優化
+  const detailImg1 = watch('detailImg1' as any);
+  const detailImg2 = watch('detailImg2' as any);
+  const detailImg3 = watch('detailImg3' as any);
+  const detailImg4 = watch('detailImg4' as any);
+  const detailImg5 = watch('detailImg5' as any);
+  const originPrice = watch('origin_price');
+
   const validatePrice = (value) => {
     if (value && originPrice && Number(value) >= Number(originPrice)) {
       return '售價必須低於原價';
     }
     return true;
   };
-  const [, dispatch] = useContext(MessageContext);
 
   useEffect(() => {
     if (type === 'create') {
@@ -71,21 +83,19 @@ function ProductModal({
       dispatchRedux(resetUploadImg());
     } else if (type === 'edit') {
       dispatchRedux(resetUploadImg());
-      let { imagesUrl } = tempProduct;
-      if (!imagesUrl) {
-        imagesUrl = Array.from({ length: 5 }, () => '');
-      }
+      // TODO: 後續要再優化
+      const imagesUrl = tempProduct.imagesUrl || Array(5).fill('');
       const imageData = imagesUrl?.reduce((result, url, index) => {
         result[`detailImg${index + 1}`] = url;
-        return result;
-      }, {});
+        return result as Record<string, string>;
+      }, {} as Record<string, string>);
       setTempData((pre) => ({
         ...pre,
-        ...tempProduct,
-        ...imageData,
+        ...(tempProduct as TAdminProduct),
+        ...(imageData as Record<string, string>),
       }));
     }
-  }, [type, tempProduct, initData, dispatchRedux]);
+  }, [dispatchRedux, initData, tempProduct, type]);
 
   useEffect(() => {
     const resetForm = () => {
@@ -94,42 +104,23 @@ function ProductModal({
     resetForm();
   }, [tempData, reset]);
 
-  const submit = async (data) => {
-    try {
-      let api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/product`;
-      let method = 'post';
-      if (type === 'edit') {
-        //如果是編輯，要更改api路徑和方法
-        api = `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/product/${
-          tempProduct.id
-        }`;
-        method = 'put';
-      }
-      const res = await axios[method](api, {
-        data: {
-          ...data,
-          imagesUrl: [
-            detailImg1,
-            detailImg2,
-            detailImg3,
-            detailImg4,
-            detailImg5,
-          ],
-        },
-      });
-      if (res.data.success) {
-        handleSuccessMessage(dispatch, res);
-        closeProductModal();
-        getProducts();
-      }
-    } catch (error) {
-      handleErrorMessage(dispatch, error);
+  const submit = (data) => {
+    const payloadData = {
+      data: {
+        ...data,
+        imagesUrl: [detailImg1, detailImg2, detailImg3, detailImg4, detailImg5],
+      },
+    };
+    if (type === 'edit') {
+      editProductMutate({ id: tempProduct.id, payloadData });
+    } else if (type === 'create') {
+      createProductMutate(payloadData);
     }
   };
   return (
     <div
       className='modal fade'
-      tabIndex='-1'
+      tabIndex={-1}
       id='productModal'
       aria-labelledby='productModalLabel'
       aria-hidden='true'
@@ -213,10 +204,7 @@ function ProductModal({
                           value: true,
                           message: '原價為必填',
                         },
-                        valueAsNumber: {
-                          value: true,
-                          message: '請輸入數值',
-                        },
+                        valueAsNumber: true,
                       }}
                     />
                   </div>
@@ -234,10 +222,7 @@ function ProductModal({
                           message: '售價為必填',
                         },
                         validate: validatePrice,
-                        valueAsNumber: {
-                          value: true,
-                          message: '請輸入數值',
-                        },
+                        valueAsNumber: true,
                       }}
                     />
                   </div>
@@ -309,7 +294,8 @@ function ProductModal({
                       setTempData={setTempData}
                     />
                   </div>
-                  {tempData.imagesUrl.length > 0 &&
+                  {tempData.imagesUrl &&
+                    tempData.imagesUrl.length > 0 &&
                     tempData.imagesUrl.map((img, i) => {
                       return (
                         <div className='col-md-4 col-sm-6 mb-3' key={i}>
@@ -339,7 +325,7 @@ function ProductModal({
                         </div>
                       );
                     })}
-                  {tempData.imagesUrl.length < 5 && (
+                  {tempData.imagesUrl && tempData.imagesUrl?.length < 5 && (
                     <div className='col-md-4 col-sm-6 mb-3'>
                       <button
                         type='button'
@@ -348,7 +334,7 @@ function ProductModal({
                         onClick={() => {
                           setTempData((pre) => ({
                             ...pre,
-                            imagesUrl: [...pre.imagesUrl, ''],
+                            imagesUrl: [...(pre.imagesUrl || []), ''],
                           }));
                         }}
                       >
@@ -491,7 +477,15 @@ function ProductModal({
                   type='submit'
                   className='btn btn-primary'
                   aria-label='Save'
+                  disabled={loadingStatus === 'pending'}
                 >
+                  {loadingStatus === 'pending' && (
+                    <span
+                      className='spinner-border spinner-border-sm me-2'
+                      role='status'
+                      aria-hidden='true'
+                    />
+                  )}
                   儲存
                 </button>
               </div>

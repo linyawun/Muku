@@ -21,7 +21,7 @@ type TInputProps = {
   id: string;
   type: string;
   labelText: string;
-  rules: RegisterOptions;
+  rules?: RegisterOptions;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -32,7 +32,7 @@ type TTextareaProps = {
   labelText: string;
   id: string;
   rowNum: number;
-  rules: RegisterOptions<FieldValues>;
+  rules?: RegisterOptions<FieldValues>;
   placeholder?: string;
 };
 

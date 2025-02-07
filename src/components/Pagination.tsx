@@ -5,7 +5,7 @@ function Pagination({
   changePage,
 }: {
   pagination: TPagination;
-  changePage: (page: number) => void;
+  changePage: (page: number | string) => void;
 }) {
   const scrollToTop = () => {
     window.scroll({

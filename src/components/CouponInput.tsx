@@ -19,32 +19,6 @@ function CouponInput({ hasCoupon }: { hasCoupon: boolean }) {
     submitCoupon(data);
   };
 
-  // const sendCoupon = async () => {
-  //   if (!couponCode) {
-  //     return;
-  //   }
-  //   const data = {
-  //     data: {
-  //       code: couponCode,
-  //     },
-  //   };
-  //   setIsLoading(true);
-  //   try {
-  //     const res = await axios.post(
-  //       `/v2/api/${import.meta.env.VITE_APP_API_PATH}/coupon`,
-  //       data
-  //     );
-  //     if (res.data.success) {
-  //       setCouponMsg('');
-  //       getCart();
-  //     }
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     setCouponMsg(error?.response?.data?.message);
-  //     setIsLoading(false);
-  //   }
-  // };
-
   return (
     <div className='d-flex align-items-center justify-content-between mb-2'>
       <label htmlFor='coupon' className='me-3'>

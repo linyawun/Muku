@@ -3,11 +3,13 @@ function DeleteModal({
   text,
   handleDelete,
   id,
+  deleteDisabled = false,
 }: {
   close: () => void;
   text: string;
   handleDelete: (id?: string) => void;
   id?: string;
+  deleteDisabled?: boolean;
 }) {
   return (
     <div
@@ -45,6 +47,7 @@ function DeleteModal({
               className='btn btn-danger'
               aria-label='Confirm delete'
               onClick={() => handleDelete(id)}
+              disabled={deleteDisabled}
             >
               確認刪除
             </button>

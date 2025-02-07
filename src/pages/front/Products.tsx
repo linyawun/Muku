@@ -35,10 +35,10 @@ function Products() {
     navigate('/products/all');
   }
 
-  const changePage = (page: string) => {
+  const changePage = (page: string | number) => {
     setProductsParams((pre) => ({
       ...pre,
-      page,
+      page: page.toString(),
     }));
   };
 

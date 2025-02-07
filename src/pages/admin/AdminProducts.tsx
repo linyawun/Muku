@@ -1,85 +1,87 @@
-import { useEffect, useState, useRef, useContext, useCallback } from 'react';
-import axios from 'axios';
+import { useEffect, useState, useRef } from 'react';
+
 import ProductModal from '../../components/ProductModal';
 import DeleteModal from '../../components/DeleteModal';
 import Pagination from '../../components/Pagination';
 import { Modal } from 'bootstrap';
-import {
-  MessageContext,
-  handleSuccessMessage,
-  handleErrorMessage,
-} from '../../store/messageStore';
-import Loading from '../../components/Loading';
-function AdminProducts() {
-  const [products, setProducts] = useState([]);
-  const [pagination, setPagination] = useState({});
-  const [categoryList, setCategoryList] = useState([]);
-  const [filterCategory, setFilterCategory] = useState('All');
-  //type: 決定 modal 展開的用途
-  const [type, setType] = useState('create'); //預設為create，另一type為edit
-  const [tempProduct, setTempProduct] = useState({});
-  const productModal = useRef(null);
-  const deleteModal = useRef(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [, dispatch] = useContext(MessageContext);
 
-  const getCategory = async () => {
-    const res = await axios.get(
-      `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/products/all`
-    );
-    const categories = [
-      ...new Set(Object.values(res.data.products).map((obj) => obj.category)),
-    ];
-    setCategoryList(categories);
-  };
-  const getProducts = useCallback(
-    async (page = 1) => {
-      setIsLoading(true);
-      const category = filterCategory === 'All' ? '' : filterCategory;
-      const productRes = await axios.get(
-        `/v2/api/${
-          import.meta.env.VITE_APP_API_PATH
-        }/admin/products?page=${page}&category=${category}`
-      );
-      setProducts(productRes.data.products);
-      setPagination(productRes.data.pagination);
-      setIsLoading(false);
+import Loading from '../../components/Loading';
+import {
+  useAdminProductsQuery,
+  useAllAdminProductsQuery,
+} from '@/hooks/api/admin/product/queries';
+import {
+  TAdminModalType,
+  TAdminProduct,
+  TAdminProductsPayload,
+  TDeleteProductPayload,
+} from '@/types';
+import { useDeleteProductMutation } from '@/hooks/api/admin/product/mutations';
+
+function AdminProducts() {
+  const [productsParams, setProductsParams] = useState<TAdminProductsPayload>({
+    page: '1',
+    category: '',
+  });
+  const { data: products, status: productsStatus } = useAdminProductsQuery({
+    params: {
+      page: productsParams.page,
+      category:
+        productsParams.category === 'All' ? '' : productsParams.category,
     },
-    [filterCategory]
-  );
-  const openProductModal = (type, product) => {
+  });
+  const { data: allProducts, status: allProductsStatus } =
+    useAllAdminProductsQuery();
+  const categoryList = allProducts
+    ? [...new Set(Object.values(allProducts).map((obj) => obj?.category))]
+    : [];
+  const pagination = products?.pagination || {};
+  //type: 決定 modal 展開的用途
+  const [type, setType] = useState<TAdminModalType>('create'); //預設為create，另一type為edit
+  const [tempProduct, setTempProduct] = useState<TAdminProduct>({});
+  const productModal = useRef<Modal | null>(null);
+  const deleteModal = useRef<Modal | null>(null);
+  const { mutate: deleteProductMutate, status: deleteProductStatus } =
+    useDeleteProductMutation({
+      reactQuery: {
+        onSuccess: () => {
+          closeDeleteModal();
+        },
+      },
+    });
+
+  const changePage = (page: string | number) => {
+    setProductsParams((pre) => ({
+      ...pre,
+      page: page.toString(),
+    }));
+  };
+
+  const openProductModal = (type: TAdminModalType, product: TAdminProduct) => {
     //展開modal時確認modal用途
     setType(type);
     setTempProduct(product);
-    productModal.current.show();
+    productModal.current?.show();
   };
+
   const closeProductModal = () => {
-    productModal.current.hide();
+    productModal.current?.hide();
     setTempProduct({});
   };
 
-  const openDeleteModal = (product) => {
+  const openDeleteModal = (product: TAdminProduct) => {
     setTempProduct(product);
-    deleteModal.current.show();
+    deleteModal.current?.show();
   };
+
   const closeDeleteModal = () => {
-    deleteModal.current.hide();
+    deleteModal.current?.hide();
   };
-  const deleteProduct = async (id) => {
-    try {
-      const res = await axios.delete(
-        `/v2/api/${import.meta.env.VITE_APP_API_PATH}/admin/product/${id}`
-      );
-      if (res.data.success) {
-        handleSuccessMessage(dispatch, res);
-        getProducts();
-        getCategory();
-        closeDeleteModal();
-      }
-    } catch (error) {
-      handleErrorMessage(dispatch, error);
-    }
+
+  const deleteProduct = (id: TDeleteProductPayload['id']) => {
+    deleteProductMutate({ id });
   };
+
   useEffect(() => {
     productModal.current = new Modal('#productModal', {
       backdrop: 'static',
@@ -87,26 +89,27 @@ function AdminProducts() {
     deleteModal.current = new Modal('#deleteModal', {
       backdrop: 'static',
     });
-    getCategory();
   }, []);
-  useEffect(() => {
-    getProducts();
-  }, [filterCategory, getProducts]);
+
   return (
     <div className='p-3'>
-      <Loading isLoading={isLoading} />
+      <Loading
+        isLoading={
+          productsStatus === 'pending' || allProductsStatus === 'pending'
+        }
+      />
       <ProductModal
         closeProductModal={closeProductModal}
-        getProducts={getProducts}
         tempProduct={tempProduct}
         type={type}
         categoryList={categoryList}
       />
       <DeleteModal
         close={closeDeleteModal}
-        text={tempProduct.title}
-        handleDelete={deleteProduct}
+        text={tempProduct.title || ''}
+        handleDelete={(id) => id && deleteProduct(id)}
         id={tempProduct.id}
+        deleteDisabled={deleteProductStatus === 'pending'}
       />
       <h3>產品列表</h3>
       <hr />
@@ -132,13 +135,17 @@ function AdminProducts() {
             className='form-select-sm'
             aria-label='Default select example'
             id='filterCategory'
-            value={filterCategory}
+            value={productsParams.category}
             onChange={(e) => {
-              setFilterCategory(e.target.value);
+              setProductsParams((pre) => ({
+                ...pre,
+                category: e.target.value,
+                page: '1',
+              }));
             }}
           >
             <option value='All'>All</option>
-            {categoryList.map((category) => (
+            {categoryList?.map((category) => (
               <option value={category} key={category}>
                 {category}
               </option>
@@ -158,7 +165,7 @@ function AdminProducts() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => {
+            {products?.products?.map((product) => {
               return (
                 <tr key={product.id}>
                   <td>{product.category}</td>
@@ -180,6 +187,7 @@ function AdminProducts() {
                         className='btn btn-outline-danger btn-sm'
                         onClick={() => openDeleteModal(product)}
                         aria-label='Delete'
+                        disabled={deleteProductStatus === 'pending'}
                       >
                         刪除
                       </button>
@@ -191,7 +199,7 @@ function AdminProducts() {
           </tbody>
         </table>
       </div>
-      <Pagination pagination={pagination} changePage={getProducts} />
+      <Pagination pagination={pagination} changePage={changePage} />
     </div>
   );
 }

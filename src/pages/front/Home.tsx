@@ -21,18 +21,6 @@ function Home() {
     params: { page: '1' },
   });
 
-  // const getProducts = async (page = 1) => {
-  //   setIsLoading(true);
-  //   const productRes = await axios.get(
-  //     `/v2/api/${import.meta.env.VITE_APP_API_PATH}/products?page=${page}`
-  //   );
-  //   setProducts(productRes.data.products);
-  //   setIsLoading(false);
-  // };
-  // useEffect(() => {
-  //   getProducts(1);
-  // }, []);
-
   return (
     <>
       <div className='container'>

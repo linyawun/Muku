@@ -36,7 +36,7 @@ function AdminCoupons() {
       },
     });
 
-  const changePage = (page: number) => {
+  const changePage = (page: string | number) => {
     setCouponsParams((pre) => ({
       ...pre,
       page: page.toString(),
@@ -84,6 +84,7 @@ function AdminCoupons() {
         text={`優惠券 ${tempCoupon.title || ''}`}
         handleDelete={(id) => id && deleteCoupon(id)}
         id={tempCoupon.id || ''}
+        deleteDisabled={deleteCouponStatus === 'pending'}
       />
       <h3>優惠券列表</h3>
       <hr />

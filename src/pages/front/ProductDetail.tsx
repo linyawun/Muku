@@ -62,66 +62,6 @@ function ProductDetail() {
     addToCart(payload);
   };
 
-  // const getProduct = useCallback(
-  //   async (id) => {
-  //     setIsLoading(true);
-  //     try {
-  //       const productRes = await axios.get(
-  //         `/v2/api/${import.meta.env.VITE_APP_API_PATH}/product/${id}`
-  //       );
-  //       setProduct(productRes.data.product);
-  //       setIsLoading(false);
-  //       getRelatedProducts(1, productRes.data.product.category);
-  //     } catch (error) {
-  //       dispatch(createAsyncMessage(error.response.data));
-  //       navigate('/products/all');
-  //       setIsLoading(false);
-  //     }
-  //   },
-  //   [navigate, dispatch]
-  // );
-  // const addToCart = async () => {
-  //   const data = {
-  //     data: {
-  //       product_id: product.id,
-  //       qty: cartQuantity,
-  //     },
-  //   };
-  //   setIsLoading(true);
-  //   try {
-  //     const res = await axios.post(
-  //       `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart`,
-  //       data
-  //     );
-  //     dispatch(createAsyncMessage(res.data));
-  //     getCart();
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     setIsLoading(false);
-  //     dispatch(createAsyncMessage(error.response.data));
-  //   }
-  // };
-  // const getRelatedProducts = async (page = 1, category) => {
-  //   setIsLoading(true);
-  //   const productRes = await axios.get(
-  //     `/v2/api/${
-  //       import.meta.env.VITE_APP_API_PATH
-  //     }/products?page=${page}&category=${category}`
-  //   );
-  //   setProducts(productRes.data.products);
-  //   setIsLoading(false);
-  // };
-  // useEffect(() => {
-  //   getProduct(id);
-  // }, [id, getProduct]);
-
-  // useEffect(() => {
-  //   if (productError) {
-  //     // navigate('/products/all');
-  //     dispatch(createAsyncMessage(productError.response.data));
-  //   }
-  // }, [productError, dispatch]);
-
   return (
     <>
       {isProductError ? (

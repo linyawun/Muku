@@ -18,24 +18,6 @@ function Product({ product }: { product: TUserProduct['product'] }) {
     addToCart(payload);
   };
 
-  // const addToCart = async () => {
-  //   const data = {
-  //     data: {
-  //       product_id: product.id,
-  //       qty: 1,
-  //     },
-  //   };
-  //   try {
-  //     const res = await axios.post(
-  //       `/v2/api/${import.meta.env.VITE_APP_API_PATH}/cart`,
-  //       data
-  //     );
-  //     dispatch(createAsyncMessage(res.data));
-  //     getCart();
-  //   } catch (error) {
-  //     dispatch(createAsyncMessage(error.response.data));
-  //   }
-  // };
   return (
     <div className='card border-0 mb-4 position-relative h-100'>
       <Link
