@@ -30,7 +30,7 @@
 - [ ] 多國語系(i18n)
 - [x] 加入 Google Analytics
 - [ ] 加入測試
-- [ ] 改用 react query fetch API
+- [x] 改用 react query fetch API
 - [ ] 以 TypeScript 改寫
 - [ ] (Optional) migrate to Next.js
 - [ ] (Optional) UI 套件改用 TailwindCSS or Shadcn
