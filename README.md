@@ -87,7 +87,7 @@ http://localhost:8000/
   
 ## 專案技術
 - Node.js v18.12.0
-- React v18.2.0
+- React v18.3.1
 - React-router-dom v6.9.0
 - React-Redux v8.0.5
 - React-Hook-Form v7.43.8
