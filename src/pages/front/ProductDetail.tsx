@@ -313,7 +313,7 @@ function ProductDetail() {
                     alt='productImg'
                     effect='blur'
                     src={product?.imageUrl}
-                    className='img-fluid mb-4'
+                    className='img-fluid mb-4 d-block'
                     loading='lazy'
                   />
                   {product?.imagesUrl &&
