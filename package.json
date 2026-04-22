@@ -39,7 +39,7 @@
     "react-widgets": "^5.8.4",
     "rimraf": "^4.4.1",
     "sass": "1.77.6",
-    "swiper": "^9.2.2",
+    "swiper": "^12.1.2",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
